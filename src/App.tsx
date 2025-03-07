@@ -13,6 +13,7 @@ import InvoiceUpload from "@/pages/InvoiceUpload";
 import InvoiceEdit from "@/pages/InvoiceEdit";
 import Records from "@/pages/Records";
 import NotFound from "@/pages/NotFound";
+import BusinessIntelligence from "@/pages/BusinessIntelligence";
 
 // Initialize the query client
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/upload" element={<InvoiceUpload />} />
             <Route path="/records" element={<Records />} />
             <Route path="/edit/:id" element={<InvoiceEdit />} />
+            <Route path="/bi" element={<BusinessIntelligence />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

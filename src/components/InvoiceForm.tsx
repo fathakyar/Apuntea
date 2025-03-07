@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Save } from "lucide-react";
+import CompanyAutocomplete from "@/components/CompanyAutocomplete";
+import { formatText, formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
 
 interface InvoiceFormProps {
   initialData?: InvoiceFormData;
@@ -29,27 +31,45 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
     vat: "",
     totalAmount: "",
   });
+  
+  const [formattedAmount, setFormattedAmount] = useState("");
+  const [formattedVat, setFormattedVat] = useState("");
+  const [formattedTotal, setFormattedTotal] = useState("");
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      // Format initial data
+      const formatted = {
+        ...initialData,
+        documentName: formatText(initialData.documentName, { toUpperCase: true }),
+        invoiceNumber: formatText(initialData.invoiceNumber, { toUpperCase: true }),
+        companyName: formatText(initialData.companyName, { toUpperCase: true }),
+      };
+      
+      setFormData(formatted);
+      
+      // Set formatted display values
+      setFormattedAmount(formatNumberWithEuropeanStyle(initialData.amount, { formatNumber: true }));
+      setFormattedVat(formatNumberWithEuropeanStyle(initialData.vat, { formatNumber: true }));
+      setFormattedTotal(formatNumberWithEuropeanStyle(initialData.totalAmount, { formatNumber: true }));
     }
   }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Handle number fields - recalculate total when amount or vat changes
-    if (name === "amount" || name === "vat") {
-      const amount = name === "amount" ? parseFloat(value) || 0 : parseFloat(formData.amount as string) || 0;
-      const vat = name === "vat" ? parseFloat(value) || 0 : parseFloat(formData.vat as string) || 0;
-      const totalAmount = amount + vat;
-
+    
+    if (name === "documentName" || name === "invoiceNumber") {
+      // Convert text inputs to uppercase
       setFormData({
         ...formData,
-        [name]: value,
-        totalAmount: totalAmount.toFixed(2),
+        [name]: formatText(value, { toUpperCase: true }),
       });
+    } else if (name === "amount") {
+      handleAmountChange(value);
+    } else if (name === "vat") {
+      handleVatChange(value);
+    } else if (name === "totalAmount") {
+      handleTotalAmountChange(value);
     } else {
       setFormData({
         ...formData,
@@ -57,10 +77,69 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
       });
     }
   };
+  
+  const handleCompanyChange = (value: string) => {
+    setFormData({
+      ...formData,
+      companyName: value,
+    });
+  };
+  
+  const handleAmountChange = (value: string) => {
+    setFormattedAmount(value);
+    
+    const amount = parseEuropeanNumber(value);
+    const vat = parseEuropeanNumber(formattedVat);
+    const total = amount + vat;
+    
+    setFormData({
+      ...formData,
+      amount: amount,
+      totalAmount: total,
+    });
+    
+    setFormattedTotal(formatNumberWithEuropeanStyle(total, { formatNumber: true }));
+  };
+  
+  const handleVatChange = (value: string) => {
+    setFormattedVat(value);
+    
+    const amount = parseEuropeanNumber(formattedAmount);
+    const vat = parseEuropeanNumber(value);
+    const total = amount + vat;
+    
+    setFormData({
+      ...formData,
+      vat: vat,
+      totalAmount: total,
+    });
+    
+    setFormattedTotal(formatNumberWithEuropeanStyle(total, { formatNumber: true }));
+  };
+  
+  const handleTotalAmountChange = (value: string) => {
+    setFormattedTotal(value);
+    
+    const total = parseEuropeanNumber(value);
+    
+    setFormData({
+      ...formData,
+      totalAmount: total,
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    // Convert all formatted values to numbers for submission
+    const submissionData = {
+      ...formData,
+      amount: parseEuropeanNumber(formattedAmount),
+      vat: parseEuropeanNumber(formattedVat),
+      totalAmount: parseEuropeanNumber(formattedTotal),
+    };
+    
+    onSubmit(submissionData);
   };
 
   return (
@@ -108,13 +187,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
             </div>
             
             <div className="form-group col-span-1 md:col-span-2">
-              <Label htmlFor="companyName" className="form-label">Company Name</Label>
-              <Input
-                id="companyName"
-                name="companyName"
+              <CompanyAutocomplete
                 value={formData.companyName}
-                onChange={handleChange}
-                placeholder="Company name"
+                onChange={handleCompanyChange}
                 className="form-input"
                 required
               />
@@ -125,11 +200,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
               <Input
                 id="amount"
                 name="amount"
-                type="number"
-                step="0.01"
-                value={formData.amount}
+                value={formattedAmount}
                 onChange={handleChange}
-                placeholder="0.00"
+                placeholder="0,00"
                 className="form-input"
                 required
               />
@@ -140,11 +213,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
               <Input
                 id="vat"
                 name="vat"
-                type="number"
-                step="0.01"
-                value={formData.vat}
+                value={formattedVat}
                 onChange={handleChange}
-                placeholder="0.00"
+                placeholder="0,00"
                 className="form-input"
                 required
               />
@@ -155,11 +226,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
               <Input
                 id="totalAmount"
                 name="totalAmount"
-                type="number"
-                step="0.01"
-                value={formData.totalAmount}
+                value={formattedTotal}
                 onChange={handleChange}
-                placeholder="0.00"
+                placeholder="0,00"
                 className="form-input font-medium"
                 required
               />

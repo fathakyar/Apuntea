@@ -1,6 +1,8 @@
 
 import { Invoice, InvoiceFormData } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
+import { formatText, formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
+import { deleteFileFromGoogleDrive } from "@/utils/googleDriveUtils";
 
 // Mock function to simulate invoice data extraction
 export const extractInvoiceData = async (file: File): Promise<InvoiceFormData> => {
@@ -10,13 +12,13 @@ export const extractInvoiceData = async (file: File): Promise<InvoiceFormData> =
   // Simulate processing time
   await new Promise(resolve => setTimeout(resolve, 1500));
   
-  const documentName = file.name;
+  const documentName = formatText(file.name, { toUpperCase: true });
   const currentDate = new Date();
   
   // Generate some random data for demo
-  const invoiceNumber = `INV-${Math.floor(Math.random() * 10000)}`;
+  const invoiceNumber = formatText(`INV-${Math.floor(Math.random() * 10000)}`, { toUpperCase: true });
   const companies = ["Acme Inc.", "Globex Corporation", "Stark Industries", "Wayne Enterprises", "Umbrella Corp"];
-  const companyName = companies[Math.floor(Math.random() * companies.length)];
+  const companyName = formatText(companies[Math.floor(Math.random() * companies.length)], { toUpperCase: true });
   const amount = parseFloat((Math.random() * 1000 + 100).toFixed(2));
   const vat = parseFloat((amount * 0.21).toFixed(2)); // 21% VAT
   const totalAmount = parseFloat((amount + vat).toFixed(2));
@@ -51,13 +53,13 @@ export const saveInvoice = (invoiceData: InvoiceFormData, fileUrl: string): Invo
   // Create new invoice with ID and timestamps
   const newInvoice: Invoice = {
     id: uuidv4(),
-    documentName: invoiceData.documentName,
+    documentName: formatText(invoiceData.documentName, { toUpperCase: true }),
     invoiceDate: invoiceData.invoiceDate,
-    invoiceNumber: invoiceData.invoiceNumber,
-    companyName: invoiceData.companyName,
-    amount: typeof invoiceData.amount === 'string' ? parseFloat(invoiceData.amount) : invoiceData.amount,
-    vat: typeof invoiceData.vat === 'string' ? parseFloat(invoiceData.vat) : invoiceData.vat,
-    totalAmount: typeof invoiceData.totalAmount === 'string' ? parseFloat(invoiceData.totalAmount) : invoiceData.totalAmount,
+    invoiceNumber: formatText(invoiceData.invoiceNumber, { toUpperCase: true }),
+    companyName: formatText(invoiceData.companyName, { toUpperCase: true }),
+    amount: typeof invoiceData.amount === 'string' ? parseEuropeanNumber(invoiceData.amount) : invoiceData.amount,
+    vat: typeof invoiceData.vat === 'string' ? parseEuropeanNumber(invoiceData.vat) : invoiceData.vat,
+    totalAmount: typeof invoiceData.totalAmount === 'string' ? parseEuropeanNumber(invoiceData.totalAmount) : invoiceData.totalAmount,
     documentLink: fileUrl,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -87,18 +89,27 @@ export const updateInvoice = (invoice: Invoice): void => {
 };
 
 // Delete invoice by ID
-export const deleteInvoice = (id: string): void => {
+export const deleteInvoice = async (id: string): Promise<void> => {
   const invoices = getInvoices();
+  const invoice = invoices.find(inv => inv.id === id);
+  
+  if (invoice && invoice.documentLink.includes("drive.google.com")) {
+    try {
+      // Delete file from Google Drive
+      await deleteFileFromGoogleDrive(invoice.documentLink);
+    } catch (error) {
+      console.error("Error deleting file from Google Drive:", error);
+      // Continue with deletion from local storage even if Drive deletion fails
+    }
+  }
+  
   const updatedInvoices = invoices.filter(invoice => invoice.id !== id);
   localStorage.setItem('apuntea_invoices', JSON.stringify(updatedInvoices));
 };
 
 // Format currency (for display)
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR'
-  }).format(amount);
+  return formatNumberWithEuropeanStyle(amount, { formatNumber: true }) + " €";
 };
 
 // Format date (for display)

@@ -1,16 +1,15 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import FileUpload from "@/components/FileUpload";
-import CameraCapture from "@/components/CameraCapture";
 import InvoiceForm from "@/components/InvoiceForm";
 import { useToast } from "@/components/ui/use-toast";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { extractInvoiceData, saveInvoice } from "@/utils/invoiceUtils";
+import { uploadFileToGoogleDrive } from "@/utils/googleDriveUtils";
 import { InvoiceFormData } from "@/types";
-import { Loader2, Upload, Camera, Check } from "lucide-react";
+import { Loader2, Upload, Check } from "lucide-react";
 
 const InvoiceUpload = () => {
   const navigate = useNavigate();
@@ -21,6 +20,7 @@ const InvoiceUpload = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isExtracting, setIsExtracting] = useState<boolean>(false);
   const [uploadStep, setUploadStep] = useState<1 | 2>(1);
+  const [isGoogleDriveAuthInitiated, setIsGoogleDriveAuthInitiated] = useState<boolean>(false);
 
   const handleFileSelect = async (selectedFile: File) => {
     setFile(selectedFile);
@@ -45,7 +45,7 @@ const InvoiceUpload = () => {
       
       // Create empty form data with just the document name
       setInvoiceData({
-        documentName: selectedFile.name,
+        documentName: selectedFile.name.toUpperCase(),
         invoiceDate: "",
         invoiceNumber: "",
         companyName: "",
@@ -72,17 +72,20 @@ const InvoiceUpload = () => {
     setIsLoading(true);
     
     try {
-      // In a real app, this would upload the file to Google Drive
-      // For this demo, we'll just use the local blob URL
-      const invoice = saveInvoice(formData, fileUrl);
+      // Upload to Google Drive
+      const googleDriveUrl = await uploadFileToGoogleDrive(file);
+      
+      // Save invoice with Google Drive URL
+      const invoice = saveInvoice(formData, googleDriveUrl);
       
       toast({
         title: "Invoice saved",
-        description: "Invoice has been successfully saved",
+        description: "Invoice has been successfully saved to Google Drive",
       });
       
       navigate("/records");
     } catch (error) {
+      console.error("Error in form submission:", error);
       toast({
         title: "Error saving invoice",
         description: "Could not save the invoice",
@@ -93,77 +96,60 @@ const InvoiceUpload = () => {
     }
   };
 
+  // Initial Google Drive auth on component mount
+  useEffect(() => {
+    const initGoogleAuth = async () => {
+      if (!isGoogleDriveAuthInitiated) {
+        try {
+          // Load Google API script
+          const script = document.createElement("script");
+          script.src = "https://apis.google.com/js/api.js";
+          script.async = true;
+          script.defer = true;
+          document.body.appendChild(script);
+          
+          setIsGoogleDriveAuthInitiated(true);
+        } catch (error) {
+          console.error("Error initializing Google Drive:", error);
+        }
+      }
+    };
+    
+    initGoogleAuth();
+  }, [isGoogleDriveAuthInitiated]);
+
   return (
     <Layout>
       <div className="grid grid-cols-1 gap-6 animate-slide-in">
         <div>
           <h1 className="text-3xl font-bold mb-1">Upload Invoice</h1>
           <p className="text-muted-foreground">
-            Upload or capture your invoice for automatic data extraction
+            Upload your invoice for automatic data extraction
           </p>
         </div>
 
         {uploadStep === 1 ? (
-          <Tabs defaultValue="upload" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="upload" className="flex items-center">
-                <Upload className="mr-2 h-4 w-4" />
-                File Upload
-              </TabsTrigger>
-              <TabsTrigger value="camera" className="flex items-center">
-                <Camera className="mr-2 h-4 w-4" />
-                Camera Capture
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="upload" className="animate-fade-in">
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle>Upload Invoice</CardTitle>
-                  <CardDescription>
-                    Upload your invoice as PDF, JPG, or PNG
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {isExtracting ? (
-                    <div className="text-center py-8">
-                      <Loader2 className="h-12 w-12 mx-auto mb-3 animate-spin text-primary" />
-                      <p className="text-lg font-medium">Extracting data...</p>
-                      <p className="text-muted-foreground">
-                        Please wait while we process your invoice
-                      </p>
-                    </div>
-                  ) : (
-                    <FileUpload onFileSelect={handleFileSelect} />
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="camera" className="animate-fade-in">
-              <Card className="glass-card">
-                <CardHeader>
-                  <CardTitle>Capture Invoice</CardTitle>
-                  <CardDescription>
-                    Use your camera to capture the invoice
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center">
-                  {isExtracting ? (
-                    <div className="text-center py-8">
-                      <Loader2 className="h-12 w-12 mx-auto mb-3 animate-spin text-primary" />
-                      <p className="text-lg font-medium">Extracting data...</p>
-                      <p className="text-muted-foreground">
-                        Please wait while we process your invoice
-                      </p>
-                    </div>
-                  ) : (
-                    <CameraCapture onCapture={handleFileSelect} />
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          <Card className="glass-card">
+            <CardHeader>
+              <CardTitle>Upload Invoice</CardTitle>
+              <CardDescription>
+                Upload your invoice as PDF, JPG, or PNG
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isExtracting ? (
+                <div className="text-center py-8">
+                  <Loader2 className="h-12 w-12 mx-auto mb-3 animate-spin text-primary" />
+                  <p className="text-lg font-medium">Extracting data...</p>
+                  <p className="text-muted-foreground">
+                    Please wait while we process your invoice
+                  </p>
+                </div>
+              ) : (
+                <FileUpload onFileSelect={handleFileSelect} />
+              )}
+            </CardContent>
+          </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -186,7 +172,7 @@ const InvoiceUpload = () => {
                       ) : (
                         <div className="flex flex-col items-center justify-center p-8">
                           <Check className="h-12 w-12 text-green-500 mb-3" />
-                          <p className="font-medium">{file.name}</p>
+                          <p className="font-medium">{file.name.toUpperCase()}</p>
                           <p className="text-sm text-muted-foreground mt-1">
                             PDF document uploaded
                           </p>

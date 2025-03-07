@@ -34,3 +34,15 @@ export interface InvoiceFormData {
   vat: number | string;
   totalAmount: number | string;
 }
+
+export interface FormattingOptions {
+  toUpperCase?: boolean;
+  formatNumber?: boolean;
+}
+
+// Add to the types file to support window.gapi
+declare global {
+  interface Window {
+    gapi: any;
+  }
+}

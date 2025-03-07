@@ -10,6 +10,7 @@ import {
   FileText,
   Upload,
   LayoutDashboard,
+  LineChart,
 } from "lucide-react";
 
 const Navbar = () => {
@@ -21,6 +22,7 @@ const Navbar = () => {
     { name: "Dashboard", path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
     { name: "Upload Invoice", path: "/upload", icon: <Upload className="h-5 w-5" /> },
     { name: "Records", path: "/records", icon: <FileText className="h-5 w-5" /> },
+    { name: ".BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
   ];
 
   const isActive = (path: string) => {
@@ -44,22 +46,20 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <div className="hidden md:flex items-center space-x-1">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center ${
-                    isActive(item.path)
-                      ? "bg-apuntea-purple text-white"
-                      : "text-foreground hover:bg-apuntea-light hover:text-apuntea-purple"
-                  }`}
-                >
-                  {item.icon}
-                  <span className="ml-2">{item.name}</span>
-                </Link>
-              ))}
-            </div>
+            {navigationItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center ${
+                  isActive(item.path)
+                    ? "bg-apuntea-purple text-white"
+                    : "text-foreground hover:bg-apuntea-light hover:text-apuntea-purple"
+                }`}
+              >
+                {item.icon}
+                <span className="ml-2">{item.name}</span>
+              </Link>
+            ))}
           </div>
 
           <div className="hidden md:flex items-center ml-6">
