@@ -72,6 +72,9 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   // Add new subcategory
   const addSubcategory = (categoryId: string, name: string) => {
+    // Ensure name is uppercase
+    const uppercaseName = name.toUpperCase();
+    
     setCategories(prev => 
       prev.map(category => {
         if (category.id === categoryId && category.editable) {
@@ -79,7 +82,7 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
             ...category,
             subcategories: [
               ...category.subcategories,
-              { id: uuidv4(), name }
+              { id: uuidv4(), name: uppercaseName }
             ]
           };
         }
@@ -89,19 +92,22 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
     
     toast({
       title: "Alt kategori eklendi",
-      description: `"${name}" başarıyla eklendi.`,
+      description: `"${uppercaseName}" başarıyla eklendi.`,
     });
   };
 
   // Update subcategory
   const updateSubcategory = (categoryId: string, subcategoryId: string, newName: string) => {
+    // Ensure new name is uppercase
+    const uppercaseNewName = newName.toUpperCase();
+    
     setCategories(prev => 
       prev.map(category => {
         if (category.id === categoryId && category.editable) {
           return {
             ...category,
             subcategories: category.subcategories.map(sub => 
-              sub.id === subcategoryId ? { ...sub, name: newName } : sub
+              sub.id === subcategoryId ? { ...sub, name: uppercaseNewName } : sub
             )
           };
         }
@@ -111,7 +117,7 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
     
     toast({
       title: "Alt kategori güncellendi",
-      description: `Alt kategori başarıyla "${newName}" olarak güncellendi.`,
+      description: `Alt kategori başarıyla "${uppercaseNewName}" olarak güncellendi.`,
     });
   };
 

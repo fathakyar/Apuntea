@@ -37,9 +37,15 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
+  // Sort subcategories alphabetically by name
+  const sortedSubcategories = [...subcategories].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+
   const handleAdd = () => {
     if (newSubcategory.trim()) {
-      onAdd(newSubcategory.trim());
+      // Convert to uppercase before adding
+      onAdd(newSubcategory.trim().toUpperCase());
       setNewSubcategory("");
     }
   };
@@ -56,10 +62,20 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
 
   const saveEdit = (id: string) => {
     if (editValue.trim()) {
-      onUpdate(id, editValue.trim());
+      // Convert to uppercase before updating
+      onUpdate(id, editValue.trim().toUpperCase());
       setEditingId(null);
       setEditValue("");
     }
+  };
+
+  // Auto convert input to uppercase
+  const handleNewSubcategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewSubcategory(e.target.value.toUpperCase());
+  };
+
+  const handleEditValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditValue(e.target.value.toUpperCase());
   };
 
   return (
@@ -89,13 +105,13 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
         <div className="space-y-4">
           {/* Subcategories list */}
           <div className="flex flex-wrap gap-2">
-            {subcategories.map((subcategory) => (
+            {sortedSubcategories.map((subcategory) => (
               <div key={subcategory.id} className="relative">
                 {editingId === subcategory.id ? (
                   <div className="flex items-center space-x-1">
                     <Input
                       value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
+                      onChange={handleEditValueChange}
                       className="h-8 min-w-40 text-sm"
                       autoFocus
                     />
@@ -153,7 +169,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
             <div className="flex items-center space-x-2 mt-4">
               <Input
                 value={newSubcategory}
-                onChange={(e) => setNewSubcategory(e.target.value)}
+                onChange={handleNewSubcategoryChange}
                 placeholder="Yeni alt kategori"
                 className="h-9"
               />
