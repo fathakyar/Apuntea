@@ -1,0 +1,177 @@
+
+import React, { useState } from "react";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, Pencil, X, Info } from "lucide-react";
+import { Subcategory } from "@/types";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+
+interface CategoryCardProps {
+  title: string;
+  description?: string;
+  subcategories: Subcategory[];
+  editable: boolean;
+  onAdd: (name: string) => void;
+  onUpdate: (id: string, name: string) => void;
+  onDelete: (id: string) => void;
+}
+
+const CategoryCard: React.FC<CategoryCardProps> = ({
+  title,
+  description,
+  subcategories,
+  editable,
+  onAdd,
+  onUpdate,
+  onDelete
+}) => {
+  const [newSubcategory, setNewSubcategory] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+
+  const handleAdd = () => {
+    if (newSubcategory.trim()) {
+      onAdd(newSubcategory.trim());
+      setNewSubcategory("");
+    }
+  };
+
+  const startEditing = (subcategory: Subcategory) => {
+    setEditingId(subcategory.id);
+    setEditValue(subcategory.name);
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditValue("");
+  };
+
+  const saveEdit = (id: string) => {
+    if (editValue.trim()) {
+      onUpdate(id, editValue.trim());
+      setEditingId(null);
+      setEditValue("");
+    }
+  };
+
+  return (
+    <Card className="w-full">
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-xl">{title}</CardTitle>
+          {!editable && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div>
+                    <Info className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Bu kategori otomatik olarak güncellenir</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+        {description && <CardDescription>{description}</CardDescription>}
+      </CardHeader>
+      
+      <CardContent>
+        <div className="space-y-4">
+          {/* Subcategories list */}
+          <div className="flex flex-wrap gap-2">
+            {subcategories.map((subcategory) => (
+              <div key={subcategory.id} className="relative">
+                {editingId === subcategory.id ? (
+                  <div className="flex items-center space-x-1">
+                    <Input
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      className="h-8 min-w-40 text-sm"
+                      autoFocus
+                    />
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="h-8 w-8 p-0" 
+                      onClick={() => saveEdit(subcategory.id)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="h-8 w-8 p-0" 
+                      onClick={cancelEditing}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <Badge 
+                    variant="outline" 
+                    className="px-3 py-1 h-auto text-sm flex items-center gap-1 group"
+                  >
+                    {subcategory.name}
+                    {editable && (
+                      <div className="flex items-center">
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-5 w-5 p-0 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" 
+                          onClick={() => startEditing(subcategory)}
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="h-5 w-5 p-0 ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-red-500" 
+                          onClick={() => onDelete(subcategory.id)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
+                  </Badge>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          {/* Add new subcategory form */}
+          {editable && (
+            <div className="flex items-center space-x-2 mt-4">
+              <Input
+                value={newSubcategory}
+                onChange={(e) => setNewSubcategory(e.target.value)}
+                placeholder="Yeni alt kategori"
+                className="h-9"
+              />
+              <Button 
+                size="sm" 
+                onClick={handleAdd}
+                disabled={!newSubcategory.trim()}
+                className="whitespace-nowrap"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Ekle
+              </Button>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default CategoryCard;

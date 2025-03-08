@@ -46,3 +46,23 @@ declare global {
     gapi: any;
   }
 }
+
+// Tanımlamalar (Definitions) Types
+export interface Subcategory {
+  id: string;
+  name: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  subcategories: Subcategory[];
+  editable: boolean;
+}
+
+export interface Currency {
+  code: string;
+  name: string;
+  symbol: string;
+  selected: boolean;
+}

@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,7 @@ import {
 const Navbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const navigationItems = [
@@ -34,7 +35,7 @@ const Navbar = () => {
     { name: "Yeni Kayıt", path: "/upload", icon: <Plus className="h-5 w-5" /> },
     { name: "Kayıtlar", path: "/records", icon: <FileText className="h-5 w-5" /> },
     { name: "Ajanda", path: "/agenda", icon: <Calendar className="h-5 w-5" /> },
-    { name: ".BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
+    { name: "BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
   ];
 
   const isActive = (path: string) => {
@@ -92,7 +93,10 @@ const Navbar = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuItem 
+                      className="cursor-pointer"
+                      onClick={() => navigate("/definitions")}
+                    >
                       <FileInput className="mr-2 h-4 w-4" />
                       <span>Tanımlamalar</span>
                     </DropdownMenuItem>
@@ -158,6 +162,10 @@ const Navbar = () => {
                     variant="ghost" 
                     size="icon" 
                     className="text-muted-foreground hover:text-primary"
+                    onClick={() => {
+                      navigate("/definitions");
+                      setIsOpen(false);
+                    }}
                   >
                     <FileInput className="h-5 w-5" />
                   </Button>
