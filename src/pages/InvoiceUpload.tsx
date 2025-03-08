@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -21,6 +20,7 @@ const InvoiceUpload = () => {
   const [isExtracting, setIsExtracting] = useState<boolean>(false);
   const [uploadStep, setUploadStep] = useState<1 | 2>(1);
   const [isGoogleDriveAuthInitiated, setIsGoogleDriveAuthInitiated] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleFileSelect = async (selectedFile: File) => {
     setFile(selectedFile);
@@ -37,6 +37,7 @@ const InvoiceUpload = () => {
         description: "Please verify the extracted information",
       });
     } catch (error) {
+      console.error("Extraction error:", error);
       toast({
         title: "Extraction failed",
         description: "Could not extract data from the document",
@@ -70,13 +71,20 @@ const InvoiceUpload = () => {
     }
     
     setIsLoading(true);
+    setUploadError(null);
     
     try {
+      console.log("Starting form submission process...");
+      
       // Upload to Google Drive
+      console.log("Uploading to Google Drive...");
       const googleDriveUrl = await uploadFileToGoogleDrive(file);
+      console.log("Google Drive upload successful. URL:", googleDriveUrl);
       
       // Save invoice with Google Drive URL
+      console.log("Saving invoice to local storage...");
       const invoice = saveInvoice(formData, googleDriveUrl);
+      console.log("Invoice saved successfully:", invoice);
       
       toast({
         title: "Invoice saved",
@@ -84,11 +92,13 @@ const InvoiceUpload = () => {
       });
       
       navigate("/records");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error in form submission:", error);
+      const errorMessage = error?.message || "Could not save the invoice";
+      setUploadError(errorMessage);
       toast({
         title: "Error saving invoice",
-        description: "Could not save the invoice",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -101,13 +111,22 @@ const InvoiceUpload = () => {
     const initGoogleAuth = async () => {
       if (!isGoogleDriveAuthInitiated) {
         try {
+          console.log("Initializing Google Drive API...");
           // Load Google API script
           const script = document.createElement("script");
           script.src = "https://apis.google.com/js/api.js";
           script.async = true;
           script.defer = true;
-          document.body.appendChild(script);
           
+          script.onload = () => {
+            console.log("Google API script loaded successfully");
+          };
+          
+          script.onerror = (error) => {
+            console.error("Error loading Google API script:", error);
+          };
+          
+          document.body.appendChild(script);
           setIsGoogleDriveAuthInitiated(true);
         } catch (error) {
           console.error("Error initializing Google Drive:", error);
@@ -127,6 +146,13 @@ const InvoiceUpload = () => {
             Upload your invoice for automatic data extraction
           </p>
         </div>
+
+        {uploadError && (
+          <div className="bg-destructive/15 border border-destructive text-destructive px-4 py-3 rounded-md">
+            <h4 className="font-medium mb-1">Upload Error</h4>
+            <p className="text-sm">{uploadError}</p>
+          </div>
+        )}
 
         {uploadStep === 1 ? (
           <Card className="glass-card">

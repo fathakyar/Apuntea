@@ -3,7 +3,7 @@ import { toast } from "@/components/ui/use-toast";
 
 // Google Drive API credentials
 const CLIENT_ID = "551176477836-7ggose37nkbdm8rdr2qf1becbskqeb1d.apps.googleusercontent.com";
-const API_KEY = "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";
+const API_KEY = "AIzaSyBaYEwmLyZ7a2zvAMnAOw5tU04dlkb3mBo"; // Updated API Key
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 const SCOPES = "https://www.googleapis.com/auth/drive.file";
 
@@ -66,6 +66,7 @@ export const authenticateWithGoogle = async (): Promise<void> => {
     await initGoogleDriveApi();
     if (!isGoogleAuthenticated()) {
       await window.gapi.auth2.getAuthInstance().signIn();
+      console.log("Google authentication successful");
     }
   } catch (error) {
     console.error("Google authentication failed:", error);
@@ -83,7 +84,9 @@ export const authenticateWithGoogle = async (): Promise<void> => {
  */
 export const uploadFileToGoogleDrive = async (file: File): Promise<string> => {
   try {
+    console.log("Starting Google Drive upload process...");
     await authenticateWithGoogle();
+    console.log("Authentication complete, preparing file upload...");
     
     const metadata = {
       name: file.name,
@@ -102,6 +105,7 @@ export const uploadFileToGoogleDrive = async (file: File): Promise<string> => {
       .currentUser.get()
       .getAuthResponse().access_token;
     
+    console.log("Sending file to Google Drive API...");
     const response = await fetch(
       "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
       {
@@ -114,10 +118,36 @@ export const uploadFileToGoogleDrive = async (file: File): Promise<string> => {
     );
     
     if (!response.ok) {
-      throw new Error("File upload to Google Drive failed");
+      const errorData = await response.text();
+      console.error("Drive API Error:", errorData);
+      throw new Error(`File upload to Google Drive failed: ${response.status} ${response.statusText}`);
     }
     
     const data = await response.json();
+    console.log("Upload successful, file ID:", data.id);
+    
+    // Make the file publicly accessible via link
+    const shareResponse = await fetch(
+      `https://www.googleapis.com/drive/v3/files/${data.id}/permissions`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          role: "reader",
+          type: "anyone",
+        }),
+      }
+    );
+    
+    if (!shareResponse.ok) {
+      console.warn("Could not make file publicly accessible, but upload succeeded");
+    } else {
+      console.log("File is now publicly accessible");
+    }
+    
     return `https://drive.google.com/file/d/${data.id}/view`;
   } catch (error) {
     console.error("Error uploading to Google Drive:", error);
