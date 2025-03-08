@@ -4,14 +4,25 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
-  LogOut,
   Menu,
   X,
   FileText,
-  Upload,
+  Plus,
   LayoutDashboard,
   LineChart,
+  Calendar,
+  User,
+  Settings,
+  LogOut,
+  FileInput
 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -20,8 +31,9 @@ const Navbar = () => {
 
   const navigationItems = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: "Upload Invoice", path: "/upload", icon: <Upload className="h-5 w-5" /> },
-    { name: "Records", path: "/records", icon: <FileText className="h-5 w-5" /> },
+    { name: "Yeni Kayıt", path: "/upload", icon: <Plus className="h-5 w-5" /> },
+    { name: "Kayıtlar", path: "/records", icon: <FileText className="h-5 w-5" /> },
+    { name: "Ajanda", path: "/agenda", icon: <Calendar className="h-5 w-5" /> },
     { name: ".BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
   ];
 
@@ -69,14 +81,32 @@ const Navbar = () => {
                   <span className="font-medium text-sm">{user.email}</span>
                   <span className="text-xs text-muted-foreground">Admin</span>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={logout} 
-                  className="text-muted-foreground hover:text-destructive"
-                >
-                  <LogOut className="h-5 w-5" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      className="text-muted-foreground hover:text-primary"
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <FileInput className="mr-2 h-4 w-4" />
+                      <span>Tanımlamalar</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Ayarlar</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer text-destructive" onClick={logout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             )}
           </div>
@@ -123,17 +153,33 @@ const Navbar = () => {
                   <p className="text-sm font-medium">{user.email}</p>
                   <p className="text-xs text-muted-foreground">Admin</p>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => {
-                    logout();
-                    setIsOpen(false);
-                  }}
-                  className="text-muted-foreground hover:text-destructive"
-                >
-                  <LogOut className="h-5 w-5" />
-                </Button>
+                <div className="flex space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <FileInput className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="text-muted-foreground hover:text-primary"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           )}

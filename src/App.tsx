@@ -14,6 +14,7 @@ import InvoiceEdit from "@/pages/InvoiceEdit";
 import Records from "@/pages/Records";
 import NotFound from "@/pages/NotFound";
 import BusinessIntelligence from "@/pages/BusinessIntelligence";
+import Agenda from "@/pages/Agenda";
 
 // Initialize the query client
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/records" element={<Records />} />
             <Route path="/edit/:id" element={<InvoiceEdit />} />
             <Route path="/bi" element={<BusinessIntelligence />} />
+            <Route path="/agenda" element={<Agenda />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
