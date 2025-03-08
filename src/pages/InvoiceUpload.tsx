@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import FileUpload from "@/components/FileUpload";
@@ -6,7 +7,6 @@ import InvoiceForm from "@/components/InvoiceForm";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { extractInvoiceData, saveInvoice } from "@/utils/invoiceUtils";
-import { uploadFileToGoogleDrive } from "@/utils/googleDriveUtils";
 import { InvoiceFormData } from "@/types";
 import { Loader2, Upload, Check } from "lucide-react";
 
@@ -19,7 +19,6 @@ const InvoiceUpload = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isExtracting, setIsExtracting] = useState<boolean>(false);
   const [uploadStep, setUploadStep] = useState<1 | 2>(1);
-  const [isGoogleDriveAuthInitiated, setIsGoogleDriveAuthInitiated] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleFileSelect = async (selectedFile: File) => {
@@ -76,19 +75,17 @@ const InvoiceUpload = () => {
     try {
       console.log("Starting form submission process...");
       
-      // Upload to Google Drive
-      console.log("Uploading to Google Drive...");
-      const googleDriveUrl = await uploadFileToGoogleDrive(file);
-      console.log("Google Drive upload successful. URL:", googleDriveUrl);
+      // Store the file URL locally instead of uploading to Google Drive
+      console.log("Storing file locally...");
       
-      // Save invoice with Google Drive URL
+      // Save invoice with local file URL
       console.log("Saving invoice to local storage...");
-      const invoice = saveInvoice(formData, googleDriveUrl);
+      const invoice = saveInvoice(formData, fileUrl);
       console.log("Invoice saved successfully:", invoice);
       
       toast({
         title: "Invoice saved",
-        description: "Invoice has been successfully saved to Google Drive",
+        description: "Invoice has been successfully saved",
       });
       
       navigate("/records");
@@ -105,37 +102,6 @@ const InvoiceUpload = () => {
       setIsLoading(false);
     }
   };
-
-  // Initial Google Drive auth on component mount
-  useEffect(() => {
-    const initGoogleAuth = async () => {
-      if (!isGoogleDriveAuthInitiated) {
-        try {
-          console.log("Initializing Google Drive API...");
-          // Load Google API script
-          const script = document.createElement("script");
-          script.src = "https://apis.google.com/js/api.js";
-          script.async = true;
-          script.defer = true;
-          
-          script.onload = () => {
-            console.log("Google API script loaded successfully");
-          };
-          
-          script.onerror = (error) => {
-            console.error("Error loading Google API script:", error);
-          };
-          
-          document.body.appendChild(script);
-          setIsGoogleDriveAuthInitiated(true);
-        } catch (error) {
-          console.error("Error initializing Google Drive:", error);
-        }
-      }
-    };
-    
-    initGoogleAuth();
-  }, [isGoogleDriveAuthInitiated]);
 
   return (
     <Layout>

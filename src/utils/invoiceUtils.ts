@@ -2,7 +2,6 @@
 import { Invoice, InvoiceFormData } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
 import { formatText, formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
-import { deleteFileFromGoogleDrive } from "@/utils/googleDriveUtils";
 
 // Mock function to simulate invoice data extraction
 export const extractInvoiceData = async (file: File): Promise<InvoiceFormData> => {
@@ -91,18 +90,6 @@ export const updateInvoice = (invoice: Invoice): void => {
 // Delete invoice by ID
 export const deleteInvoice = async (id: string): Promise<void> => {
   const invoices = getInvoices();
-  const invoice = invoices.find(inv => inv.id === id);
-  
-  if (invoice && invoice.documentLink.includes("drive.google.com")) {
-    try {
-      // Delete file from Google Drive
-      await deleteFileFromGoogleDrive(invoice.documentLink);
-    } catch (error) {
-      console.error("Error deleting file from Google Drive:", error);
-      // Continue with deletion from local storage even if Drive deletion fails
-    }
-  }
-  
   const updatedInvoices = invoices.filter(invoice => invoice.id !== id);
   localStorage.setItem('apuntea_invoices', JSON.stringify(updatedInvoices));
 };
