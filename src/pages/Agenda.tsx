@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from "react";
-import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Plus } from "lucide-react";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
@@ -8,10 +7,14 @@ import { AgendaEvent } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { useToast } from "@/hooks/use-toast";
 import { ensureUppercase } from "@/utils/formatUtils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // Load data from local storage
   useEffect(() => {
@@ -41,8 +44,8 @@ const Agenda = () => {
     setEvents(prev => [...prev, eventWithId]);
     
     toast({
-      title: "Etkinlik eklendi",
-      description: `"${eventWithId.title}" başarıyla eklendi.`,
+      title: t.eventAdded || "Event added",
+      description: `"${eventWithId.title}" ${t.successfullyAdded || "successfully added"}.`,
     });
   };
 
@@ -62,8 +65,8 @@ const Agenda = () => {
     );
     
     toast({
-      title: "Etkinlik güncellendi",
-      description: `"${uppercaseEvent.title}" başarıyla güncellendi.`,
+      title: t.eventUpdated || "Event updated",
+      description: `"${uppercaseEvent.title}" ${t.successfullyUpdated || "successfully updated"}.`,
     });
   };
 
@@ -74,40 +77,38 @@ const Agenda = () => {
     setEvents(prev => prev.filter(event => event.id !== eventId));
     
     toast({
-      title: "Etkinlik silindi",
+      title: t.eventDeleted || "Event deleted",
       description: eventToDelete 
-        ? `"${eventToDelete.title}" başarıyla silindi.`
-        : "Etkinlik başarıyla silindi.",
+        ? `"${eventToDelete.title}" ${t.successfullyDeleted || "successfully deleted"}.`
+        : t.eventSuccessfullyDeleted || "Event successfully deleted.",
     });
   };
 
   return (
-    <Layout>
-      <div className="grid grid-cols-1 gap-6 animate-slide-in">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-1 flex items-center">
-              <Calendar className="mr-2 h-7 w-7" />
-              Ajanda
-            </h1>
-            <p className="text-muted-foreground">
-              Etkinlikleri ve hatırlatmaları düzenleme
-            </p>
-          </div>
+    <div className="grid grid-cols-1 gap-6 animate-slide-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold mb-1 flex items-center">
+            <Calendar className="mr-2 h-7 w-7" />
+            {t.agenda}
+          </h1>
+          <p className="text-muted-foreground">
+            {t.manageEventsAndReminders || "Manage events and reminders"}
+          </p>
         </div>
-
-        <Card className="rounded-sm">
-          <CardContent className="p-6">
-            <AgendaCalendar 
-              events={events}
-              onAddEvent={handleAddEvent}
-              onEditEvent={handleEditEvent}
-              onDeleteEvent={handleDeleteEvent}
-            />
-          </CardContent>
-        </Card>
       </div>
-    </Layout>
+
+      <Card className="rounded-sm">
+        <CardContent className="p-6">
+          <AgendaCalendar 
+            events={events}
+            onAddEvent={handleAddEvent}
+            onEditEvent={handleEditEvent}
+            onDeleteEvent={handleDeleteEvent}
+          />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

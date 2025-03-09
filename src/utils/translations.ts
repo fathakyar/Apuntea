@@ -1,4 +1,3 @@
-
 export type TranslationKey = 
   | "dashboard" 
   | "newRecord" 
@@ -65,7 +64,15 @@ export type TranslationKey =
   | "enterCredentials"
   | "signIn"
   | "signingIn"
-  | "demoCredentials";
+  | "demoCredentials"
+  | "eventAdded"
+  | "eventUpdated"
+  | "eventDeleted"
+  | "successfullyAdded"
+  | "successfullyUpdated"
+  | "successfullyDeleted"
+  | "eventSuccessfullyDeleted"
+  | "manageEventsAndReminders";
 
 export type TranslationsType = {
   [key in TranslationKey]: string;
@@ -138,7 +145,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "ENTER YOUR CREDENTIALS TO ACCESS YOUR ACCOUNT",
     signIn: "SIGN IN",
     signingIn: "SIGNING IN...",
-    demoCredentials: "DEMO CREDENTIALS: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "DEMO CREDENTIALS: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "EVENT ADDED",
+    eventUpdated: "EVENT UPDATED",
+    eventDeleted: "EVENT DELETED",
+    successfullyAdded: "successfully added",
+    successfullyUpdated: "successfully updated",
+    successfullyDeleted: "successfully deleted",
+    eventSuccessfullyDeleted: "Event successfully deleted",
+    manageEventsAndReminders: "MANAGE EVENTS AND REMINDERS"
   },
   es: {
     dashboard: "PANEL",
@@ -206,7 +221,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "INGRESE SUS CREDENCIALES PARA ACCEDER A SU CUENTA",
     signIn: "INICIAR SESIÓN",
     signingIn: "INICIANDO SESIÓN...",
-    demoCredentials: "CREDENCIALES DE DEMO: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "CREDENCIALES DE DEMO: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "EVENTO AÑADIDO",
+    eventUpdated: "EVENTO ACTUALIZADO",
+    eventDeleted: "EVENTO ELIMINADO",
+    successfullyAdded: "agregado con éxito",
+    successfullyUpdated: "actualizado con éxito",
+    successfullyDeleted: "eliminado con éxito",
+    eventSuccessfullyDeleted: "Evento eliminado con éxito",
+    manageEventsAndReminders: "ADMINISTRAR EVENTOS Y RECORDATORIOS"
   },
   de: {
     dashboard: "DASHBOARD",
@@ -274,7 +297,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "GEBEN SIE IHRE ANMELDEDATEN EIN, UM AUF IHR KONTO ZUZUGREIFEN",
     signIn: "ANMELDEN",
     signingIn: "ANMELDUNG...",
-    demoCredentials: "DEMO-ANMELDEDATEN: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "DEMO-ANMELDEDATEN: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "EREIGNIS HINZUGEFÜGT",
+    eventUpdated: "EREIGNIS AKTUALISIERT",
+    eventDeleted: "EREIGNIS GELÖSCHT",
+    successfullyAdded: "erfolgreich hinzugefügt",
+    successfullyUpdated: "erfolgreich aktualisiert",
+    successfullyDeleted: "erfolgreich gelöscht",
+    eventSuccessfullyDeleted: "Ereignis erfolgreich gelöscht",
+    manageEventsAndReminders: "EREIGNISSE UND ERINNERUNGEN VERWALTEN"
   },
   fr: {
     dashboard: "TABLEAU DE BORD",
@@ -342,7 +373,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "ENTREZ VOS IDENTIFIANTS POUR ACCÉDER À VOTRE COMPTE",
     signIn: "SE CONNECTER",
     signingIn: "CONNEXION...",
-    demoCredentials: "IDENTIFIANTS DE DÉMO: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "IDENTIFIANTS DE DÉMO: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "ÉVÉNEMENT AJOUTÉ",
+    eventUpdated: "ÉVÉNEMENT MIS À JOUR",
+    eventDeleted: "ÉVÉNEMENT SUPPRIMÉ",
+    successfullyAdded: "ajouté avec succès",
+    successfullyUpdated: "mis à jour avec succès",
+    successfullyDeleted: "supprimé avec succès",
+    eventSuccessfullyDeleted: "Événement supprimé avec succès",
+    manageEventsAndReminders: "GÉRER LES ÉVÉNEMENTS ET LES RAPPELS"
   },
   it: {
     dashboard: "DASHBOARD",
@@ -410,7 +449,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "INSERISCI LE TUE CREDENZIALI PER ACCEDERE AL TUO ACCOUNT",
     signIn: "ACCEDI",
     signingIn: "ACCESSO IN CORSO...",
-    demoCredentials: "CREDENZIALI DEMO: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "CREDENZIALI DEMO: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "EVENTO AGGIUNTO",
+    eventUpdated: "EVENTO AGGIORNATO",
+    eventDeleted: "EVENTO ELIMINATO",
+    successfullyAdded: "aggiunto con successo",
+    successfullyUpdated: "aggiornato con successo",
+    successfullyDeleted: "eliminato con successo",
+    eventSuccessfullyDeleted: "Evento eliminato con successo",
+    manageEventsAndReminders: "GESTISCI EVENTI E PROMEMORIA"
   },
   pt: {
     dashboard: "PAINEL",
@@ -478,7 +525,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "INSIRA SUAS CREDENCIAIS PARA ACESSAR SUA CONTA",
     signIn: "ENTRAR",
     signingIn: "ENTRANDO...",
-    demoCredentials: "CREDENCIAIS DE DEMONSTRAÇÃO: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "CREDENCIAIS DE DEMONSTRAÇÃO: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "EVENTO ADICIONADO",
+    eventUpdated: "EVENTO ATUALIZADO",
+    eventDeleted: "EVENTO EXCLUÍDO",
+    successfullyAdded: "adicionado com sucesso",
+    successfullyUpdated: "atualizado com sucesso",
+    successfullyDeleted: "excluído com sucesso",
+    eventSuccessfullyDeleted: "Evento excluído com sucesso",
+    manageEventsAndReminders: "GERENCIAR EVENTOS E LEMBRETES"
   },
   ar: {
     dashboard: "لوحة القيادة",
@@ -546,7 +601,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "أدخل بيانات اعتمادك للوصول إلى حسابك",
     signIn: "تسجيل الدخول",
     signingIn: "جاري تسجيل الدخول...",
-    demoCredentials: "بيانات اعتماد تجريبية: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "بيانات اعتماد تجريبية: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "تمت إضافة الحدث",
+    eventUpdated: "تم تحديث الحدث",
+    eventDeleted: "تم حذف الحدث",
+    successfullyAdded: "تمت الإضافة بنجاح",
+    successfullyUpdated: "تم التحديث بنجاح",
+    successfullyDeleted: "تم الحذف بنجاح",
+    eventSuccessfullyDeleted: "تم حذف الحدث بنجاح",
+    manageEventsAndReminders: "إدارة الأحداث والتذكيرات"
   },
   zh: {
     dashboard: "仪表板",
@@ -614,7 +677,15 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "输入您的凭据以访问您的账户",
     signIn: "登录",
     signingIn: "正在登录...",
-    demoCredentials: "演示凭据：ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "演示凭据：ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "已添加事件",
+    eventUpdated: "已更新事件",
+    eventDeleted: "已删除事件",
+    successfullyAdded: "添加成功",
+    successfullyUpdated: "更新成功",
+    successfullyDeleted: "删除成功",
+    eventSuccessfullyDeleted: "事件已成功删除",
+    manageEventsAndReminders: "管理事件和提醒"
   },
   tr: {
     dashboard: "GÖSTERGE PANELİ",
@@ -682,6 +753,14 @@ export const translations: Record<string, TranslationsType> = {
     enterCredentials: "HESABINIZA ERİŞMEK İÇİN BİLGİLERİNİZİ GİRİN",
     signIn: "GİRİŞ YAP",
     signingIn: "GİRİŞ YAPILIYOR...",
-    demoCredentials: "DEMO BİLGİLERİ: ADMIN@APUNTEA.COM / 1ADMIN?"
+    demoCredentials: "DEMO BİLGİLERİ: ADMIN@APUNTEA.COM / 1ADMIN?",
+    eventAdded: "ETKİNLİK EKLENDİ",
+    eventUpdated: "ETKİNLİK GÜNCELLENDİ",
+    eventDeleted: "ETKİNLİK SİLİNDİ",
+    successfullyAdded: "başarıyla eklendi",
+    successfullyUpdated: "başarıyla güncellendi",
+    successfullyDeleted: "başarıyla silindi",
+    eventSuccessfullyDeleted: "Etkinlik başarıyla silindi",
+    manageEventsAndReminders: "ETKİNLİKLERİ VE HATIRLATICILARI YÖNET"
   }
 };

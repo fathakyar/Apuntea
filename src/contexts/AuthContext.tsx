@@ -28,7 +28,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       // This would normally be an API call to a backend
       // For demo purposes, we're using hardcoded credentials
-      if (email === "admin@apuntea.com" && password === "1admin?") {
+      // Fix: Make credentials case-insensitive for email
+      if (email.toLowerCase() === "admin@apuntea.com" && password === "1admin?") {
         const user = { email, isAuthenticated: true };
         setUser(user);
         localStorage.setItem("apuntea_user", JSON.stringify(user));

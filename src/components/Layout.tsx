@@ -12,7 +12,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, isLoading } = useAuth();
-  const { language } = useLanguage();
 
   // If loading, show a loading state
   if (isLoading) {
