@@ -7,11 +7,15 @@ import { getInvoices, deleteInvoice } from "@/utils/invoiceUtils";
 import { Invoice } from "@/types";
 import { Upload, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 const Records = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     loadInvoices();
@@ -32,13 +36,17 @@ const Records = () => {
       loadInvoices();
       
       toast({
-        title: "Invoice deleted",
-        description: "Invoice has been successfully deleted",
+        title: language === 'tr' ? "Fatura silindi" : "Invoice deleted",
+        description: language === 'tr' 
+          ? "Fatura başarıyla silindi" 
+          : "Invoice has been successfully deleted",
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Could not delete the invoice",
+        title: t.error,
+        description: language === 'tr' 
+          ? "Fatura silinemedi" 
+          : "Could not delete the invoice",
         variant: "destructive",
       });
     }
@@ -57,25 +65,37 @@ const Records = () => {
       linkElement.click();
       
       toast({
-        title: "Export successful",
-        description: "Invoice data has been exported successfully",
+        title: language === 'tr' ? "Dışa aktarma başarılı" : "Export successful",
+        description: language === 'tr' 
+          ? "Fatura verileri başarıyla dışa aktarıldı" 
+          : "Invoice data has been exported successfully",
       });
     } catch (error) {
       toast({
-        title: "Export failed",
-        description: "Could not export invoice data",
+        title: language === 'tr' ? "Dışa aktarma başarısız" : "Export failed",
+        description: language === 'tr' 
+          ? "Fatura verileri dışa aktarılamadı" 
+          : "Could not export invoice data",
         variant: "destructive",
       });
     }
+  };
+
+  // Records page translations
+  const recordsTranslations = {
+    invoiceRecords: language === 'tr' ? "Fatura Kayıtları" : "Invoice Records",
+    manageInvoices: language === 'tr' ? "Tüm fatura kayıtlarınızı tek bir yerden yönetin" : "Manage all your invoice records in one place",
+    uploadNew: language === 'tr' ? "Yeni Yükle" : "Upload New",
+    exportData: language === 'tr' ? "Verileri Dışa Aktar" : "Export Data",
   };
 
   return (
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-1">Invoice Records</h1>
+          <h1 className="text-3xl font-bold mb-1">{recordsTranslations.invoiceRecords}</h1>
           <p className="text-muted-foreground">
-            Manage all your invoice records in one place
+            {recordsTranslations.manageInvoices}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
@@ -84,7 +104,7 @@ const Records = () => {
             className="btn-primary"
           >
             <Upload className="h-4 w-4 mr-2" />
-            Upload New
+            {recordsTranslations.uploadNew}
           </Button>
           {invoices.length > 0 && (
             <Button 
@@ -92,7 +112,7 @@ const Records = () => {
               onClick={handleExport}
             >
               <Download className="h-4 w-4 mr-2" />
-              Export Data
+              {recordsTranslations.exportData}
             </Button>
           )}
         </div>

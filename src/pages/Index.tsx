@@ -2,6 +2,7 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import Layout from "@/components/Layout";
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -23,9 +24,12 @@ const Index = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated, render outlet (child routes) without wrapping in Layout
-  // Layout is now only rendered once by the parent routes
-  return <Outlet />;
+  // Wrap outlet in Layout to ensure header and footer are shown on all pages
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
 };
 
 export default Index;
