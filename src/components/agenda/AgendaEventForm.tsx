@@ -78,7 +78,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value.toUpperCase() }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
@@ -117,6 +117,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
           onChange={handleChange}
           placeholder="Başlık giriniz"
           required
+          className="rounded-sm"
         />
       </div>
 
@@ -127,7 +128,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
             value={formData.type}
             onValueChange={(value) => handleSelectChange("type", value)}
           >
-            <SelectTrigger id="type">
+            <SelectTrigger id="type" className="rounded-sm">
               <SelectValue placeholder="Tür seçiniz" />
             </SelectTrigger>
             <SelectContent>
@@ -143,7 +144,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
             value={formData.subcategoryId}
             onValueChange={(value) => handleSelectChange("subcategoryId", value)}
           >
-            <SelectTrigger id="subcategoryId">
+            <SelectTrigger id="subcategoryId" className="rounded-sm">
               <SelectValue placeholder="Alt kategori seçiniz" />
             </SelectTrigger>
             <SelectContent>
@@ -164,7 +165,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal",
+                "w-full justify-start text-left font-normal rounded-sm",
                 !date && "text-muted-foreground"
               )}
             >
@@ -172,7 +173,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
               {date ? format(date, "PPP") : <span>Tarih seçiniz</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
+          <PopoverContent className="w-auto p-0" align="start">
             <Calendar
               mode="single"
               selected={date}
@@ -193,6 +194,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
           onChange={handleChange}
           placeholder="Açıklama giriniz"
           rows={4}
+          className="rounded-sm"
         />
       </div>
 
@@ -202,7 +204,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
             <Button
               type="button"
               variant="outline"
-              className="text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              className="text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-sm"
               onClick={() => setIsDeleteAlertOpen(true)}
             >
               <Trash2 className="h-4 w-4 mr-2" />
@@ -211,10 +213,10 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
           )}
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm">
             İptal
           </Button>
-          <Button type="submit">
+          <Button type="submit" className="rounded-sm">
             {event ? "Güncelle" : "Ekle"}
           </Button>
         </div>
@@ -229,10 +231,10 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>İptal</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-sm">İptal</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-sm"
             >
               Sil
             </AlertDialogAction>

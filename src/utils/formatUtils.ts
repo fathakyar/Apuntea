@@ -46,3 +46,10 @@ export const parseEuropeanNumber = (value: string): number => {
   const normalized = value.replace(/\./g, "").replace(",", ".");
   return parseFloat(normalized);
 };
+
+/**
+ * Ensure input text is always uppercase
+ */
+export const ensureUppercase = (text: string): string => {
+  return text.toUpperCase();
+};

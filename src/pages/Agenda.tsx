@@ -7,12 +7,13 @@ import AgendaCalendar from "@/components/agenda/AgendaCalendar";
 import { AgendaEvent } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { useToast } from "@/hooks/use-toast";
+import { ensureUppercase } from "@/utils/formatUtils";
 
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
   const { toast } = useToast();
 
-  // Local storage'dan verileri yükle
+  // Load data from local storage
   useEffect(() => {
     const storedEvents = localStorage.getItem("apuntea_agenda_events");
     if (storedEvents) {
@@ -20,17 +21,20 @@ const Agenda = () => {
     }
   }, []);
 
-  // Local storage'a verileri kaydet
+  // Save data to local storage
   useEffect(() => {
     if (events.length > 0 || localStorage.getItem("apuntea_agenda_events")) {
       localStorage.setItem("apuntea_agenda_events", JSON.stringify(events));
     }
   }, [events]);
 
-  // Yeni etkinlik ekleme
+  // Add new event
   const handleAddEvent = (newEvent: Omit<AgendaEvent, "id">) => {
+    // Ensure all text content is uppercase
     const eventWithId = {
       ...newEvent,
+      title: ensureUppercase(newEvent.title),
+      description: ensureUppercase(newEvent.description),
       id: uuidv4()
     };
     
@@ -38,25 +42,32 @@ const Agenda = () => {
     
     toast({
       title: "Etkinlik eklendi",
-      description: `"${newEvent.title}" başarıyla eklendi.`,
+      description: `"${eventWithId.title}" başarıyla eklendi.`,
     });
   };
 
-  // Etkinlik düzenleme
+  // Edit event
   const handleEditEvent = (updatedEvent: AgendaEvent) => {
+    // Ensure all text content is uppercase
+    const uppercaseEvent = {
+      ...updatedEvent,
+      title: ensureUppercase(updatedEvent.title),
+      description: ensureUppercase(updatedEvent.description),
+    };
+    
     setEvents(prev => 
       prev.map(event => 
-        event.id === updatedEvent.id ? updatedEvent : event
+        event.id === uppercaseEvent.id ? uppercaseEvent : event
       )
     );
     
     toast({
       title: "Etkinlik güncellendi",
-      description: `"${updatedEvent.title}" başarıyla güncellendi.`,
+      description: `"${uppercaseEvent.title}" başarıyla güncellendi.`,
     });
   };
 
-  // Etkinlik silme
+  // Delete event
   const handleDeleteEvent = (eventId: string) => {
     const eventToDelete = events.find(e => e.id === eventId);
     
@@ -85,7 +96,7 @@ const Agenda = () => {
           </div>
         </div>
 
-        <Card>
+        <Card className="rounded-sm">
           <CardContent className="p-6">
             <AgendaCalendar 
               events={events}

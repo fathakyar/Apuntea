@@ -16,7 +16,7 @@
 
 @layer base {
   :root {
-    --background: 263 45% 98%;
+    --background: 0 0% 100%;
     --foreground: 263 45% 15%;
 
     --card: 0 0% 100%;
@@ -44,7 +44,7 @@
     --input: 263 45% 90%;
     --ring: 273 50% 48%;
 
-    --radius: 0.25rem;
+    --radius: 0.125rem;
   }
 
   .dark {
@@ -57,8 +57,8 @@
     --popover: 263 45% 10%;
     --popover-foreground: 263 45% 98%;
 
-    --primary: 273 50% 48%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 263 45% 6%;
 
     --secondary: 44 92% 53%;
     --secondary-foreground: 0 0% 12%;
@@ -66,15 +66,15 @@
     --muted: 263 45% 20%;
     --muted-foreground: 263 45% 80%;
 
-    --accent: 273 50% 16%;
-    --accent-foreground: 273 50% 90%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 90%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 263 45% 20%;
     --input: 263 45% 20%;
-    --ring: 273 50% 48%;
+    --ring: 0 0% 100%;
   }
 }
 
@@ -95,11 +95,11 @@
 
   /* Glass effect styles */
   .glass {
-    @apply bg-black/40 dark:bg-black/60 backdrop-blur-md border border-apuntea-purple/20 shadow-glass;
+    @apply bg-white/90 dark:bg-black/60 backdrop-blur-md border border-gray-200 dark:border-gray-800 shadow-glass;
   }
 
   .card {
-    @apply rounded-md p-6 transition-all duration-300 ease-in-out;
+    @apply rounded-sm p-6 transition-all duration-300 ease-in-out;
   }
 
   .glass-card {
@@ -112,17 +112,17 @@
   }
   
   .form-label {
-    @apply text-sm font-medium text-white;
+    @apply text-sm font-medium text-foreground;
   }
   
   .form-input {
-    @apply w-full rounded-md border border-apuntea-purple/40 bg-black/50 px-3 py-2 text-sm ring-offset-background 
-    placeholder:text-white/30 focus-visible:outline-none focus-visible:ring-2 
-    focus-visible:ring-apuntea-purple focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white;
+    @apply w-full rounded-sm border border-input bg-background px-3 py-2 text-sm ring-offset-background 
+    placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 
+    focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-foreground;
   }
   
   .btn-primary {
-    @apply bg-apuntea-purple hover:bg-apuntea-dark text-white transition-all;
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground transition-all;
   }
   
   .btn-secondary {
@@ -140,19 +140,19 @@
 
   /* Table styling */
   .table-header {
-    @apply bg-black/60 text-white border-b-2 border-apuntea-purple/50;
+    @apply bg-gray-100 dark:bg-black/60 text-foreground border-b-2 border-primary/50;
   }
 
   .table-row {
-    @apply border-b border-apuntea-purple/20 hover:bg-apuntea-purple/10 transition-colors;
+    @apply border-b border-primary/20 hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors;
   }
 
   /* Tab styling */
   .tab-active {
-    @apply bg-apuntea-purple text-white font-bold;
+    @apply bg-primary text-primary-foreground font-bold;
   }
 
   .tab-inactive {
-    @apply bg-black/60 text-white/70 hover:bg-apuntea-purple/30;
+    @apply bg-gray-100 dark:bg-black/60 text-foreground/70 hover:bg-primary/10;
   }
 }
