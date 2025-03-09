@@ -24,12 +24,9 @@ const Index = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // Wrap outlet in Layout to ensure header and footer are shown on all pages
-  return (
-    <Layout>
-      <Outlet />
-    </Layout>
-  );
+  // Outlet is used to render the child routes without wrapping them in Layout
+  // since Layout will now only be applied once from here
+  return <Layout><Outlet /></Layout>;
 };
 
 export default Index;
