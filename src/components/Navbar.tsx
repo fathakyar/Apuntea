@@ -14,7 +14,8 @@ import {
   User,
   Settings,
   LogOut,
-  FileInput
+  FileInput,
+  Search
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
+import { Input } from "@/components/ui/input";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -37,10 +39,10 @@ const Navbar = () => {
 
   const navigationItems = [
     { name: t.dashboard, path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: t.newRecord, path: "/upload", icon: <Plus className="h-5 w-5" /> },
+    { name: t.new, path: "/upload", icon: <Plus className="h-5 w-5" /> },
     { name: t.records, path: "/records", icon: <FileText className="h-5 w-5" /> },
     { name: t.agenda, path: "/agenda", icon: <Calendar className="h-5 w-5" /> },
-    { name: t.bi, path: "/bi", icon: <LineChart className="h-5 w-5" /> },
+    { name: ".BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
   ];
 
   const isActive = (path: string) => {
@@ -53,22 +55,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-apuntea-purple/30">
+    <nav className="bg-white dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-apuntea-purple/30 transition-all duration-300 shadow-sm hover:shadow-md">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-12">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <img
-                src="/lovable-uploads/4d2af4ce-8457-4acd-8aa3-6758e383a21f.png"
+                src="/lovable-uploads/23d89839-23e5-4a91-9d1e-ab2a8bb6a03e.png"
                 alt="Apuntea Logo"
                 className="h-8 mr-2"
               />
-              <span className="font-bold text-xl text-apuntea-purple uppercase">Apuntea</span>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          {/* Desktop Navigation - moved closer to logo */}
+          <div className="hidden md:flex items-center space-x-1 ml-4">
             {navigationItems.map((item) => (
               <Link
                 key={item.path}
@@ -85,7 +86,17 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="hidden md:flex items-center ml-6">
+          <div className="hidden md:flex items-center ml-auto gap-2">
+            {/* Search Bar */}
+            <div className="relative mr-2">
+              <Input
+                type="search"
+                placeholder={t.search}
+                className="h-8 w-40 rounded-full pl-8 pr-4 bg-gray-100 dark:bg-black/50 border-gray-200 dark:border-gray-700 text-sm"
+              />
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            </div>
+            
             {user && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -149,6 +160,18 @@ const Navbar = () => {
       {/* Mobile menu */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-black/90 backdrop-blur-md animate-slide-in">
+          {/* Mobile search */}
+          <div className="px-3 py-2">
+            <div className="relative">
+              <Input
+                type="search"
+                placeholder={t.search}
+                className="w-full h-9 rounded-full pl-8 pr-4 bg-gray-100 dark:bg-black/50 border-gray-200 dark:border-gray-700"
+              />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            </div>
+          </div>
+          
           {navigationItems.map((item) => (
             <Link
               key={item.path}

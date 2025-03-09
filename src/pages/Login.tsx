@@ -62,7 +62,7 @@ const Login = () => {
       <div className="w-full max-w-md animate-scale-in z-10">
         <div className="text-center mb-8">
           <img 
-            src="/lovable-uploads/4d2af4ce-8457-4acd-8aa3-6758e383a21f.png" 
+            src="/lovable-uploads/23d89839-23e5-4a91-9d1e-ab2a8bb6a03e.png" 
             alt="Apuntea Logo" 
             className="h-20 mx-auto mb-6" 
           />

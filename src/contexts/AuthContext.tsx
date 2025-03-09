@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { User, AuthContextType } from "@/types";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 // Create auth context
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -28,7 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       // This would normally be an API call to a backend
       // For demo purposes, we're using hardcoded credentials
-      // Fix: Make credentials case-insensitive for email
+      // Using case-insensitive comparison for email
       if (email.toLowerCase() === "admin@apuntea.com" && password === "1admin?") {
         const user = { email, isAuthenticated: true };
         setUser(user);

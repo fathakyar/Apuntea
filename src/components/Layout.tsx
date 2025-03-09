@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext"; 
 
 interface LayoutProps {
   children: React.ReactNode;

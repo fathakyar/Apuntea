@@ -2,6 +2,7 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import Layout from "@/components/Layout";
 
 const Index = () => {
   const { user, isLoading } = useAuth();
@@ -23,8 +24,12 @@ const Index = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated, render the outlet for nested routes
-  return <Outlet />;
+  // If authenticated, render outlet (child routes) within the Layout
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
 };
 
 export default Index;
