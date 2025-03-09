@@ -100,10 +100,10 @@ export default {
 				'scale-in': 'scale-in 0.3s ease-out'
 			},
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
+				sans: ['"UnB Pro Bold"', 'Inter', 'sans-serif'],
 			},
 			boxShadow: {
-				'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+				'glass': '0 4px 30px rgba(0, 0, 0, 0.3)',
 			},
 		}
 	},

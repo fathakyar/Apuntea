@@ -1,6 +1,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+@font-face {
+  font-family: 'UnB Pro Bold';
+  src: url('/fonts/UnB-Pro-Bold.woff2') format('woff2'),
+       url('/fonts/UnB-Pro-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,7 +44,7 @@
     --input: 263 45% 90%;
     --ring: 273 50% 48%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
   }
 
   .dark {
@@ -72,19 +81,25 @@
 @layer base {
   * {
     @apply border-border;
+    text-transform: uppercase;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground;
+    font-family: 'UnB Pro Bold', 'Inter', sans-serif;
+  }
+
+  input, textarea, select {
+    text-transform: uppercase;
   }
 
   /* Glass effect styles */
   .glass {
-    @apply bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/20 dark:border-black/20 shadow-glass;
+    @apply bg-black/40 dark:bg-black/60 backdrop-blur-md border border-apuntea-purple/20 shadow-glass;
   }
 
   .card {
-    @apply rounded-xl p-6 transition-all duration-300 ease-in-out;
+    @apply rounded-md p-6 transition-all duration-300 ease-in-out;
   }
 
   .glass-card {
@@ -97,13 +112,13 @@
   }
   
   .form-label {
-    @apply text-sm font-medium text-foreground;
+    @apply text-sm font-medium text-white;
   }
   
   .form-input {
-    @apply w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background 
-    placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 
-    focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply w-full rounded-md border border-apuntea-purple/40 bg-black/50 px-3 py-2 text-sm ring-offset-background 
+    placeholder:text-white/30 focus-visible:outline-none focus-visible:ring-2 
+    focus-visible:ring-apuntea-purple focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-white;
   }
   
   .btn-primary {
@@ -121,5 +136,23 @@
   
   .animate-ready.animate-visible {
     @apply opacity-100 transition-opacity duration-500 ease-in-out;
+  }
+
+  /* Table styling */
+  .table-header {
+    @apply bg-black/60 text-white border-b-2 border-apuntea-purple/50;
+  }
+
+  .table-row {
+    @apply border-b border-apuntea-purple/20 hover:bg-apuntea-purple/10 transition-colors;
+  }
+
+  /* Tab styling */
+  .tab-active {
+    @apply bg-apuntea-purple text-white font-bold;
+  }
+
+  .tab-inactive {
+    @apply bg-black/60 text-white/70 hover:bg-apuntea-purple/30;
   }
 }

@@ -7,12 +7,8 @@ import { FormattingOptions } from "@/types";
 export const formatText = (text: string, options?: FormattingOptions): string => {
   if (!text) return text;
   
-  // Convert to uppercase if specified
-  if (options?.toUpperCase) {
-    return text.toUpperCase();
-  }
-  
-  return text;
+  // Always convert to uppercase
+  return text.toUpperCase();
 };
 
 /**

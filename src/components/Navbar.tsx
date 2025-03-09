@@ -22,6 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
@@ -48,7 +49,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-md sticky top-0 z-50 border-b border-border">
+    <nav className="bg-black/80 dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-apuntea-purple/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -58,7 +59,7 @@ const Navbar = () => {
                 alt="Apuntea Logo"
                 className="h-8 mr-2"
               />
-              <span className="font-bold text-xl text-apuntea-purple">Apuntea</span>
+              <span className="font-bold text-xl text-apuntea-purple uppercase">Apuntea</span>
             </Link>
           </div>
 
@@ -68,10 +69,10 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center ${
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center uppercase ${
                   isActive(item.path)
                     ? "bg-apuntea-purple text-white"
-                    : "text-foreground hover:bg-apuntea-light hover:text-apuntea-purple"
+                    : "text-white hover:bg-apuntea-light hover:text-apuntea-purple"
                 }`}
               >
                 {item.icon}
@@ -82,44 +83,46 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center ml-6">
             {user && (
-              <div className="flex items-center">
-                <div className="flex flex-col items-end mr-4">
-                  <span className="font-medium text-sm">{user.email}</span>
-                  <span className="text-xs text-muted-foreground">Admin</span>
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      className="text-muted-foreground hover:text-primary"
-                    >
-                      <User className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem 
-                      className="cursor-pointer"
-                      onClick={() => navigate("/definitions")}
-                    >
-                      <FileInput className="mr-2 h-4 w-4" />
-                      <span>Tanımlamalar</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      className="cursor-pointer"
-                      onClick={() => navigate("/settings")}
-                    >
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Ayarlar</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer text-destructive" onClick={logout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Log out</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="text-white hover:text-apuntea-gold"
+                  >
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-black/90 border-apuntea-purple/50 text-white">
+                  <DropdownMenuLabel className="uppercase font-bold text-apuntea-purple">Admin</DropdownMenuLabel>
+                  <DropdownMenuItem className="text-white hover:text-apuntea-gold uppercase">
+                    {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-apuntea-purple/30" />
+                  <DropdownMenuItem 
+                    className="cursor-pointer text-white hover:text-apuntea-gold uppercase"
+                    onClick={() => handleNavigation("/definitions")}
+                  >
+                    <FileInput className="mr-2 h-4 w-4" />
+                    <span>Tanımlamalar</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    className="cursor-pointer text-white hover:text-apuntea-gold uppercase"
+                    onClick={() => handleNavigation("/settings")}
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Ayarlar</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-apuntea-purple/30" />
+                  <DropdownMenuItem 
+                    className="cursor-pointer text-destructive uppercase" 
+                    onClick={logout}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
 
@@ -127,7 +130,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:text-primary hover:bg-background"
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-apuntea-gold hover:bg-black"
             >
               {isOpen ? (
                 <X className="h-6 w-6" />
@@ -141,15 +144,15 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 bg-card/90 backdrop-blur-md animate-slide-in">
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-black/90 backdrop-blur-md animate-slide-in">
           {navigationItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`block px-3 py-2 rounded-md text-base font-medium flex items-center ${
+              className={`block px-3 py-2 rounded-md text-base font-medium flex items-center uppercase ${
                 isActive(item.path)
                   ? "bg-apuntea-purple text-white"
-                  : "text-foreground hover:bg-apuntea-light hover:text-apuntea-purple"
+                  : "text-white hover:bg-apuntea-light hover:text-apuntea-purple"
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -159,17 +162,17 @@ const Navbar = () => {
           ))}
           
           {user && (
-            <div className="px-3 py-2 border-t border-border mt-2 pt-2">
+            <div className="px-3 py-2 border-t border-apuntea-purple/30 mt-2 pt-2">
               <div className="flex items-center justify-between">
-                <div>
+                <div className="text-white uppercase">
                   <p className="text-sm font-medium">{user.email}</p>
-                  <p className="text-xs text-muted-foreground">Admin</p>
+                  <p className="text-xs text-apuntea-gold">Admin</p>
                 </div>
                 <div className="flex space-x-2">
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="text-muted-foreground hover:text-primary"
+                    className="text-white hover:text-apuntea-gold"
                     onClick={() => handleNavigation("/definitions")}
                   >
                     <FileInput className="h-5 w-5" />
@@ -177,7 +180,7 @@ const Navbar = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="text-muted-foreground hover:text-primary"
+                    className="text-white hover:text-apuntea-gold"
                     onClick={() => handleNavigation("/settings")}
                   >
                     <Settings className="h-5 w-5" />
@@ -189,7 +192,7 @@ const Navbar = () => {
                       logout();
                       setIsOpen(false);
                     }}
-                    className="text-muted-foreground hover:text-destructive"
+                    className="text-destructive hover:text-red-400"
                   >
                     <LogOut className="h-5 w-5" />
                   </Button>
