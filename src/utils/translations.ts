@@ -1,3 +1,4 @@
+<lov-code>
 export type TranslationKey = 
   | "dashboard" 
   | "newRecord" 
@@ -725,4 +726,3 @@ export const translations: Record<string, TranslationsType> = {
     exportData: "Exportar dados",
   },
   ar: {
-    dashboard:
