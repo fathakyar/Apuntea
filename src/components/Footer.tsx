@@ -1,9 +1,9 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 
 const Footer = () => {
@@ -11,8 +11,7 @@ const Footer = () => {
   const t = translations[language];
 
   const handleLanguageChange = (value: string) => {
-    setLanguage(value);
-    localStorage.setItem("apuntea_language", value);
+    setLanguage(value as Language);
   };
 
   return (
@@ -33,7 +32,7 @@ const Footer = () => {
             </Link>
           </div>
 
-          {/* Footer Links */}
+          {/* Footer Links - Right aligned */}
           <div className="flex flex-wrap gap-6 justify-end">
             <Link to="/about">
               <Button variant="link" className="p-0 h-auto">{t.aboutApuntea}</Button>
