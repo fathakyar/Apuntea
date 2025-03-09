@@ -3,7 +3,7 @@ import React from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, BarChart, AreaChart, PieChart } from "@/components/ui/chart";
+import { LineChart, BarChart, AreaChart, PieChart } from "@/components/ui/charts";
 
 const BusinessIntelligence = () => {
   const { language } = useLanguage();
