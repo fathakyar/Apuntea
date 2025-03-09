@@ -11,6 +11,8 @@ import AgendaEvent from "./AgendaEvent";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AgendaEvent as AgendaEventType } from "@/types";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 interface AgendaCalendarProps {
   events: AgendaEventType[];
@@ -35,6 +37,17 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
   
   const { categories } = useDefinitions();
   const notTaskCategory = categories.find(cat => cat.id === "noteTask");
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  // Get the correct locale for date formatting based on language
+  const getDateLocale = () => {
+    switch(language) {
+      case "tr": return tr;
+      // Add more locales as needed
+      default: return undefined;
+    }
+  };
 
   // Navigation helpers
   const navigate = (direction: "prev" | "next" | "today") => {
@@ -68,17 +81,18 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
   // View mode header
   const renderViewModeHeader = () => {
     let headerText = "";
+    const locale = getDateLocale();
     
     if (viewMode === "day") {
-      headerText = format(currentDate, "dd MMMM yyyy, EEEE", { locale: tr });
+      headerText = format(currentDate, "dd MMMM yyyy, EEEE", { locale });
     } else if (viewMode === "week") {
       const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
       const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
-      headerText = `${format(weekStart, "dd")} - ${format(weekEnd, "dd MMMM yyyy")}`;
+      headerText = `${format(weekStart, "dd")} - ${format(weekEnd, "dd MMMM yyyy", { locale })}`;
     } else if (viewMode === "month") {
-      headerText = format(currentDate, "MMMM yyyy", { locale: tr });
+      headerText = format(currentDate, "MMMM yyyy", { locale });
     } else if (viewMode === "year") {
-      headerText = format(currentDate, "yyyy", { locale: tr });
+      headerText = format(currentDate, "yyyy", { locale });
     }
     
     return (
@@ -109,7 +123,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               size="sm"
               onClick={() => navigate("today")}
             >
-              Bugün
+              {language === "tr" ? "Bugün" : "Today"}
             </Button>
             <Button
               variant="outline"
@@ -127,7 +141,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               className="bg-apuntea-gold text-black hover:bg-apuntea-gold/90"
             >
               <Plus className="h-4 w-4 mr-1" />
-              Ekle
+              {language === "tr" ? "Ekle" : t.new}
             </Button>
           </div>
         </div>
@@ -136,19 +150,19 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
           <TabsList className="w-full">
             <TabsTrigger value="day" className="flex items-center">
               <FileClock className="h-4 w-4 mr-2" />
-              Gün
+              {language === "tr" ? "Gün" : "Day"}
             </TabsTrigger>
             <TabsTrigger value="week" className="flex items-center">
               <Columns className="h-4 w-4 mr-2" />
-              Hafta
+              {language === "tr" ? "Hafta" : "Week"}
             </TabsTrigger>
             <TabsTrigger value="month" className="flex items-center">
               <CalendarDays className="h-4 w-4 mr-2" />
-              Ay
+              {language === "tr" ? "Ay" : "Month"}
             </TabsTrigger>
             <TabsTrigger value="year" className="flex items-center">
               <CalendarCheck className="h-4 w-4 mr-2" />
-              Yıl
+              {language === "tr" ? "Yıl" : "Year"}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -263,7 +277,17 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
   // Month view content (traditional calendar)
   const renderMonthView = () => {
     const renderDays = () => {
-      const days = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+      // Translate day names based on language
+      const getDayNames = () => {
+        if (language === "tr") {
+          return ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+        } else {
+          return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        }
+      };
+      
+      const days = getDayNames();
+      
       return (
         <div className="grid grid-cols-7 gap-1 mb-2">
           {days.map((day) => (
@@ -492,7 +516,9 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {editingEvent ? "Etkinlik Düzenle" : "Yeni Etkinlik Ekle"}
+              {editingEvent 
+                ? (language === "tr" ? "Etkinlik Düzenle" : "Edit Event") 
+                : (language === "tr" ? "Yeni Etkinlik Ekle" : "Add New Event")}
             </DialogTitle>
           </DialogHeader>
           <AgendaEventForm

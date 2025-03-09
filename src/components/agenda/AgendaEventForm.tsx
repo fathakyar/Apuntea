@@ -4,17 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { AgendaEvent, Subcategory } from "@/types";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Trash2 } from "lucide-react";
+import { CalendarIcon, Trash2, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
@@ -27,6 +19,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
+import { AgendaEvent, Subcategory } from "@/types";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface AgendaEventFormProps {
   event: AgendaEvent | null;
@@ -45,10 +41,14 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
   subcategories,
   selectedDate
 }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+  
   const [formData, setFormData] = useState<Omit<AgendaEvent, "id"> & { id?: string }>({
     title: "",
     description: "",
     type: "NOT",
+    importance: "",
     date: format(new Date(), "yyyy-MM-dd"),
     subcategoryId: subcategories[0]?.id || "",
   });
@@ -81,8 +81,12 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
     setFormData((prev) => ({ ...prev, [name]: value.toUpperCase() }));
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleTypeChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, type: value }));
+  };
+
+  const handleImportanceChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, importance: value }));
   };
 
   const handleDateChange = (newDate: Date | undefined) => {
@@ -106,60 +110,93 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
     }
   };
 
+  // Translation helper for form labels
+  const getLabel = (key: string) => {
+    if (language === "tr") {
+      switch(key) {
+        case "title": return "BAŞLIK";
+        case "type": return "TÜR";
+        case "importance": return "ÖNEM";
+        case "date": return "TARİH";
+        case "description": return "AÇIKLAMA";
+        case "cancel": return "İPTAL";
+        case "add": return "EKLE";
+        case "update": return "GÜNCELLE";
+        case "delete": return "SİL";
+        case "deleteConfirmTitle": return "Bu etkinliği silmek istediğinizden emin misiniz?";
+        case "deleteConfirmDesc": return "Bu işlem geri alınamaz. Etkinlik tamamen silinecektir.";
+        case "note": return "NOT";
+        case "task": return "GÖREV";
+        default: return key;
+      }
+    }
+    
+    // English labels
+    switch(key) {
+      case "title": return "TITLE";
+      case "type": return "TYPE";
+      case "importance": return "IMPORTANCE";
+      case "date": return "DATE";
+      case "description": return "DESCRIPTION";
+      case "cancel": return "CANCEL";
+      case "add": return "ADD";
+      case "update": return "UPDATE";
+      case "delete": return "DELETE";
+      case "deleteConfirmTitle": return "Are you sure you want to delete this event?";
+      case "deleteConfirmDesc": return "This action cannot be undone. The event will be permanently deleted.";
+      case "note": return "NOTE";
+      case "task": return "TASK";
+      default: return key;
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="title">Başlık</Label>
+        <Label htmlFor="title">{getLabel("title")}</Label>
         <Input
           id="title"
           name="title"
           value={formData.title}
           onChange={handleChange}
-          placeholder="Başlık giriniz"
+          placeholder={getLabel("title")}
           required
           className="rounded-sm"
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="type">Tür</Label>
-          <Select
-            value={formData.type}
-            onValueChange={(value) => handleSelectChange("type", value)}
-          >
-            <SelectTrigger id="type" className="rounded-sm">
-              <SelectValue placeholder="Tür seçiniz" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="NOT">NOT</SelectItem>
-              <SelectItem value="GÖREV">GÖREV</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="subcategoryId">Alt Kategori</Label>
-          <Select
-            value={formData.subcategoryId}
-            onValueChange={(value) => handleSelectChange("subcategoryId", value)}
-          >
-            <SelectTrigger id="subcategoryId" className="rounded-sm">
-              <SelectValue placeholder="Alt kategori seçiniz" />
-            </SelectTrigger>
-            <SelectContent>
-              {subcategories.map((subcategory) => (
-                <SelectItem key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="space-y-2">
+        <Label>{getLabel("type")}</Label>
+        <ToggleGroup type="single" value={formData.type} onValueChange={handleTypeChange} className="justify-start">
+          <ToggleGroupItem value="NOT" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white">
+            {getLabel("note")}
+          </ToggleGroupItem>
+          <ToggleGroupItem value="GÖREV" className="data-[state=on]:bg-green-500 data-[state=on]:text-white">
+            {getLabel("task")}
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="date">Tarih</Label>
+        <Label>{getLabel("importance")}</Label>
+        <ToggleGroup type="single" value={formData.importance} onValueChange={handleImportanceChange} className="justify-start">
+          <ToggleGroupItem value="!" className="data-[state=on]:bg-yellow-500 data-[state=on]:text-white">
+            <AlertTriangle className="h-4 w-4 mr-1" />
+            !
+          </ToggleGroupItem>
+          <ToggleGroupItem value="!!" className="data-[state=on]:bg-orange-500 data-[state=on]:text-white">
+            <AlertTriangle className="h-4 w-4 mr-1" />
+            !!
+          </ToggleGroupItem>
+          <ToggleGroupItem value="!!!" className="data-[state=on]:bg-red-500 data-[state=on]:text-white">
+            <AlertTriangle className="h-4 w-4 mr-1" />
+            !!!
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="date">{getLabel("date")}</Label>
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -170,7 +207,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>Tarih seçiniz</span>}
+              {date ? format(date, "PPP") : <span>{getLabel("date")}</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -186,13 +223,13 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Açıklama</Label>
+        <Label htmlFor="description">{getLabel("description")}</Label>
         <Textarea
           id="description"
           name="description"
           value={formData.description}
           onChange={handleChange}
-          placeholder="Açıklama giriniz"
+          placeholder={getLabel("description")}
           rows={4}
           className="rounded-sm"
         />
@@ -208,16 +245,16 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
               onClick={() => setIsDeleteAlertOpen(true)}
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Sil
+              {getLabel("delete")}
             </Button>
           )}
         </div>
         <div className="flex gap-2">
           <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm">
-            İptal
+            {getLabel("cancel")}
           </Button>
           <Button type="submit" className="rounded-sm">
-            {event ? "Güncelle" : "Ekle"}
+            {event ? getLabel("update") : getLabel("add")}
           </Button>
         </div>
       </div>
@@ -225,18 +262,18 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
       <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Bu etkinliği silmek istediğinizden emin misiniz?</AlertDialogTitle>
+            <AlertDialogTitle>{getLabel("deleteConfirmTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Bu işlem geri alınamaz. Etkinlik tamamen silinecektir.
+              {getLabel("deleteConfirmDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-sm">İptal</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-sm">{getLabel("cancel")}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-sm"
             >
-              Sil
+              {getLabel("delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

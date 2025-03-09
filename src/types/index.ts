@@ -1,4 +1,3 @@
-
 export interface Invoice {
   id: string;
   documentName: string;
@@ -40,14 +39,12 @@ export interface FormattingOptions {
   formatNumber?: boolean;
 }
 
-// Add to the types file to support window.gapi
 declare global {
   interface Window {
     gapi: any;
   }
 }
 
-// Tanımlamalar (Definitions) Types
 export interface Subcategory {
   id: string;
   name: string;
@@ -67,12 +64,12 @@ export interface Currency {
   selected: boolean;
 }
 
-// Ajanda (Agenda) Types
 export interface AgendaEvent {
   id: string;
   title: string;
   description: string;
-  date: string; // format: "yyyy-MM-dd"
-  type: "NOT" | "GÖREV"; // NOTE or TASK
+  type: string;
+  importance: string;
+  date: string;
   subcategoryId: string;
 }

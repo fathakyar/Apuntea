@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,7 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -36,6 +37,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { language } = useLanguage();
   const t = translations[language];
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const navigationItems = [
     { name: t.dashboard, path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
@@ -53,6 +56,20 @@ const Navbar = () => {
     navigate(path);
     setIsOpen(false);
   };
+
+  // Handle clicks outside the search box to unfocus it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-white dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-apuntea-purple/30 transition-all duration-300 shadow-sm hover:shadow-md">
@@ -87,12 +104,19 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center ml-auto gap-2">
-            {/* Search Bar */}
-            <div className="relative mr-2">
+            {/* Improved Search Bar with animation */}
+            <div 
+              ref={searchRef}
+              className={cn(
+                "relative border border-gray-300 dark:border-gray-700 rounded-sm transition-all duration-300",
+                isSearchFocused ? "w-64" : "w-40"
+              )}
+            >
               <Input
                 type="search"
                 placeholder={t.search}
-                className="h-8 w-40 rounded-full pl-8 pr-4 bg-gray-100 dark:bg-black/50 border-gray-200 dark:border-gray-700 text-sm"
+                className="h-8 rounded-sm pl-8 pr-4 bg-gray-100 dark:bg-black/50 border-0 text-sm"
+                onFocus={() => setIsSearchFocused(true)}
               />
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
@@ -160,13 +184,13 @@ const Navbar = () => {
       {/* Mobile menu */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-black/90 backdrop-blur-md animate-slide-in">
-          {/* Mobile search */}
+          {/* Mobile search with improved UI */}
           <div className="px-3 py-2">
-            <div className="relative">
+            <div className="relative border border-gray-300 dark:border-gray-700 rounded-sm">
               <Input
                 type="search"
                 placeholder={t.search}
-                className="w-full h-9 rounded-full pl-8 pr-4 bg-gray-100 dark:bg-black/50 border-gray-200 dark:border-gray-700"
+                className="w-full h-9 rounded-sm pl-8 pr-4 bg-gray-100 dark:bg-black/50 border-0"
               />
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
