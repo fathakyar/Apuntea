@@ -24,19 +24,23 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const navigationItems = [
-    { name: "Dashboard", path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: "Yeni Kayıt", path: "/upload", icon: <Plus className="h-5 w-5" /> },
-    { name: "Kayıtlar", path: "/records", icon: <FileText className="h-5 w-5" /> },
-    { name: "Ajanda", path: "/agenda", icon: <Calendar className="h-5 w-5" /> },
-    { name: "BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
+    { name: t.dashboard, path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
+    { name: t.newRecord, path: "/upload", icon: <Plus className="h-5 w-5" /> },
+    { name: t.records, path: "/records", icon: <FileText className="h-5 w-5" /> },
+    { name: t.agenda, path: "/agenda", icon: <Calendar className="h-5 w-5" /> },
+    { name: t.bi, path: "/bi", icon: <LineChart className="h-5 w-5" /> },
   ];
 
   const isActive = (path: string) => {
@@ -49,7 +53,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-black/80 dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-apuntea-purple/30">
+    <nav className="bg-white dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-apuntea-purple/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -69,10 +73,10 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center uppercase ${
+                className={`px-3 py-2 rounded-sm text-sm font-medium transition-colors duration-200 flex items-center uppercase ${
                   isActive(item.path)
                     ? "bg-apuntea-purple text-white"
-                    : "text-white hover:bg-apuntea-light hover:text-apuntea-purple"
+                    : "text-gray-800 dark:text-white hover:bg-apuntea-light hover:text-apuntea-purple"
                 }`}
               >
                 {item.icon}
@@ -88,38 +92,38 @@ const Navbar = () => {
                   <Button 
                     variant="ghost" 
                     size="icon"
-                    className="text-white hover:text-apuntea-gold"
+                    className="text-gray-800 dark:text-white hover:text-apuntea-purple"
                   >
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-black/90 border-apuntea-purple/50 text-white">
+                <DropdownMenuContent align="end" className="bg-white dark:bg-black/90 border-gray-200 dark:border-apuntea-purple/50 text-gray-800 dark:text-white">
                   <DropdownMenuLabel className="uppercase font-bold text-apuntea-purple">Admin</DropdownMenuLabel>
-                  <DropdownMenuItem className="text-white hover:text-apuntea-gold uppercase">
+                  <DropdownMenuItem className="text-gray-800 dark:text-white hover:text-apuntea-purple uppercase">
                     {user.email}
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-apuntea-purple/30" />
+                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-apuntea-purple/30" />
                   <DropdownMenuItem 
-                    className="cursor-pointer text-white hover:text-apuntea-gold uppercase"
+                    className="cursor-pointer text-gray-800 dark:text-white hover:text-apuntea-purple uppercase"
                     onClick={() => handleNavigation("/definitions")}
                   >
                     <FileInput className="mr-2 h-4 w-4" />
-                    <span>Tanımlamalar</span>
+                    <span>{t.definitions}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem 
-                    className="cursor-pointer text-white hover:text-apuntea-gold uppercase"
+                    className="cursor-pointer text-gray-800 dark:text-white hover:text-apuntea-purple uppercase"
                     onClick={() => handleNavigation("/settings")}
                   >
                     <Settings className="mr-2 h-4 w-4" />
-                    <span>Ayarlar</span>
+                    <span>{t.settings}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-apuntea-purple/30" />
+                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-apuntea-purple/30" />
                   <DropdownMenuItem 
                     className="cursor-pointer text-destructive uppercase" 
                     onClick={logout}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    <span>{t.logout}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -130,7 +134,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-apuntea-gold hover:bg-black"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-800 dark:text-white hover:text-apuntea-purple dark:hover:text-apuntea-gold hover:bg-gray-100 dark:hover:bg-black"
             >
               {isOpen ? (
                 <X className="h-6 w-6" />
@@ -144,15 +148,15 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 bg-black/90 backdrop-blur-md animate-slide-in">
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-black/90 backdrop-blur-md animate-slide-in">
           {navigationItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`block px-3 py-2 rounded-md text-base font-medium flex items-center uppercase ${
+              className={`block px-3 py-2 rounded-sm text-base font-medium flex items-center uppercase ${
                 isActive(item.path)
                   ? "bg-apuntea-purple text-white"
-                  : "text-white hover:bg-apuntea-light hover:text-apuntea-purple"
+                  : "text-gray-800 dark:text-white hover:bg-apuntea-light hover:text-apuntea-purple"
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -162,17 +166,17 @@ const Navbar = () => {
           ))}
           
           {user && (
-            <div className="px-3 py-2 border-t border-apuntea-purple/30 mt-2 pt-2">
+            <div className="px-3 py-2 border-t border-gray-200 dark:border-apuntea-purple/30 mt-2 pt-2">
               <div className="flex items-center justify-between">
-                <div className="text-white uppercase">
+                <div className="text-gray-800 dark:text-white uppercase">
                   <p className="text-sm font-medium">{user.email}</p>
-                  <p className="text-xs text-apuntea-gold">Admin</p>
+                  <p className="text-xs text-apuntea-purple">Admin</p>
                 </div>
                 <div className="flex space-x-2">
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="text-white hover:text-apuntea-gold"
+                    className="text-gray-800 dark:text-white hover:text-apuntea-purple"
                     onClick={() => handleNavigation("/definitions")}
                   >
                     <FileInput className="h-5 w-5" />
@@ -180,7 +184,7 @@ const Navbar = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="text-white hover:text-apuntea-gold"
+                    className="text-gray-800 dark:text-white hover:text-apuntea-purple"
                     onClick={() => handleNavigation("/settings")}
                   >
                     <Settings className="h-5 w-5" />

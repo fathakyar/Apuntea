@@ -53,3 +53,14 @@ export const parseEuropeanNumber = (value: string): number => {
 export const ensureUppercase = (text: string): string => {
   return text.toUpperCase();
 };
+
+/**
+ * Format text input values to uppercase automatically
+ */
+export const handleUppercaseInput = (
+  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
+  setter: React.Dispatch<React.SetStateAction<string>>
+) => {
+  setter(e.target.value.toUpperCase());
+};
+
