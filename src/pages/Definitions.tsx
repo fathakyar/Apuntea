@@ -1,6 +1,4 @@
-
 import React, { useState } from "react";
-import Layout from "@/components/Layout";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
 import CategoryCard from "@/components/definitions/CategoryCard";
 import CurrencySelector from "@/components/definitions/CurrencySelector";
@@ -42,101 +40,99 @@ const Definitions = () => {
   const budgetGroups = getBudgetSubcategoryGroups();
 
   return (
-    <Layout>
-      <div className="grid grid-cols-1 gap-6 animate-slide-in">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-1 flex items-center">
-              <Settings className="mr-2 h-6 w-6" />
-              Tanımlamalar
-            </h1>
-            <p className="text-muted-foreground">
-              Sistem içindeki kategori ve alt kategori tanımlamalarını yönetin
-            </p>
-          </div>
+    <div className="grid grid-cols-1 gap-6 animate-slide-in">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold mb-1 flex items-center">
+            <Settings className="mr-2 h-6 w-6" />
+            Tanımlamalar
+          </h1>
+          <p className="text-muted-foreground">
+            Sistem içindeki kategori ve alt kategori tanımlamalarını yönetin
+          </p>
         </div>
+      </div>
 
-        <Tabs 
-          defaultValue={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full"
-        >
-          <TabsList className="w-full justify-start mb-6 overflow-x-auto">
-            {categories.map((category) => (
-              <TabsTrigger 
-                key={category.id} 
-                value={category.id}
-                className="px-4 py-2"
-              >
-                {category.name}
-              </TabsTrigger>
-            ))}
-            <TabsTrigger value="currency" className="px-4 py-2">
-              PARA BİRİMİ
-            </TabsTrigger>
-          </TabsList>
-          
+      <Tabs 
+        defaultValue={activeTab}
+        onValueChange={setActiveTab}
+        className="w-full"
+      >
+        <TabsList className="w-full justify-start mb-6 overflow-x-auto">
           {categories.map((category) => (
-            <TabsContent key={category.id} value={category.id} className="mt-0">
-              {category.id === "budget" ? (
-                <div className="space-y-6">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-medium mb-4">GELİR</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {budgetGroups.income.map((subcategory) => (
-                        <div key={subcategory.id} className="relative">
-                          <div className="px-3 py-1 border rounded-md text-sm">
-                            {subcategory.name}
-                          </div>
+            <TabsTrigger 
+              key={category.id} 
+              value={category.id}
+              className="px-4 py-2"
+            >
+              {category.name}
+            </TabsTrigger>
+          ))}
+          <TabsTrigger value="currency" className="px-4 py-2">
+            PARA BİRİMİ
+          </TabsTrigger>
+        </TabsList>
+        
+        {categories.map((category) => (
+          <TabsContent key={category.id} value={category.id} className="mt-0">
+            {category.id === "budget" ? (
+              <div className="space-y-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-medium mb-4">GELİR</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {budgetGroups.income.map((subcategory) => (
+                      <div key={subcategory.id} className="relative">
+                        <div className="px-3 py-1 border rounded-md text-sm">
+                          {subcategory.name}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium mb-4">GİDER</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {budgetGroups.expense.map((subcategory) => (
-                        <div key={subcategory.id} className="relative">
-                          <div className="px-3 py-1 border rounded-md text-sm">
-                            {subcategory.name}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ) : (
-                <CategoryCard
-                  title={category.name}
-                  subcategories={category.subcategories}
-                  editable={category.editable}
-                  onAdd={(name) => addSubcategory(category.id, name)}
-                  onUpdate={(subcategoryId, newName) => 
-                    updateSubcategory(category.id, subcategoryId, newName)
-                  }
-                  onDelete={(subcategoryId) => 
-                    deleteSubcategory(category.id, subcategoryId)
-                  }
-                  description={
-                    category.id === "budget" 
-                      ? "GELİR ve GİDER kategorileri ile otomatik olarak senkronize edilir"
-                      : undefined
-                  }
-                />
-              )}
-            </TabsContent>
-          ))}
-          
-          <TabsContent value="currency" className="mt-0">
-            <CurrencySelector 
-              currencies={currencies}
-              onToggle={toggleCurrencySelection}
-            />
+
+                <div>
+                  <h3 className="text-lg font-medium mb-4">GİDER</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {budgetGroups.expense.map((subcategory) => (
+                      <div key={subcategory.id} className="relative">
+                        <div className="px-3 py-1 border rounded-md text-sm">
+                          {subcategory.name}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <CategoryCard
+                title={category.name}
+                subcategories={category.subcategories}
+                editable={category.editable}
+                onAdd={(name) => addSubcategory(category.id, name)}
+                onUpdate={(subcategoryId, newName) => 
+                  updateSubcategory(category.id, subcategoryId, newName)
+                }
+                onDelete={(subcategoryId) => 
+                  deleteSubcategory(category.id, subcategoryId)
+                }
+                description={
+                  category.id === "budget" 
+                    ? "GELİR ve GİDER kategorileri ile otomatik olarak senkronize edilir"
+                    : undefined
+                }
+              />
+            )}
           </TabsContent>
-        </Tabs>
-      </div>
-    </Layout>
+        ))}
+        
+        <TabsContent value="currency" className="mt-0">
+          <CurrencySelector 
+            currencies={currencies}
+            onToggle={toggleCurrencySelection}
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 
