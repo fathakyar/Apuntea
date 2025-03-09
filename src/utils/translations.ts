@@ -72,7 +72,9 @@ export type TranslationKey =
   | "successfullyUpdated"
   | "successfullyDeleted"
   | "eventSuccessfullyDeleted"
-  | "manageEventsAndReminders";
+  | "manageEventsAndReminders"
+  | "new"
+  | "search";
 
 export type TranslationsType = {
   [key in TranslationKey]: string;
@@ -153,7 +155,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "successfully updated",
     successfullyDeleted: "successfully deleted",
     eventSuccessfullyDeleted: "Event successfully deleted",
-    manageEventsAndReminders: "MANAGE EVENTS AND REMINDERS"
+    manageEventsAndReminders: "MANAGE EVENTS AND REMINDERS",
+    new: "NEW",
+    search: "SEARCH",
   },
   es: {
     dashboard: "PANEL",
@@ -229,7 +233,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "actualizado con éxito",
     successfullyDeleted: "eliminado con éxito",
     eventSuccessfullyDeleted: "Evento eliminado con éxito",
-    manageEventsAndReminders: "ADMINISTRAR EVENTOS Y RECORDATORIOS"
+    manageEventsAndReminders: "ADMINISTRAR EVENTOS Y RECORDATORIOS",
+    new: "NUEVO",
+    search: "BUSCAR",
   },
   de: {
     dashboard: "DASHBOARD",
@@ -305,7 +311,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "erfolgreich aktualisiert",
     successfullyDeleted: "erfolgreich gelöscht",
     eventSuccessfullyDeleted: "Ereignis erfolgreich gelöscht",
-    manageEventsAndReminders: "EREIGNISSE UND ERINNERUNGEN VERWALTEN"
+    manageEventsAndReminders: "EREIGNISSE UND ERINNERUNGEN VERWALTEN",
+    new: "NEU",
+    search: "SUCHEN",
   },
   fr: {
     dashboard: "TABLEAU DE BORD",
@@ -381,7 +389,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "mis à jour avec succès",
     successfullyDeleted: "supprimé avec succès",
     eventSuccessfullyDeleted: "Événement supprimé avec succès",
-    manageEventsAndReminders: "GÉRER LES ÉVÉNEMENTS ET LES RAPPELS"
+    manageEventsAndReminders: "GÉRER LES ÉVÉNEMENTS ET LES RAPPELS",
+    new: "NOUVEAU",
+    search: "RECHERCHER",
   },
   it: {
     dashboard: "DASHBOARD",
@@ -457,7 +467,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "aggiornato con successo",
     successfullyDeleted: "eliminato con successo",
     eventSuccessfullyDeleted: "Evento eliminato con successo",
-    manageEventsAndReminders: "GESTISCI EVENTI E PROMEMORIA"
+    manageEventsAndReminders: "GESTISCI EVENTI E PROMEMORIA",
+    new: "NUOVO",
+    search: "CERCARE",
   },
   pt: {
     dashboard: "PAINEL",
@@ -533,7 +545,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "atualizado com sucesso",
     successfullyDeleted: "excluído com sucesso",
     eventSuccessfullyDeleted: "Evento excluído com sucesso",
-    manageEventsAndReminders: "GERENCIAR EVENTOS E LEMBRETES"
+    manageEventsAndReminders: "GERENCIAR EVENTOS E LEMBRETES",
+    new: "NOVO",
+    search: "PESQUISAR",
   },
   ar: {
     dashboard: "لوحة القيادة",
@@ -609,7 +623,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "تم التحديث بنجاح",
     successfullyDeleted: "تم الحذف بنجاح",
     eventSuccessfullyDeleted: "تم حذف الحدث بنجاح",
-    manageEventsAndReminders: "إدارة الأحداث والتذكيرات"
+    manageEventsAndReminders: "إدارة الأحداث والتذكيرات",
+    new: "جديد",
+    search: "بحث",
   },
   zh: {
     dashboard: "仪表板",
@@ -685,7 +701,9 @@ export const translations: Record<string, TranslationsType> = {
     successfullyUpdated: "更新成功",
     successfullyDeleted: "删除成功",
     eventSuccessfullyDeleted: "事件已成功删除",
-    manageEventsAndReminders: "管理事件和提醒"
+    manageEventsAndReminders: "管理事件和提醒",
+    new: "新建",
+    search: "搜索",
   },
   tr: {
     dashboard: "GÖSTERGE PANELİ",
@@ -741,26 +759,4 @@ export const translations: Record<string, TranslationsType> = {
     enterCountry: "Ülkenizi girin",
     enterPosition: "Pozisyonunuzu girin",
     aboutApuntea: "APUNTEA HAKKINDA",
-    whatWeOffer: "NE SUNUYORUZ",
-    blog: "BLOG",
-    contactUs: "BİZE ULAŞIN",
-    privacyStatement: "GİZLİLİK BİLDİRİMİ",
-    termsConditions: "ŞARTLAR VE KOŞULLAR",
-    cookiePolicy: "ÇEREZLERİ POLİTİKASI",
-    selectLanguage: "DİL SEÇİN",
-    allRightsReserved: "TÜM HAKLARI SAKLIDIR",
-    welcomeBack: "YENİDEN HOŞGELDİNİZ",
-    enterCredentials: "HESABINIZA ERİŞMEK İÇİN BİLGİLERİNİZİ GİRİN",
-    signIn: "GİRİŞ YAP",
-    signingIn: "GİRİŞ YAPILIYOR...",
-    demoCredentials: "DEMO BİLGİLERİ: ADMIN@APUNTEA.COM / 1ADMIN?",
-    eventAdded: "ETKİNLİK EKLENDİ",
-    eventUpdated: "ETKİNLİK GÜNCELLENDİ",
-    eventDeleted: "ETKİNLİK SİLİNDİ",
-    successfullyAdded: "başarıyla eklendi",
-    successfullyUpdated: "başarıyla güncellendi",
-    successfullyDeleted: "başarıyla silindi",
-    eventSuccessfullyDeleted: "Etkinlik başarıyla silindi",
-    manageEventsAndReminders: "ETKİNLİKLERİ VE HATIRLATICILARI YÖNET"
-  }
-};
+    whatWeOffer: "NE SUN
