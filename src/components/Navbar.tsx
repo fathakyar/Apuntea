@@ -42,6 +42,11 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsOpen(false);
+  };
+
   return (
     <nav className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-md sticky top-0 z-50 border-b border-border">
       <div className="container mx-auto px-4 md:px-6">
@@ -165,10 +170,7 @@ const Navbar = () => {
                     variant="ghost" 
                     size="icon" 
                     className="text-muted-foreground hover:text-primary"
-                    onClick={() => {
-                      navigate("/definitions");
-                      setIsOpen(false);
-                    }}
+                    onClick={() => handleNavigation("/definitions")}
                   >
                     <FileInput className="h-5 w-5" />
                   </Button>
@@ -176,10 +178,7 @@ const Navbar = () => {
                     variant="ghost" 
                     size="icon" 
                     className="text-muted-foreground hover:text-primary"
-                    onClick={() => {
-                      navigate("/settings");
-                      setIsOpen(false);
-                    }}
+                    onClick={() => handleNavigation("/settings")}
                   >
                     <Settings className="h-5 w-5" />
                   </Button>
