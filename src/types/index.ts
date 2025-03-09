@@ -66,3 +66,13 @@ export interface Currency {
   symbol: string;
   selected: boolean;
 }
+
+// Ajanda (Agenda) Types
+export interface AgendaEvent {
+  id: string;
+  title: string;
+  description: string;
+  date: string; // format: "yyyy-MM-dd"
+  type: "NOT" | "GÖREV"; // NOTE or TASK
+  subcategoryId: string;
+}
