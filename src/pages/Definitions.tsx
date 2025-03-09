@@ -19,6 +19,28 @@ const Definitions = () => {
   
   const [activeTab, setActiveTab] = useState(categories[0]?.id || "");
 
+  // Group budget subcategories by income and expense
+  const getBudgetSubcategoryGroups = () => {
+    const budgetCategory = categories.find(c => c.id === "budget");
+    const incomeCategory = categories.find(c => c.id === "income");
+    const expenseCategory = categories.find(c => c.id === "expense");
+    
+    if (!budgetCategory || !incomeCategory || !expenseCategory) return { income: [], expense: [] };
+    
+    const incomeSubcategories = incomeCategory.subcategories.map(sub => sub.id);
+    
+    return {
+      income: budgetCategory.subcategories.filter(sub => 
+        incomeSubcategories.includes(sub.id)
+      ),
+      expense: budgetCategory.subcategories.filter(sub => 
+        !incomeSubcategories.includes(sub.id)
+      )
+    };
+  };
+  
+  const budgetGroups = getBudgetSubcategoryGroups();
+
   return (
     <Layout>
       <div className="grid grid-cols-1 gap-6 animate-slide-in">
@@ -49,37 +71,70 @@ const Definitions = () => {
                 {category.name}
               </TabsTrigger>
             ))}
+            <TabsTrigger value="currency" className="px-4 py-2">
+              PARA BİRİMİ
+            </TabsTrigger>
           </TabsList>
           
           {categories.map((category) => (
             <TabsContent key={category.id} value={category.id} className="mt-0">
-              <CategoryCard
-                title={category.name}
-                subcategories={category.subcategories}
-                editable={category.editable}
-                onAdd={(name) => addSubcategory(category.id, name)}
-                onUpdate={(subcategoryId, newName) => 
-                  updateSubcategory(category.id, subcategoryId, newName)
-                }
-                onDelete={(subcategoryId) => 
-                  deleteSubcategory(category.id, subcategoryId)
-                }
-                description={
-                  category.id === "budget" 
-                    ? "GELİR ve GİDER kategorileri ile otomatik olarak senkronize edilir"
-                    : undefined
-                }
-              />
+              {category.id === "budget" ? (
+                <div className="space-y-6">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-medium mb-4">GELİR</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {budgetGroups.income.map((subcategory) => (
+                        <div key={subcategory.id} className="relative">
+                          <div className="px-3 py-1 border rounded-md text-sm">
+                            {subcategory.name}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">GİDER</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {budgetGroups.expense.map((subcategory) => (
+                        <div key={subcategory.id} className="relative">
+                          <div className="px-3 py-1 border rounded-md text-sm">
+                            {subcategory.name}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <CategoryCard
+                  title={category.name}
+                  subcategories={category.subcategories}
+                  editable={category.editable}
+                  onAdd={(name) => addSubcategory(category.id, name)}
+                  onUpdate={(subcategoryId, newName) => 
+                    updateSubcategory(category.id, subcategoryId, newName)
+                  }
+                  onDelete={(subcategoryId) => 
+                    deleteSubcategory(category.id, subcategoryId)
+                  }
+                  description={
+                    category.id === "budget" 
+                      ? "GELİR ve GİDER kategorileri ile otomatik olarak senkronize edilir"
+                      : undefined
+                  }
+                />
+              )}
             </TabsContent>
           ))}
+          
+          <TabsContent value="currency" className="mt-0">
+            <CurrencySelector 
+              currencies={currencies}
+              onToggle={toggleCurrencySelection}
+            />
+          </TabsContent>
         </Tabs>
-
-        <div className="mt-4">
-          <CurrencySelector 
-            currencies={currencies}
-            onToggle={toggleCurrencySelection}
-          />
-        </div>
       </div>
     </Layout>
   );

@@ -17,6 +17,7 @@ import NotFound from "@/pages/NotFound";
 import BusinessIntelligence from "@/pages/BusinessIntelligence";
 import Agenda from "@/pages/Agenda";
 import Definitions from "@/pages/Definitions";
+import Settings from "@/pages/Settings";
 
 // Initialize the query client
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/bi" element={<BusinessIntelligence />} />
               <Route path="/agenda" element={<Agenda />} />
               <Route path="/definitions" element={<Definitions />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
