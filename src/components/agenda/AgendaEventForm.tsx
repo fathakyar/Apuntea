@@ -112,26 +112,7 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
 
   // Translation helper for form labels
   const getLabel = (key: string) => {
-    if (language === "tr") {
-      switch(key) {
-        case "title": return "BAŞLIK";
-        case "type": return "TÜR";
-        case "importance": return "ÖNEM";
-        case "date": return "TARİH";
-        case "description": return "AÇIKLAMA";
-        case "cancel": return "İPTAL";
-        case "add": return "EKLE";
-        case "update": return "GÜNCELLE";
-        case "delete": return "SİL";
-        case "deleteConfirmTitle": return "Bu etkinliği silmek istediğinizden emin misiniz?";
-        case "deleteConfirmDesc": return "Bu işlem geri alınamaz. Etkinlik tamamen silinecektir.";
-        case "note": return "NOT";
-        case "task": return "GÖREV";
-        default: return key;
-      }
-    }
-    
-    // English labels
+    // Only English labels now
     switch(key) {
       case "title": return "TITLE";
       case "type": return "TYPE";

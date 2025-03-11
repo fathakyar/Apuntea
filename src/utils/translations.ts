@@ -159,11 +159,39 @@ export type TranslationKey =
   | "invoiceSaved"
   | "invoiceSuccessfullySaved"
   | "errorSavingInvoice"
-  | "couldNotSaveInvoice";
+  | "couldNotSaveInvoice"
+  // Privacy Policy
+  | "privacyIntro"
+  | "dataCollection"
+  | "dataCollectionText"
+  | "dataUse"
+  | "dataUseText"
+  | "dataSecurity"
+  | "dataSecurityText"
+  | "contactInfo"
+  | "contactInfoText"
+  // Terms and Conditions
+  | "termsIntro"
+  | "services"
+  | "servicesText"
+  | "userObligations"
+  | "userObligationsText"
+  | "intellectualProperty"
+  | "intellectualPropertyText"
+  | "termination"
+  | "terminationText"
+  // Cookie Policy
+  | "cookieIntro"
+  | "whatAreCookies"
+  | "whatAreCookiesText"
+  | "cookieTypes"
+  | "cookieTypesText"
+  | "cookieControl"
+  | "cookieControlText";
 
 export type Language = "en";
 
-// Simplified to only include English translations
+// Only English translations
 export const translations: Record<Language, Partial<Record<TranslationKey, string>>> = {
   en: {
     dashboard: "DASHBOARD",
@@ -350,6 +378,6 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     cookieTypes: "Types of Cookies We Use",
     cookieTypesText: "We use essential cookies for basic functionality, analytical cookies to improve our services, and preference cookies to remember your settings.",
     cookieControl: "Cookie Control",
-    cookieControlText: "Most web browsers allow you to control cookies through their settings preferences. However, limiting cookies may affect your experience of our platform.",
+    cookieControlText: "Most web browsers allow you to control cookies through their settings preferences. However, limiting cookies may affect your experience of our platform."
   }
 };

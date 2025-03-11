@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, FileClock, Columns, CalendarDays, CalendarCheck } from "lucide-react";
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, parse, add, eachWeekOfInterval, getWeek, startOfWeek, endOfWeek, eachMonthOfInterval, endOfYear, startOfYear, getMonth, getYear, getDay, getDate } from "date-fns";
-import { tr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
@@ -42,11 +41,8 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
 
   // Get the correct locale for date formatting based on language
   const getDateLocale = () => {
-    switch(language) {
-      case "tr": return tr;
-      // Add more locales as needed
-      default: return undefined;
-    }
+    // Only English is supported now
+    return undefined;
   };
 
   // Navigation helpers
@@ -123,7 +119,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               size="sm"
               onClick={() => navigate("today")}
             >
-              {language === "tr" ? "Bugün" : "Today"}
+              Today
             </Button>
             <Button
               variant="outline"
@@ -141,7 +137,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               className="bg-apuntea-gold text-black hover:bg-apuntea-gold/90"
             >
               <Plus className="h-4 w-4 mr-1" />
-              {language === "tr" ? "Ekle" : t.new}
+              {t.new}
             </Button>
           </div>
         </div>
@@ -150,19 +146,19 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
           <TabsList className="w-full">
             <TabsTrigger value="day" className="flex items-center">
               <FileClock className="h-4 w-4 mr-2" />
-              {language === "tr" ? "Gün" : "Day"}
+              Day
             </TabsTrigger>
             <TabsTrigger value="week" className="flex items-center">
               <Columns className="h-4 w-4 mr-2" />
-              {language === "tr" ? "Hafta" : "Week"}
+              Week
             </TabsTrigger>
             <TabsTrigger value="month" className="flex items-center">
               <CalendarDays className="h-4 w-4 mr-2" />
-              {language === "tr" ? "Ay" : "Month"}
+              Month
             </TabsTrigger>
             <TabsTrigger value="year" className="flex items-center">
               <CalendarCheck className="h-4 w-4 mr-2" />
-              {language === "tr" ? "Yıl" : "Year"}
+              Year
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -178,11 +174,11 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     
     return (
       <div className="border rounded-sm p-4 min-h-[500px]">
-        <h3 className="font-bold mb-4">{format(currentDate, "dd MMMM yyyy, EEEE", { locale: tr })}</h3>
+        <h3 className="font-bold mb-4">{format(currentDate, "dd MMMM yyyy, EEEE")}</h3>
         
         {dayEvents.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            Bu güne ait etkinlik bulunmuyor. Yeni etkinlik eklemek için "Ekle" butonuna tıklayın.
+            No events for this day. Click "New" to add an event.
           </div>
         ) : (
           <div className="space-y-2">
@@ -244,7 +240,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
                 "text-center py-1 font-medium rounded-sm mb-2",
                 isToday(day) && "bg-primary text-primary-foreground"
               )}>
-                {format(day, "EEE", { locale: tr })}
+                {format(day, "EEE")}
                 <div className="text-xl">{format(day, "dd")}</div>
               </div>
               
@@ -264,7 +260,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               
               {dayEvents.length === 0 && (
                 <div className="text-center text-xs text-muted-foreground mt-2">
-                  Etkinlik yok
+                  No events
                 </div>
               )}
             </div>
@@ -277,13 +273,9 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
   // Month view content (traditional calendar)
   const renderMonthView = () => {
     const renderDays = () => {
-      // Translate day names based on language
+      // Day names
       const getDayNames = () => {
-        if (language === "tr") {
-          return ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
-        } else {
-          return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-        }
+        return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       };
       
       const days = getDayNames();
@@ -404,7 +396,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     return (
       <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
         {months.map(month => {
-          const monthName = format(month, "MMMM", { locale: tr });
+          const monthName = format(month, "MMMM");
           const monthStart = startOfMonth(month);
           const monthEnd = endOfMonth(month);
           const startDate = add(monthStart, { days: -((monthStart.getDay() + 6) % 7) });
@@ -436,7 +428,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
             >
               <h3 className="text-center font-bold mb-2">{monthName}</h3>
               <div className="grid grid-cols-7 gap-px text-center">
-                {["P", "S", "Ç", "P", "C", "C", "P"].map((d, i) => (
+                {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
                   <div key={i} className="text-xs text-muted-foreground">
                     {d}
                   </div>
@@ -464,7 +456,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               {monthEvents.length > 0 && (
                 <div className="mt-2 text-center text-xs">
                   <span className="bg-primary/10 text-primary px-2 py-1 rounded-sm">
-                    {monthEvents.length} etkinlik
+                    {monthEvents.length} events
                   </span>
                 </div>
               )}
@@ -516,9 +508,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {editingEvent 
-                ? (language === "tr" ? "Etkinlik Düzenle" : "Edit Event") 
-                : (language === "tr" ? "Yeni Etkinlik Ekle" : "Add New Event")}
+              {editingEvent ? "Edit Event" : "Add New Event"}
             </DialogTitle>
           </DialogHeader>
           <AgendaEventForm
