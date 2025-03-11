@@ -750,4 +750,4 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     invoiceSuccessfullyDeleted: "Rechnung wurde erfolgreich gelöscht",
     couldNotDeleteInvoice: "Rechnung konnte nicht gelöscht werden",
     exportSuccessful: "Export erfolgreich",
-    invoiceDataExported:
+    invoiceData
