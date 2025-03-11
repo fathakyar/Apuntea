@@ -21,7 +21,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField>('invoiceDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
-  const [typeFilter, setTypeFilter] = useState<string>("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
   const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
     to: undefined,
@@ -43,8 +43,8 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
       invoice.invoiceNumber.toLowerCase().includes(searchLower) ||
       invoice.documentName.toLowerCase().includes(searchLower);
     
-    // Apply type filter
-    const matchesType = typeFilter ? invoice.type === typeFilter : true;
+    // Apply type filter (show all if "all" or empty, otherwise filter by type)
+    const matchesType = !typeFilter || typeFilter === "all" ? true : invoice.type === typeFilter;
     
     // Apply date filter
     let matchesDate = true;
@@ -93,11 +93,12 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   });
 
   const clearFilters = () => {
-    setTypeFilter("");
+    setTypeFilter("all");
+    setSearchTerm("");
     setDateRange({ from: undefined, to: undefined });
   };
 
-  const hasFilters = !!searchTerm || !!typeFilter || !!dateRange.from;
+  const hasFilters = !!searchTerm || (typeFilter && typeFilter !== "all") || !!dateRange.from;
 
   return (
     <div className="w-full animate-fade-in">
