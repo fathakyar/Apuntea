@@ -44,6 +44,22 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
     return url;
   };
 
+  const handleEditClick = (e: React.MouseEvent, invoice: Invoice) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(invoice);
+  };
+
+  const handleDocumentClick = (e: React.MouseEvent, url: string) => {
+    if (url === '#') {
+      e.preventDefault();
+      alert('Document is not available.');
+      return;
+    }
+    
+    // For actual URLs, the default link behavior will work
+  };
+
   return (
     <TableBody>
       {invoices.map((invoice) => (
@@ -64,12 +80,8 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
               variant="outline" 
               size="icon" 
               className="h-8 w-8"
-              onClick={(e) => {
-                if (invoice.documentLink === '#') {
-                  e.preventDefault();
-                  alert('Document is not available.');
-                }
-              }}
+              onClick={(e) => handleDocumentClick(e, invoice.documentLink)}
+              type="button"
               asChild={invoice.documentLink !== '#'}
             >
               {invoice.documentLink !== '#' ? (
@@ -93,7 +105,7 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => onEdit(invoice)}
+                onClick={(e) => handleEditClick(e, invoice)}
                 className="h-8 w-8"
                 title="Edit invoice"
                 type="button"

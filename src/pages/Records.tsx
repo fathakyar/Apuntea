@@ -5,7 +5,7 @@ import InvoiceTable from "@/components/InvoiceTable";
 import { Button } from "@/components/ui/button";
 import { getInvoices, deleteInvoice } from "@/utils/invoiceUtils";
 import { Invoice } from "@/types";
-import { Upload, Download } from "lucide-react";
+import { Upload, Download, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
@@ -84,11 +84,11 @@ const Records = () => {
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
           <Button
-            onClick={() => navigate("/upload")}
+            onClick={() => navigate("/new-record")}
             className="btn-primary"
           >
-            <Upload className="h-4 w-4 mr-2" />
-            {t.uploadNew || "Upload New"}
+            <Plus className="h-4 w-4 mr-2" />
+            +NEW
           </Button>
           {invoices.length > 0 && (
             <Button 
@@ -96,7 +96,7 @@ const Records = () => {
               onClick={handleExport}
             >
               <Download className="h-4 w-4 mr-2" />
-              {t.exportData || "Export Data"}
+              EXPORT DATA
             </Button>
           )}
         </div>
