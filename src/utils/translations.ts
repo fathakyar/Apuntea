@@ -707,4 +707,4 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     // Terms and Conditions
     termsIntro: "Apuntea'nın hizmetlerine erişerek ve kullanarak, bu Şartlar ve Koşullara bağlı kalmayı kabul etmiş olursunuz.",
     services: "Hizmetler",
-    servicesText: "Fatura yönetimi ve iş zekası hizmetleri sunuyoruz. Herhangi bir
+    servicesText: "Fatura yönetimi ve iş zekası hizmetleri sunuyoruz.
