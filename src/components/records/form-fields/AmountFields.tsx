@@ -22,7 +22,7 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
           onChange={onChange}
           required
           type="text"
-          inputMode="decimal"
+          inputMode="numeric"
           placeholder="0,00"
         />
       </div>
@@ -36,7 +36,7 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
           onChange={onChange}
           required
           type="text"
-          inputMode="decimal"
+          inputMode="numeric"
           placeholder="0,00"
         />
       </div>

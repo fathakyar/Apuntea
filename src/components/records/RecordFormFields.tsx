@@ -35,25 +35,36 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
     const { name, value } = e.target;
     
     if (name === "amount" || name === "vat") {
-      let numericValue = 0;
-      try {
-        numericValue = parseEuropeanNumber(value);
-      } catch (error) {
-        // If parsing fails, use 0
-        numericValue = 0;
-      }
-      
-      const formattedValue = formatNumberWithEuropeanStyle(numericValue, { formatNumber: true });
-      
+      // Allow direct input of numbers without immediately formatting
+      // This will let users type values like "1500" without interference
       setFormData(prev => {
-        const amount = name === "amount" ? numericValue : parseEuropeanNumber(prev.amount);
-        const vat = name === "vat" ? numericValue : parseEuropeanNumber(prev.vat);
-        const total = amount + vat;
+        let numericInput = value.replace(/[^\d,]/g, ''); // Keep only digits and comma
+        
+        // Calculate the total
+        const otherField = name === "amount" ? "vat" : "amount";
+        const otherValue = prev[otherField] || "0";
+        
+        // Parse values safely
+        let currentValue = 0;
+        let otherFieldValue = 0;
+        
+        try {
+          // Handle comma as decimal separator
+          currentValue = numericInput ? parseFloat(numericInput.replace(",", ".")) : 0;
+          otherFieldValue = parseEuropeanNumber(otherValue);
+        } catch (error) {
+          console.error("Error parsing number:", error);
+        }
+        
+        const total = currentValue + otherFieldValue;
+        
+        // Format total amount with European style
+        const formattedTotal = formatNumberWithEuropeanStyle(total, { formatNumber: true });
         
         return {
           ...prev,
-          [name]: formattedValue,
-          totalAmount: formatNumberWithEuropeanStyle(total, { formatNumber: true })
+          [name]: numericInput,
+          totalAmount: formattedTotal
         };
       });
     } else {

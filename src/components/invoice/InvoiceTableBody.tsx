@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Invoice } from "@/types";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -95,6 +96,7 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
                 onClick={() => onEdit(invoice)}
                 className="h-8 w-8"
                 title="Edit invoice"
+                type="button"
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -105,6 +107,7 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
                     size="icon"
                     className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
                     title="Delete invoice"
+                    type="button"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
