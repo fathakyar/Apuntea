@@ -17,11 +17,17 @@ import {
   ArrowUpDown,
   Search,
   FileText,
+  Filter,
+  CalendarRange,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { formatCurrency, formatDate } from "@/utils/invoiceUtils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
 
 interface InvoiceTableProps {
   invoices: Invoice[];
@@ -37,6 +43,14 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const [sortField, setSortField] = useState<SortField>('invoiceDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [invoiceToDelete, setInvoiceToDelete] = useState<string | null>(null);
+  const [typeFilter, setTypeFilter] = useState<string>("");
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
+    from: undefined,
+    to: undefined,
+  });
 
   const handleSort = (field: SortField) => {
     if (field === sortField) {
@@ -49,11 +63,26 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
 
   const filteredInvoices = invoices.filter((invoice) => {
     const searchLower = searchTerm.toLowerCase();
-    return (
+    const matchesSearch = 
       invoice.companyName.toLowerCase().includes(searchLower) ||
       invoice.invoiceNumber.toLowerCase().includes(searchLower) ||
-      invoice.documentName.toLowerCase().includes(searchLower)
-    );
+      invoice.documentName.toLowerCase().includes(searchLower);
+    
+    // Apply type filter
+    const matchesType = typeFilter ? invoice.type === typeFilter : true;
+    
+    // Apply date filter
+    let matchesDate = true;
+    if (dateRange.from) {
+      const invoiceDate = new Date(invoice.invoiceDate);
+      matchesDate = invoiceDate >= dateRange.from;
+      
+      if (dateRange.to) {
+        matchesDate = matchesDate && invoiceDate <= dateRange.to;
+      }
+    }
+    
+    return matchesSearch && matchesType && matchesDate;
   });
 
   const sortedInvoices = [...filteredInvoices].sort((a, b) => {
@@ -122,17 +151,88 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
     </div>
   );
 
+  const clearFilters = () => {
+    setTypeFilter("");
+    setDateRange({ from: undefined, to: undefined });
+  };
+
   return (
     <div className="w-full animate-fade-in">
-      <div className="flex items-center mb-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search invoices..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
+      <div className="flex flex-col space-y-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search invoices..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-8"
+            />
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-[180px]">
+                <div className="flex items-center gap-2">
+                  <Filter className="h-4 w-4" />
+                  <SelectValue placeholder="Filter by Type" />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="income">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-apuntea-gold text-black">Income</Badge>
+                  </div>
+                </SelectItem>
+                <SelectItem value="expense">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-apuntea-purple text-white">Expense</Badge>
+                  </div>
+                </SelectItem>
+                <SelectItem value="financing">
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-apuntea-dark text-white">Financing</Badge>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-[240px] justify-start">
+                  <CalendarRange className="mr-2 h-4 w-4" />
+                  {dateRange.from ? (
+                    dateRange.to ? (
+                      <>
+                        {format(dateRange.from, "dd/MM/yyyy")} - {format(dateRange.to, "dd/MM/yyyy")}
+                      </>
+                    ) : (
+                      format(dateRange.from, "dd/MM/yyyy")
+                    )
+                  ) : (
+                    <span>Date Range</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  defaultMonth={dateRange.from}
+                  selected={dateRange}
+                  onSelect={setDateRange}
+                  numberOfMonths={2}
+                />
+              </PopoverContent>
+            </Popover>
+            
+            {(typeFilter || dateRange.from) && (
+              <Button variant="ghost" onClick={clearFilters} size="sm">
+                Clear Filters
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -237,7 +337,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
           <FileText className="h-12 w-12 mx-auto mb-3 text-muted-foreground opacity-40" />
           <h3 className="text-lg font-medium mb-1">No invoices found</h3>
           <p className="text-muted-foreground">
-            {searchTerm ? "Try adjusting your search" : "Start by uploading your first invoice"}
+            {searchTerm || typeFilter || dateRange.from ? "Try adjusting your filters" : "Start by uploading your first invoice"}
           </p>
         </div>
       )}

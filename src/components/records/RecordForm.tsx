@@ -79,8 +79,8 @@ const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Get existing invoices or initialize empty array
-    const existingInvoices = JSON.parse(localStorage.getItem("invoices") || "[]");
+    // Get existing invoices from local storage
+    const existingInvoices = JSON.parse(localStorage.getItem("apuntea_invoices") || "[]");
     
     // Create new invoice with the form data
     const newInvoice = {
@@ -102,7 +102,7 @@ const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
     existingInvoices.push(newInvoice);
     
     // Save back to localStorage
-    localStorage.setItem("invoices", JSON.stringify(existingInvoices));
+    localStorage.setItem("apuntea_invoices", JSON.stringify(existingInvoices));
     
     // Show success message
     toast({
