@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Invoice } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { DateRange } from "react-day-picker";
 
 interface InvoiceTableProps {
   invoices: Invoice[];
@@ -44,10 +44,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [invoiceToDelete, setInvoiceToDelete] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>("");
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
     to: undefined,
   });
@@ -223,6 +220,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
                   selected={dateRange}
                   onSelect={setDateRange}
                   numberOfMonths={2}
+                  className="pointer-events-auto"
                 />
               </PopoverContent>
             </Popover>
