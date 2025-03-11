@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FileUpload from "@/components/FileUpload";
@@ -6,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { extractInvoiceData, saveInvoice } from "@/utils/invoiceUtils";
 import { InvoiceFormData } from "@/types";
-import { Loader2, Upload, Check } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 
@@ -34,14 +35,14 @@ const InvoiceUpload = () => {
       setUploadStep(2);
       
       toast({
-        title: "Data extracted",
-        description: "Please verify the extracted information",
+        title: t.dataExtracted || "Data extracted",
+        description: t.verifyExtractedInfo || "Please verify the extracted information",
       });
     } catch (error) {
       console.error("Extraction error:", error);
       toast({
-        title: "Extraction failed",
-        description: "Could not extract data from the document",
+        title: t.extractionFailed || "Extraction failed",
+        description: t.couldNotExtractData || "Could not extract data from the document",
         variant: "destructive",
       });
       
@@ -63,8 +64,8 @@ const InvoiceUpload = () => {
   const handleFormSubmit = async (formData: InvoiceFormData) => {
     if (!file || !fileUrl) {
       toast({
-        title: "Error",
-        description: "No file selected",
+        title: t.error || "Error",
+        description: t.noFileSelected || "No file selected",
         variant: "destructive",
       });
       return;
@@ -75,25 +76,23 @@ const InvoiceUpload = () => {
     
     try {
       console.log("Starting form submission process...");
-      
       console.log("Storing file locally...");
-      
       console.log("Saving invoice to local storage...");
       const invoice = saveInvoice(formData, fileUrl);
       console.log("Invoice saved successfully:", invoice);
       
       toast({
-        title: "Invoice saved",
-        description: "Invoice has been successfully saved",
+        title: t.invoiceSaved || "Invoice saved",
+        description: t.invoiceSuccessfullySaved || "Invoice has been successfully saved",
       });
       
       navigate("/records");
     } catch (error: any) {
       console.error("Error in form submission:", error);
-      const errorMessage = error?.message || "Could not save the invoice";
+      const errorMessage = error?.message || t.couldNotSaveInvoice || "Could not save the invoice";
       setUploadError(errorMessage);
       toast({
-        title: "Error saving invoice",
+        title: t.errorSavingInvoice || "Error saving invoice",
         description: errorMessage,
         variant: "destructive",
       });
@@ -102,25 +101,18 @@ const InvoiceUpload = () => {
     }
   };
 
-  const recordsTranslations = {
-    invoiceRecords: language === 'tr' ? "Fatura Kayıtları" : "Invoice Records",
-    manageInvoices: language === 'tr' ? "Tüm fatura kayıtlarınızı tek bir yerden yönetin" : "Manage all your invoice records in one place",
-    uploadNew: language === 'tr' ? "Yeni Yükle" : "Upload New",
-    exportData: language === 'tr' ? "Verileri Dışa Aktar" : "Export Data",
-  };
-
   return (
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
       <div>
-        <h1 className="text-3xl font-bold mb-1">{t.uploadNew || "Upload Invoice"}</h1>
+        <h1 className="text-3xl font-bold mb-1">{t.uploadInvoice || "Upload Invoice"}</h1>
         <p className="text-muted-foreground">
-          Upload your invoice for automatic data extraction
+          {t.uploadInvoiceForExtraction || "Upload your invoice for automatic data extraction"}
         </p>
       </div>
 
       {uploadError && (
         <div className="bg-destructive/15 border border-destructive text-destructive px-4 py-3 rounded-md">
-          <h4 className="font-medium mb-1">Upload Error</h4>
+          <h4 className="font-medium mb-1">{t.uploadError || "Upload Error"}</h4>
           <p className="text-sm">{uploadError}</p>
         </div>
       )}
@@ -128,18 +120,18 @@ const InvoiceUpload = () => {
       {uploadStep === 1 ? (
         <Card className="glass-card">
           <CardHeader>
-            <CardTitle>Upload Invoice</CardTitle>
+            <CardTitle>{t.uploadInvoice || "Upload Invoice"}</CardTitle>
             <CardDescription>
-              Upload your invoice as PDF, JPG, or PNG
+              {t.uploadInvoiceFormatInfo || "Upload your invoice as PDF, JPG, or PNG"}
             </CardDescription>
           </CardHeader>
           <CardContent>
             {isExtracting ? (
               <div className="text-center py-8">
                 <Loader2 className="h-12 w-12 mx-auto mb-3 animate-spin text-primary" />
-                <p className="text-lg font-medium">Extracting data...</p>
+                <p className="text-lg font-medium">{t.extractingData || "Extracting data..."}</p>
                 <p className="text-muted-foreground">
-                  Please wait while we process your invoice
+                  {t.pleaseWaitProcessing || "Please wait while we process your invoice"}
                 </p>
               </div>
             ) : (
@@ -152,9 +144,9 @@ const InvoiceUpload = () => {
           <div>
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Document Preview</CardTitle>
+                <CardTitle>{t.documentPreview || "Document Preview"}</CardTitle>
                 <CardDescription>
-                  Review your uploaded document
+                  {t.reviewUploadedDocument || "Review your uploaded document"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -171,7 +163,7 @@ const InvoiceUpload = () => {
                         <Check className="h-12 w-12 text-green-500 mb-3" />
                         <p className="font-medium">{file.name.toUpperCase()}</p>
                         <p className="text-sm text-muted-foreground mt-1">
-                          PDF document uploaded
+                          {t.pdfDocumentUploaded || "PDF document uploaded"}
                         </p>
                       </div>
                     )}
@@ -184,9 +176,9 @@ const InvoiceUpload = () => {
           <div>
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Invoice Details</CardTitle>
+                <CardTitle>{t.invoiceDetails || "Invoice Details"}</CardTitle>
                 <CardDescription>
-                  Verify and complete the extracted information
+                  {t.verifyExtractedInfo || "Verify and complete the extracted information"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -195,7 +187,7 @@ const InvoiceUpload = () => {
                     initialData={invoiceData}
                     onSubmit={handleFormSubmit}
                     isLoading={isLoading}
-                    submitLabel="Save Invoice"
+                    submitLabel={t.saveInvoice || "Save Invoice"}
                   />
                 )}
               </CardContent>

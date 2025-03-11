@@ -36,17 +36,13 @@ const Records = () => {
       loadInvoices();
       
       toast({
-        title: language === 'tr' ? "Fatura silindi" : "Invoice deleted",
-        description: language === 'tr' 
-          ? "Fatura başarıyla silindi" 
-          : "Invoice has been successfully deleted",
+        title: t.invoiceDeleted || "Invoice deleted",
+        description: t.invoiceSuccessfullyDeleted || "Invoice has been successfully deleted",
       });
     } catch (error) {
       toast({
-        title: t.error,
-        description: language === 'tr' 
-          ? "Fatura silinemedi" 
-          : "Could not delete the invoice",
+        title: t.error || "Error",
+        description: t.couldNotDeleteInvoice || "Could not delete the invoice",
         variant: "destructive",
       });
     }
@@ -65,37 +61,25 @@ const Records = () => {
       linkElement.click();
       
       toast({
-        title: language === 'tr' ? "Dışa aktarma başarılı" : "Export successful",
-        description: language === 'tr' 
-          ? "Fatura verileri başarıyla dışa aktarıldı" 
-          : "Invoice data has been exported successfully",
+        title: t.exportSuccessful || "Export successful",
+        description: t.invoiceDataExported || "Invoice data has been exported successfully",
       });
     } catch (error) {
       toast({
-        title: language === 'tr' ? "Dışa aktarma başarısız" : "Export failed",
-        description: language === 'tr' 
-          ? "Fatura verileri dışa aktarılamadı" 
-          : "Could not export invoice data",
+        title: t.exportFailed || "Export failed",
+        description: t.couldNotExportData || "Could not export invoice data",
         variant: "destructive",
       });
     }
-  };
-
-  // Records page translations
-  const recordsTranslations = {
-    invoiceRecords: language === 'tr' ? "Fatura Kayıtları" : "Invoice Records",
-    manageInvoices: language === 'tr' ? "Tüm fatura kayıtlarınızı tek bir yerden yönetin" : "Manage all your invoice records in one place",
-    uploadNew: language === 'tr' ? "Yeni Yükle" : "Upload New",
-    exportData: language === 'tr' ? "Verileri Dışa Aktar" : "Export Data",
   };
 
   return (
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-1">{recordsTranslations.invoiceRecords}</h1>
+          <h1 className="text-3xl font-bold mb-1">{t.invoiceRecords || "Invoice Records"}</h1>
           <p className="text-muted-foreground">
-            {recordsTranslations.manageInvoices}
+            {t.manageAllInvoices || "Manage all your invoice records in one place"}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
@@ -104,7 +88,7 @@ const Records = () => {
             className="btn-primary"
           >
             <Upload className="h-4 w-4 mr-2" />
-            {recordsTranslations.uploadNew}
+            {t.uploadNew || "Upload New"}
           </Button>
           {invoices.length > 0 && (
             <Button 
@@ -112,7 +96,7 @@ const Records = () => {
               onClick={handleExport}
             >
               <Download className="h-4 w-4 mr-2" />
-              {recordsTranslations.exportData}
+              {t.exportData || "Export Data"}
             </Button>
           )}
         </div>

@@ -1,9 +1,12 @@
+
 import React, { useState } from "react";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
 import CategoryCard from "@/components/definitions/CategoryCard";
 import CurrencySelector from "@/components/definitions/CurrencySelector";
 import { Settings } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 const Definitions = () => {
   const { 
@@ -16,6 +19,8 @@ const Definitions = () => {
   } = useDefinitions();
   
   const [activeTab, setActiveTab] = useState(categories[0]?.id || "");
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // Group budget subcategories by income and expense
   const getBudgetSubcategoryGroups = () => {
@@ -45,10 +50,10 @@ const Definitions = () => {
         <div>
           <h1 className="text-3xl font-bold mb-1 flex items-center">
             <Settings className="mr-2 h-6 w-6" />
-            Tanımlamalar
+            {t.definitions || "Definitions"}
           </h1>
           <p className="text-muted-foreground">
-            Sistem içindeki kategori ve alt kategori tanımlamalarını yönetin
+            {t.manageCategories || "Manage system categories and subcategories"}
           </p>
         </div>
       </div>
@@ -65,11 +70,11 @@ const Definitions = () => {
               value={category.id}
               className="px-4 py-2"
             >
-              {category.name}
+              {t[category.id as keyof typeof t] || category.name}
             </TabsTrigger>
           ))}
           <TabsTrigger value="currency" className="px-4 py-2">
-            PARA BİRİMİ
+            {t.currency || "CURRENCY"}
           </TabsTrigger>
         </TabsList>
         
@@ -78,7 +83,7 @@ const Definitions = () => {
             {category.id === "budget" ? (
               <div className="space-y-6">
                 <div className="mb-4">
-                  <h3 className="text-lg font-medium mb-4">GELİR</h3>
+                  <h3 className="text-lg font-medium mb-4">{t.income || "INCOME"}</h3>
                   <div className="flex flex-wrap gap-2">
                     {budgetGroups.income.map((subcategory) => (
                       <div key={subcategory.id} className="relative">
@@ -91,7 +96,7 @@ const Definitions = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium mb-4">GİDER</h3>
+                  <h3 className="text-lg font-medium mb-4">{t.expense || "EXPENSE"}</h3>
                   <div className="flex flex-wrap gap-2">
                     {budgetGroups.expense.map((subcategory) => (
                       <div key={subcategory.id} className="relative">
@@ -105,7 +110,7 @@ const Definitions = () => {
               </div>
             ) : (
               <CategoryCard
-                title={category.name}
+                title={t[category.id as keyof typeof t] || category.name}
                 subcategories={category.subcategories}
                 editable={category.editable}
                 onAdd={(name) => addSubcategory(category.id, name)}
@@ -117,7 +122,7 @@ const Definitions = () => {
                 }
                 description={
                   category.id === "budget" 
-                    ? "GELİR ve GİDER kategorileri ile otomatik olarak senkronize edilir"
+                    ? t.budgetSyncDescription || "Automatically synchronized with INCOME and EXPENSE categories"
                     : undefined
                 }
               />

@@ -12,18 +12,18 @@ const BusinessIntelligence = () => {
   return (
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
       <div>
-        <h1 className="text-3xl font-bold mb-1">Business Intelligence</h1>
+        <h1 className="text-3xl font-bold mb-1">{t.businessIntelligence || "Business Intelligence"}</h1>
         <p className="text-muted-foreground">
-          Analytics and insights for your business
+          {t.analyticsAndInsights || "Analytics and insights for your business"}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="glass-card">
           <CardHeader>
-            <CardTitle>Revenue Overview</CardTitle>
+            <CardTitle>{t.revenueOverview || "Revenue Overview"}</CardTitle>
             <CardDescription>
-              Monthly revenue trends
+              {t.monthlyRevenueTrends || "Monthly revenue trends"}
             </CardDescription>
           </CardHeader>
           <CardContent className="h-80">
@@ -45,19 +45,19 @@ const BusinessIntelligence = () => {
         
         <Card className="glass-card">
           <CardHeader>
-            <CardTitle>Expense Breakdown</CardTitle>
+            <CardTitle>{t.expenseBreakdown || "Expense Breakdown"}</CardTitle>
             <CardDescription>
-              Expenses by category
+              {t.expensesByCategory || "Expenses by category"}
             </CardDescription>
           </CardHeader>
           <CardContent className="h-80">
             <PieChart
               data={[
-                { name: "Office", value: 400 },
-                { name: "Salary", value: 300 },
-                { name: "Marketing", value: 300 },
-                { name: "Travel", value: 200 },
-                { name: "Other", value: 100 },
+                { name: t.office || "Office", value: 400 },
+                { name: t.salary || "Salary", value: 300 },
+                { name: t.marketing || "Marketing", value: 300 },
+                { name: t.travel || "Travel", value: 200 },
+                { name: t.other || "Other", value: 100 },
               ]}
               index="name"
               categories={["value"]}
@@ -68,9 +68,9 @@ const BusinessIntelligence = () => {
         
         <Card className="glass-card">
           <CardHeader>
-            <CardTitle>Sales by Product</CardTitle>
+            <CardTitle>{t.salesByProduct || "Sales by Product"}</CardTitle>
             <CardDescription>
-              Quarterly product sales
+              {t.quarterlyProductSales || "Quarterly product sales"}
             </CardDescription>
           </CardHeader>
           <CardContent className="h-80">
@@ -90,9 +90,9 @@ const BusinessIntelligence = () => {
         
         <Card className="glass-card">
           <CardHeader>
-            <CardTitle>Customer Growth</CardTitle>
+            <CardTitle>{t.customerGrowth || "Customer Growth"}</CardTitle>
             <CardDescription>
-              Monthly new customer acquisition
+              {t.monthlyNewCustomers || "Monthly new customer acquisition"}
             </CardDescription>
           </CardHeader>
           <CardContent className="h-80">

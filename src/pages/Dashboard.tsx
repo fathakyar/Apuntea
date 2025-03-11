@@ -46,38 +46,19 @@ const Dashboard = () => {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
 
-  // Dashboard translations
-  const dashboardTranslations = {
-    welcome: language === 'tr' ? 'Apuntea\'ya Hoşgeldiniz' : 'Welcome to Apuntea',
-    intelligentInvoice: language === 'tr' ? 'Akıllı fatura yönetimi basitleştirildi' : 'Intelligent invoice management made simple',
-    totalInvoices: language === 'tr' ? 'Toplam Faturalar' : 'Total Invoices',
-    recent: language === 'tr' ? 'Son (30 gün)' : 'Recent (30 days)',
-    totalAmount: language === 'tr' ? 'Toplam Tutar' : 'Total Amount',
-    recentInvoices: language === 'tr' ? 'Son Faturalar' : 'Recent Invoices',
-    recentInvoicesDesc: language === 'tr' ? 'En son eklenen faturalarınız' : 'Your most recently added invoices',
-    noInvoices: language === 'tr' ? 'Henüz fatura yok' : 'No invoices yet',
-    viewAllInvoices: language === 'tr' ? 'Tüm Faturaları Görüntüle' : 'View All Invoices',
-    actions: language === 'tr' ? 'İşlemler' : 'Actions',
-    quickLinks: language === 'tr' ? 'Hızlı bağlantılar' : 'Quick links to common tasks',
-    uploadNew: language === 'tr' ? 'Yeni Fatura Yükle' : 'Upload New Invoice',
-    manageRecords: language === 'tr' ? 'Kayıtları Yönet' : 'Manage Records',
-    proTip: language === 'tr' ? 'Pro İpucu' : 'Pro Tip',
-    proTipDesc: language === 'tr' ? 'Anında veri çıkarma ve işleme için telefonunuzun kamerasıyla bir faturayı tarayın.' : 'Scan an invoice with your phone camera for instant data extraction and processing.',
-  };
-
   return (
     <div className="grid grid-cols-1 gap-8 animate-slide-in">
       <div>
-        <h1 className="text-3xl font-bold mb-1">{dashboardTranslations.welcome}</h1>
+        <h1 className="text-3xl font-bold mb-1">{t.welcomeToApuntea || "Welcome to Apuntea"}</h1>
         <p className="text-muted-foreground">
-          {dashboardTranslations.intelligentInvoice}
+          {t.intelligentInvoiceManagement || "Intelligent invoice management made simple"}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="glass-card">
           <CardHeader className="pb-2">
-            <CardDescription>{dashboardTranslations.totalInvoices}</CardDescription>
+            <CardDescription>{t.totalInvoices || "Total Invoices"}</CardDescription>
             <CardTitle className="text-3xl flex items-center">
               {stats.totalInvoices}
               <FileText className="h-6 w-6 ml-2 text-muted-foreground" />
@@ -87,7 +68,7 @@ const Dashboard = () => {
         
         <Card className="glass-card">
           <CardHeader className="pb-2">
-            <CardDescription>{dashboardTranslations.recent}</CardDescription>
+            <CardDescription>{t.recent30Days || "Recent (30 days)"}</CardDescription>
             <CardTitle className="text-3xl flex items-center">
               {stats.recentInvoices}
               <Calendar className="h-6 w-6 ml-2 text-muted-foreground" />
@@ -97,7 +78,7 @@ const Dashboard = () => {
         
         <Card className="glass-card">
           <CardHeader className="pb-2">
-            <CardDescription>{dashboardTranslations.totalAmount}</CardDescription>
+            <CardDescription>{t.totalAmount || "Total Amount"}</CardDescription>
             <CardTitle className="text-3xl flex items-center">
               {formatCurrency(stats.totalAmount)}
               <Calculator className="h-6 w-6 ml-2 text-muted-foreground" />
@@ -110,9 +91,9 @@ const Dashboard = () => {
         <div className="col-span-1 md:col-span-2">
           <Card className="glass-card h-full">
             <CardHeader>
-              <CardTitle>{dashboardTranslations.recentInvoices}</CardTitle>
+              <CardTitle>{t.recentInvoices || "Recent Invoices"}</CardTitle>
               <CardDescription>
-                {dashboardTranslations.recentInvoicesDesc}
+                {t.mostRecentlyAddedInvoices || "Your most recently added invoices"}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -137,13 +118,13 @@ const Dashboard = () => {
               ) : (
                 <div className="text-center py-6">
                   <FileText className="h-10 w-10 mx-auto mb-3 text-muted-foreground opacity-40" />
-                  <p className="text-muted-foreground">{dashboardTranslations.noInvoices}</p>
+                  <p className="text-muted-foreground">{t.noInvoicesYet || "No invoices yet"}</p>
                 </div>
               )}
               
               <div className="mt-6 text-center">
                 <Button asChild variant="outline">
-                  <Link to="/records">{dashboardTranslations.viewAllInvoices}</Link>
+                  <Link to="/records">{t.viewAllInvoices || "View All Invoices"}</Link>
                 </Button>
               </div>
             </CardContent>
@@ -153,31 +134,31 @@ const Dashboard = () => {
         <div>
           <Card className="glass-card h-full flex flex-col">
             <CardHeader>
-              <CardTitle>{dashboardTranslations.actions}</CardTitle>
+              <CardTitle>{t.actions || "Actions"}</CardTitle>
               <CardDescription>
-                {dashboardTranslations.quickLinks}
+                {t.quickLinksToTasks || "Quick links to common tasks"}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col space-y-4 flex-1">
               <Button asChild className="btn-primary">
                 <Link to="/upload" className="flex items-center">
                   <Upload className="mr-2 h-4 w-4" />
-                  {dashboardTranslations.uploadNew}
+                  {t.uploadNew || "Upload New Invoice"}
                 </Link>
               </Button>
               
               <Button asChild variant="outline">
                 <Link to="/records" className="flex items-center">
                   <FileText className="mr-2 h-4 w-4" />
-                  {dashboardTranslations.manageRecords}
+                  {t.manageRecords || "Manage Records"}
                 </Link>
               </Button>
               
               <div className="mt-auto">
                 <div className="rounded-lg bg-apuntea-light p-4">
-                  <h3 className="text-sm font-medium mb-2">{dashboardTranslations.proTip}</h3>
+                  <h3 className="text-sm font-medium mb-2">{t.proTip || "Pro Tip"}</h3>
                   <p className="text-xs text-muted-foreground">
-                    {dashboardTranslations.proTipDesc}
+                    {t.scanInvoiceWithPhone || "Scan an invoice with your phone camera for instant data extraction and processing."}
                   </p>
                 </div>
               </div>

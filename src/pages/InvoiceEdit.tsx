@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import InvoiceForm from "@/components/InvoiceForm";
@@ -7,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getInvoices, updateInvoice } from "@/utils/invoiceUtils";
 import { Invoice, InvoiceFormData } from "@/types";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 const InvoiceEdit = () => {
   const navigate = useNavigate();
@@ -14,6 +17,8 @@ const InvoiceEdit = () => {
   const { id } = useParams<{ id: string }>();
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   useEffect(() => {
     if (id) {
@@ -24,14 +29,14 @@ const InvoiceEdit = () => {
         setInvoice(foundInvoice);
       } else {
         toast({
-          title: "Error",
-          description: "Invoice not found",
+          title: t.error || "Error",
+          description: t.invoiceNotFound || "Invoice not found",
           variant: "destructive",
         });
         navigate("/records");
       }
     }
-  }, [id, navigate, toast]);
+  }, [id, navigate, toast, t]);
 
   const handleFormSubmit = (formData: InvoiceFormData) => {
     if (!invoice) return;
@@ -53,15 +58,15 @@ const InvoiceEdit = () => {
       updateInvoice(updatedInvoice);
       
       toast({
-        title: "Invoice updated",
-        description: "Invoice has been successfully updated",
+        title: t.invoiceUpdated || "Invoice updated",
+        description: t.invoiceSuccessfullyUpdated || "Invoice has been successfully updated",
       });
       
       navigate("/records");
     } catch (error) {
       toast({
-        title: "Error updating invoice",
-        description: "Could not update the invoice",
+        title: t.errorUpdatingInvoice || "Error updating invoice",
+        description: t.couldNotUpdateInvoice || "Could not update the invoice",
         variant: "destructive",
       });
     } finally {
@@ -92,12 +97,12 @@ const InvoiceEdit = () => {
           className="mr-4"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {t.back || "Back"}
         </Button>
         <div>
-          <h1 className="text-3xl font-bold mb-1">Edit Invoice</h1>
+          <h1 className="text-3xl font-bold mb-1">{t.editInvoice || "Edit Invoice"}</h1>
           <p className="text-muted-foreground">
-            Update invoice information
+            {t.updateInvoiceInfo || "Update invoice information"}
           </p>
         </div>
       </div>
@@ -107,9 +112,9 @@ const InvoiceEdit = () => {
           <div>
             <Card className="glass-card h-full">
               <CardHeader>
-                <CardTitle>Document Preview</CardTitle>
+                <CardTitle>{t.documentPreview || "Document Preview"}</CardTitle>
                 <CardDescription>
-                  View the original document
+                  {t.viewOriginalDocument || "View the original document"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col h-full">
@@ -149,7 +154,7 @@ const InvoiceEdit = () => {
                     className="w-full"
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    Open Original Document
+                    {t.openOriginalDocument || "Open Original Document"}
                   </a>
                 </Button>
               </CardContent>
@@ -159,9 +164,9 @@ const InvoiceEdit = () => {
           <div>
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>Edit Invoice Details</CardTitle>
+                <CardTitle>{t.editInvoiceDetails || "Edit Invoice Details"}</CardTitle>
                 <CardDescription>
-                  Update the invoice information as needed
+                  {t.updateInvoiceInfoNeeded || "Update the invoice information as needed"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -169,7 +174,7 @@ const InvoiceEdit = () => {
                   initialData={getInitialFormData()}
                   onSubmit={handleFormSubmit}
                   isLoading={isLoading}
-                  submitLabel="Update Invoice"
+                  submitLabel={t.updateInvoice || "Update Invoice"}
                 />
               </CardContent>
             </Card>
