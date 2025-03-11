@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, FileClock, Columns, CalendarDays, CalendarCheck } from "lucide-react";
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, parse, add, eachWeekOfInterval, getWeek, startOfWeek, endOfWeek, eachMonthOfInterval, endOfYear, startOfYear, getMonth, getYear, getDay, getDate } from "date-fns";
@@ -8,25 +7,29 @@ import { useDefinitions } from "@/contexts/DefinitionsContext";
 import AgendaEventForm from "./AgendaEventForm";
 import AgendaEvent from "./AgendaEvent";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { AgendaEvent as AgendaEventType } from "@/types";
+import { AgendaEvent as AgendaEventType, Invoice } from "@/types";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 
 interface AgendaCalendarProps {
   events: AgendaEventType[];
+  invoices: Invoice[];
   onAddEvent: (event: Omit<AgendaEventType, "id">) => void;
   onEditEvent: (event: AgendaEventType) => void;
   onDeleteEvent: (eventId: string) => void;
+  onInvoiceClick: (invoice: Invoice) => void;
 }
 
 type ViewMode = "day" | "week" | "month" | "year";
 
 const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
   events,
+  invoices,
   onAddEvent,
   onEditEvent,
-  onDeleteEvent
+  onDeleteEvent,
+  onInvoiceClick
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -72,6 +75,42 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
         return add(prev, { years });
       });
     }
+  };
+
+  // Helper to get events for a specific day
+  const getEventsForDay = (day: Date) => {
+    // Get regular agenda events
+    const dayEvents = events.filter(event => 
+      isSameDay(parse(event.date, "yyyy-MM-dd", new Date()), day)
+    );
+    
+    // Get invoice records for this day
+    const dayInvoices = invoices
+      .filter(invoice => 
+        isSameDay(parse(invoice.invoiceDate, "yyyy-MM-dd", new Date()), day)
+      )
+      .map(invoice => ({
+        ...invoice,
+        eventType: 'invoice' as const
+      }));
+    
+    // Combine both types of events
+    return [...dayEvents, ...dayInvoices];
+  };
+
+  // Handle event click
+  const handleEventClick = (e: React.MouseEvent, event: AgendaEventType | (Invoice & { eventType?: 'invoice' })) => {
+    e.stopPropagation();
+    
+    // Check if this is an invoice record
+    if ('eventType' in event && event.eventType === 'invoice') {
+      onInvoiceClick(event);
+      return;
+    }
+    
+    // Otherwise it's a regular agenda event
+    setEditingEvent(event as AgendaEventType);
+    setIsFormOpen(true);
   };
 
   // View mode header
@@ -168,38 +207,57 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
 
   // Day view content
   const renderDayView = () => {
-    const dayEvents = events.filter(event => 
-      isSameDay(parse(event.date, "yyyy-MM-dd", new Date()), currentDate)
-    );
+    const combinedEvents = getEventsForDay(currentDate);
     
     return (
       <div className="border rounded-sm p-4 min-h-[500px]">
         <h3 className="font-bold mb-4">{format(currentDate, "dd MMMM yyyy, EEEE")}</h3>
         
-        {dayEvents.length === 0 ? (
+        {combinedEvents.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             No events for this day. Click "New" to add an event.
           </div>
         ) : (
           <div className="space-y-2">
-            {dayEvents.map(event => (
-              <div 
-                key={event.id} 
-                className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
-                onClick={() => {
-                  setEditingEvent(event);
-                  setIsFormOpen(true);
-                }}
-              >
-                <div className="flex-grow">
-                  <h4 className="font-medium">{event.title}</h4>
-                  <p className="text-sm text-muted-foreground truncate">{event.description}</p>
-                </div>
-                <div className="text-sm text-muted-foreground whitespace-nowrap ml-4">
-                  {event.type}
-                </div>
-              </div>
-            ))}
+            {combinedEvents.map((event) => {
+              if ('eventType' in event && event.eventType === 'invoice') {
+                const invoice = event as Invoice & { eventType: 'invoice' };
+                return (
+                  <div 
+                    key={`invoice-${invoice.id}`} 
+                    className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                    onClick={(e) => handleEventClick(e, invoice)}
+                  >
+                    <div className="flex-grow">
+                      <h4 className="font-medium">{invoice.companyName}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {invoice.invoiceNumber} - {invoice.totalAmount}
+                      </p>
+                    </div>
+                    <div className="text-sm text-muted-foreground whitespace-nowrap ml-4">
+                      {invoice.type?.toUpperCase()}
+                    </div>
+                  </div>
+                );
+              } else {
+                const agendaEvent = event as AgendaEventType;
+                return (
+                  <div 
+                    key={`event-${agendaEvent.id}`} 
+                    className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                    onClick={(e) => handleEventClick(e, agendaEvent)}
+                  >
+                    <div className="flex-grow">
+                      <h4 className="font-medium">{agendaEvent.title}</h4>
+                      <p className="text-sm text-muted-foreground truncate">{agendaEvent.description}</p>
+                    </div>
+                    <div className="text-sm text-muted-foreground whitespace-nowrap ml-4">
+                      {agendaEvent.type}
+                    </div>
+                  </div>
+                );
+              }
+            })}
           </div>
         )}
       </div>
@@ -216,9 +274,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     return (
       <div className="grid grid-cols-7 gap-4">
         {days.map((day) => {
-          const dayEvents = events.filter(event => 
-            isSameDay(parse(event.date, "yyyy-MM-dd", new Date()), day)
-          );
+          const combinedEvents = getEventsForDay(day);
           
           return (
             <div 
@@ -230,7 +286,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               )}
               onClick={() => {
                 setSelectedDate(day);
-                if (dayEvents.length === 0) {
+                if (combinedEvents.length === 0) {
                   setEditingEvent(null);
                   setIsFormOpen(true);
                 }
@@ -245,20 +301,16 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
               </div>
               
               <div className="flex-grow overflow-y-auto space-y-1">
-                {dayEvents.map(event => (
+                {combinedEvents.map((event) => (
                   <AgendaEvent
-                    key={event.id}
+                    key={'id' in event ? event.id : `invoice-${event.id}`}
                     event={event}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEditingEvent(event);
-                      setIsFormOpen(true);
-                    }}
+                    onClick={(e) => handleEventClick(e, event)}
                   />
                 ))}
               </div>
               
-              {dayEvents.length === 0 && (
+              {combinedEvents.length === 0 && (
                 <div className="text-center text-xs text-muted-foreground mt-2">
                   No events
                 </div>
@@ -318,9 +370,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
           <React.Fragment key={`row-${i}`}>
             <div className="grid grid-cols-7 gap-1">
               {row.map((day, idx) => {
-                const dayEvents = events.filter(event => 
-                  isSameDay(parse(event.date, "yyyy-MM-dd", new Date()), day)
-                );
+                const combinedEvents = getEventsForDay(day);
                 const isCurrentMonth = isSameMonth(day, currentDate);
                 const isSelectedDay = selectedDate && isSameDay(day, selectedDate);
                 const isCurrentDay = isToday(day);
@@ -337,7 +387,7 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
                     )}
                     onClick={() => {
                       setSelectedDate(day);
-                      if (dayEvents.length === 0) {
+                      if (combinedEvents.length === 0) {
                         setEditingEvent(null);
                         setIsFormOpen(true);
                       }
@@ -354,15 +404,11 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
                       </span>
                     </div>
                     <div className="overflow-y-auto max-h-[80px] space-y-1 pr-1">
-                      {dayEvents.map((event) => (
+                      {combinedEvents.map((event) => (
                         <AgendaEvent 
-                          key={event.id} 
-                          event={event} 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditingEvent(event);
-                            setIsFormOpen(true);
-                          }}
+                          key={'id' in event ? event.id : `invoice-${event.id}`}
+                          event={event}
+                          onClick={(e) => handleEventClick(e, event)}
                         />
                       ))}
                     </div>

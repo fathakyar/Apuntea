@@ -3,25 +3,33 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Plus } from "lucide-react";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
-import { AgendaEvent } from "@/types";
+import { AgendaEvent, Invoice } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { useToast } from "@/hooks/use-toast";
 import { ensureUppercase } from "@/utils/formatUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
+import { getInvoices } from "@/utils/invoiceUtils";
+import { useNavigate } from "react-router-dom";
 
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const { toast } = useToast();
   const { language } = useLanguage();
   const t = translations[language];
+  const navigate = useNavigate();
 
-  // Load data from local storage
+  // Load events data from local storage
   useEffect(() => {
     const storedEvents = localStorage.getItem("apuntea_agenda_events");
     if (storedEvents) {
       setEvents(JSON.parse(storedEvents));
     }
+    
+    // Load invoice records
+    const invoiceRecords = getInvoices();
+    setInvoices(invoiceRecords);
   }, []);
 
   // Save data to local storage
@@ -83,6 +91,11 @@ const Agenda = () => {
         : t.eventSuccessfullyDeleted || "Event successfully deleted.",
     });
   };
+  
+  // Handle invoice click
+  const handleInvoiceClick = (invoice: Invoice) => {
+    navigate(`/edit/${invoice.id}`);
+  };
 
   return (
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
@@ -102,9 +115,11 @@ const Agenda = () => {
         <CardContent className="p-6">
           <AgendaCalendar 
             events={events}
+            invoices={invoices}
             onAddEvent={handleAddEvent}
             onEditEvent={handleEditEvent}
             onDeleteEvent={handleDeleteEvent}
+            onInvoiceClick={handleInvoiceClick}
           />
         </CardContent>
       </Card>

@@ -11,7 +11,7 @@ interface DateFieldProps {
 const DateField: React.FC<DateFieldProps> = ({ value, onChange }) => {
   return (
     <div className="space-y-2">
-      <Label htmlFor="invoiceDate">Invoice Date</Label>
+      <Label htmlFor="invoiceDate">Document Date</Label>
       <Input
         id="invoiceDate"
         name="invoiceDate"

@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, ExternalLink } from "lucide-react";
 import { formatCurrency, formatDate } from "@/utils/invoiceUtils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useDefinitions } from "@/contexts/DefinitionsContext";
+import { useNavigate } from "react-router-dom";
 
 interface InvoiceTableBodyProps {
   invoices: Invoice[];
@@ -19,6 +21,9 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
   onEdit, 
   onDelete 
 }) => {
+  const { categories } = useDefinitions();
+  const navigate = useNavigate();
+
   const getTypeColor = (type?: string) => {
     switch (type) {
       case 'income':
@@ -47,7 +52,7 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
   const handleEditClick = (e: React.MouseEvent, invoice: Invoice) => {
     e.preventDefault();
     e.stopPropagation();
-    onEdit(invoice);
+    navigate(`/edit/${invoice.id}`);
   };
 
   const handleDocumentClick = (e: React.MouseEvent, url: string) => {
@@ -59,6 +64,17 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
     }
     
     // For actual URLs, the default link behavior will work
+  };
+
+  // Find subcategory name based on category ID
+  const getCategoryName = (categoryId?: string, type?: string) => {
+    if (!categoryId) return "-";
+    
+    const category = categories.find(cat => cat.id === type?.toLowerCase());
+    if (!category) return "-";
+    
+    const subcategory = category.subcategories.find(sub => sub.id === categoryId);
+    return subcategory ? subcategory.name : "-";
   };
 
   return (
@@ -76,6 +92,7 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
           <TableCell className="text-right">{formatCurrency(invoice.amount)}</TableCell>
           <TableCell className="text-right">{formatCurrency(invoice.vat)}</TableCell>
           <TableCell className="text-right font-medium">{formatCurrency(invoice.totalAmount)}</TableCell>
+          <TableCell>{getCategoryName(invoice.categoryId, invoice.type)}</TableCell>
           <TableCell>
             <Button 
               variant="outline" 
@@ -83,22 +100,8 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
               className="h-8 w-8"
               onClick={(e) => handleDocumentClick(e, invoice.documentLink)}
               type="button"
-              asChild={invoice.documentLink !== '#'}
             >
-              {invoice.documentLink !== '#' ? (
-                <a 
-                  href={getDocumentUrl(invoice.documentLink)} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  title="View document"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              ) : (
-                <span title="No document available">
-                  <ExternalLink className="h-4 w-4 text-gray-400" />
-                </span>
-              )}
+              <ExternalLink className="h-4 w-4" />
             </Button>
           </TableCell>
           <TableCell className="text-right">

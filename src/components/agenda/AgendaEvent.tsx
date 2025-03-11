@@ -1,15 +1,19 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { AgendaEvent as AgendaEventType } from "@/types";
-import { FileText, CheckSquare } from "lucide-react";
+import { AgendaEvent as AgendaEventType, Invoice } from "@/types";
+import { FileText, CheckSquare, Receipt } from "lucide-react";
+import { formatCurrency } from "@/utils/invoiceUtils";
 
 interface AgendaEventProps {
-  event: AgendaEventType;
+  event: AgendaEventType | (Invoice & { eventType?: 'invoice' });
   onClick: (e: React.MouseEvent) => void;
 }
 
 const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick }) => {
+  // Check if this is an invoice record
+  const isInvoice = 'eventType' in event && event.eventType === 'invoice';
+  
   // Renk seçimi için basit bir fonksiyon
   const getCategoryColor = (subcategoryId: string) => {
     // subcategoryId'nin son karakterini alarak sabit renk dönelim
@@ -30,24 +34,59 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick }) => {
     return colorMap[lastChar] || "bg-gray-50 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700";
   };
 
-  const isTask = event.type === "GÖREV";
+  // Get display based on event type
+  if (isInvoice) {
+    const invoice = event as Invoice & { eventType: 'invoice' };
+    
+    // Set color based on invoice type
+    const getInvoiceTypeColor = (type?: string) => {
+      switch (type) {
+        case 'income':
+          return "bg-apuntea-gold/20 text-black border-apuntea-gold/30 dark:bg-apuntea-gold/10 dark:border-apuntea-gold/20";
+        case 'expense':
+          return "bg-apuntea-purple/20 text-purple-800 border-apuntea-purple/30 dark:bg-apuntea-purple/10 dark:border-apuntea-purple/20 dark:text-purple-300";
+        case 'financing':
+          return "bg-apuntea-dark/20 text-gray-800 border-apuntea-dark/30 dark:bg-apuntea-dark/10 dark:border-apuntea-dark/20 dark:text-gray-300";
+        default:
+          return "bg-gray-50 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700";
+      }
+    };
+    
+    return (
+      <div
+        className={cn(
+          "text-xs px-2 py-1 rounded-sm border truncate flex items-center gap-1",
+          getInvoiceTypeColor(invoice.type),
+          "cursor-pointer hover:opacity-80 transition-opacity"
+        )}
+        onClick={onClick}
+        title={`${invoice.companyName} - ${formatCurrency(invoice.totalAmount)}`}
+      >
+        <Receipt className="h-3 w-3 shrink-0" />
+        <span className="truncate">{invoice.companyName} - {formatCurrency(invoice.totalAmount)}</span>
+      </div>
+    );
+  }
+  
+  const regularEvent = event as AgendaEventType;
+  const isTask = regularEvent.type === "GÖREV";
   
   return (
     <div
       className={cn(
         "text-xs px-2 py-1 rounded-sm border truncate flex items-center gap-1",
-        getCategoryColor(event.subcategoryId),
+        getCategoryColor(regularEvent.subcategoryId),
         "cursor-pointer hover:opacity-80 transition-opacity"
       )}
       onClick={onClick}
-      title={event.title}
+      title={regularEvent.title}
     >
       {isTask ? (
         <CheckSquare className="h-3 w-3 shrink-0" />
       ) : (
         <FileText className="h-3 w-3 shrink-0" />
       )}
-      <span className="truncate">{event.title}</span>
+      <span className="truncate">{regularEvent.title}</span>
     </div>
   );
 };

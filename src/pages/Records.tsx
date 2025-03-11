@@ -5,7 +5,7 @@ import InvoiceTable from "@/components/InvoiceTable";
 import { Button } from "@/components/ui/button";
 import { getInvoices, deleteInvoice } from "@/utils/invoiceUtils";
 import { Invoice } from "@/types";
-import { Upload, Download, Plus } from "lucide-react";
+import { Download, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
@@ -88,7 +88,7 @@ const Records = () => {
             className="btn-primary"
           >
             <Plus className="h-4 w-4 mr-2" />
-            +NEW
+            NEW RECORD
           </Button>
           {invoices.length > 0 && (
             <Button 

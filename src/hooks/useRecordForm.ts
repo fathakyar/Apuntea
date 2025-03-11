@@ -13,6 +13,7 @@ export interface RecordFormData {
   amount: string;
   vat: string;
   totalAmount: string;
+  categoryId: string;
 }
 
 export function useRecordForm(initialData?: RecordFormData, recordType: RecordType = "expense") {
@@ -27,6 +28,7 @@ export function useRecordForm(initialData?: RecordFormData, recordType: RecordTy
     amount: initialData?.amount || "",
     vat: initialData?.vat || "",
     totalAmount: initialData?.totalAmount || "",
+    categoryId: initialData?.categoryId || "",
   });
 
   const navigate = useNavigate();
@@ -49,6 +51,7 @@ export function useRecordForm(initialData?: RecordFormData, recordType: RecordTy
       vat: parseFloat(formData.vat.replace(/\./g, "").replace(",", ".")) || 0,
       totalAmount: parseFloat(formData.totalAmount.replace(/\./g, "").replace(",", ".")) || 0,
       type: recordType, // Save the record type
+      categoryId: formData.categoryId, // Save the selected category ID
       documentLink: "#", // Placeholder for document link
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

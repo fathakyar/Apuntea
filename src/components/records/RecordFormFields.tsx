@@ -1,13 +1,13 @@
 
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import CompanyAutocomplete from "@/components/CompanyAutocomplete";
+import { RecordType } from "@/types";
 import { formatText, formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
+import CompanyAutocomplete from "@/components/CompanyAutocomplete";
 import DocumentField from "./form-fields/DocumentField";
 import DateField from "./form-fields/DateField";
 import InvoiceNumberField from "./form-fields/InvoiceNumberField";
 import AmountFields from "./form-fields/AmountFields";
+import CategoryField from "./form-fields/CategoryField";
 
 interface RecordFormFieldsProps {
   formData: {
@@ -18,6 +18,7 @@ interface RecordFormFieldsProps {
     amount: string;
     vat: string;
     totalAmount: string;
+    categoryId: string;
   };
   setFormData: React.Dispatch<React.SetStateAction<{
     documentName: string;
@@ -27,10 +28,12 @@ interface RecordFormFieldsProps {
     amount: string;
     vat: string;
     totalAmount: string;
+    categoryId: string;
   }>>;
+  recordType: RecordType;
 }
 
-const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormData }) => {
+const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormData, recordType }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
@@ -77,6 +80,13 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
     }
   };
 
+  const handleCategoryChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      categoryId: value
+    }));
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <DocumentField 
@@ -107,6 +117,12 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
         vat={formData.vat}
         totalAmount={formData.totalAmount}
         onChange={handleChange}
+      />
+
+      <CategoryField
+        value={formData.categoryId}
+        onChange={handleCategoryChange}
+        recordType={recordType}
       />
     </div>
   );

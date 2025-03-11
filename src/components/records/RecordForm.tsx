@@ -18,6 +18,7 @@ const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
       <RecordFormFields 
         formData={formData} 
         setFormData={setFormData} 
+        recordType={recordType}
       />
       <RecordFormActions recordType={recordType} />
     </form>

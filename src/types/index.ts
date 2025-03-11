@@ -1,6 +1,10 @@
+
+export type RecordType = "income" | "expense" | "financing";
+
 export interface Invoice {
   id: string;
-  documentName: string;
+  type?: RecordType;
+  documentName?: string;
   invoiceDate: string;
   invoiceNumber: string;
   companyName: string;
@@ -8,21 +12,9 @@ export interface Invoice {
   vat: number;
   totalAmount: number;
   documentLink: string;
+  categoryId?: string;
   createdAt: string;
   updatedAt: string;
-  type?: RecordType; // Added type field
-}
-
-export interface User {
-  email: string;
-  isAuthenticated: boolean;
-}
-
-export interface AuthContextType {
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-  isLoading: boolean;
 }
 
 export interface InvoiceFormData {
@@ -30,26 +22,10 @@ export interface InvoiceFormData {
   invoiceDate: string;
   invoiceNumber: string;
   companyName: string;
-  amount: number | string;
-  vat: number | string;
-  totalAmount: number | string;
-  type?: RecordType; // Added type field
-}
-
-export interface FormattingOptions {
-  toUpperCase?: boolean;
-  formatNumber?: boolean;
-}
-
-declare global {
-  interface Window {
-    gapi: any;
-  }
-}
-
-export interface Subcategory {
-  id: string;
-  name: string;
+  amount: any;
+  vat: any;
+  totalAmount: any;
+  categoryId?: string;
 }
 
 export interface Category {
@@ -57,6 +33,11 @@ export interface Category {
   name: string;
   subcategories: Subcategory[];
   editable: boolean;
+}
+
+export interface Subcategory {
+  id: string;
+  name: string;
 }
 
 export interface Currency {
@@ -71,9 +52,7 @@ export interface AgendaEvent {
   title: string;
   description: string;
   type: string;
-  importance: string;
-  date: string;
   subcategoryId: string;
+  date: string;
+  reminder?: boolean;
 }
-
-export type RecordType = "income" | "expense" | "financing";
