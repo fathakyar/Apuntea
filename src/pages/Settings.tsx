@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,15 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
-import { handleUppercaseInput } from "@/utils/formatUtils";
 
 const Settings = () => {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const t = translations[language];
   
   const [activeTab, setActiveTab] = useState("profile");
@@ -308,27 +307,7 @@ const Settings = () => {
                 </div>
               </div>
               
-              <div className="space-y-4 border p-4 rounded-sm">
-                <h3 className="text-lg font-medium">{t.languages}</h3>
-                <RadioGroup 
-                  value={language} 
-                  onValueChange={setLanguage}
-                  className="grid grid-cols-1 md:grid-cols-3 gap-2"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="en" id="en" />
-                    <Label htmlFor="en">ENGLISH</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="es" id="es" />
-                    <Label htmlFor="es">ESPAÑOL</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="tr" id="tr" />
-                    <Label htmlFor="tr">TÜRKÇE</Label>
-                  </div>
-                </RadioGroup>
-              </div>
+              {/* Language section removed as we only support English now */}
               
               <div className="space-y-4 border p-4 rounded-sm">
                 <h3 className="text-lg font-medium">{t.security}</h3>

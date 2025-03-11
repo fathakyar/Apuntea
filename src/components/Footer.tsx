@@ -2,17 +2,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useLanguage, Language } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 
 const Footer = () => {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const t = translations[language];
-
-  const handleLanguageChange = (value: string) => {
-    setLanguage(value as Language);
-  };
 
   return (
     <footer className="bg-[#f0b50a] dark:bg-black border-t border-gray-200 dark:border-gray-800">
@@ -50,16 +45,7 @@ const Footer = () => {
         <div className="mt-6 pt-4 border-t border-gray-600/20 dark:border-gray-800">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-              <Select value={language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-[140px] rounded-sm">
-                  <SelectValue placeholder={t.selectLanguage} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">ENGLISH</SelectItem>
-                  <SelectItem value="es">ESPAÑOL</SelectItem>
-                  <SelectItem value="tr">TÜRKÇE</SelectItem>
-                </SelectContent>
-              </Select>
+              {/* Language selector removed as we only support English now */}
               
               <Link to="/privacy">
                 <Button variant="link" className="text-sm">{t.privacyStatement}</Button>

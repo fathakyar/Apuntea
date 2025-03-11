@@ -1,7 +1,7 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 
-export type Language = "en" | "es" | "tr";
+export type Language = "en";
 
 interface LanguageContextType {
   language: Language;
@@ -23,17 +23,11 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    // Try to get the saved language from localStorage, or default to "en"
-    const savedLanguage = localStorage.getItem("apuntea_language");
-    // Check if the saved language is one of the allowed languages
-    return (savedLanguage as Language) && ["en", "es", "tr"].includes(savedLanguage) ? (savedLanguage as Language) : "en";
-  });
-
-  // Save language to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("apuntea_language", language);
-  }, [language]);
+  // Always use "en" as the language
+  const language: Language = "en";
+  
+  // Empty function as we now only support English
+  const setLanguage = () => {};
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>
