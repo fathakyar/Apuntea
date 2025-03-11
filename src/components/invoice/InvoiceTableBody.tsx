@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Invoice } from "@/types";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -32,6 +31,18 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
     }
   };
 
+  const getDocumentUrl = (url: string) => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    
+    if (url === '#') {
+      return 'javascript:void(0)';
+    }
+    
+    return url;
+  };
+
   return (
     <TableBody>
       {invoices.map((invoice) => (
@@ -51,17 +62,29 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
             <Button 
               variant="outline" 
               size="icon" 
-              asChild
               className="h-8 w-8"
+              onClick={(e) => {
+                if (invoice.documentLink === '#') {
+                  e.preventDefault();
+                  alert('Document is not available.');
+                }
+              }}
+              asChild={invoice.documentLink !== '#'}
             >
-              <a 
-                href={invoice.documentLink} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                title="View document"
-              >
-                <ExternalLink className="h-4 w-4" />
-              </a>
+              {invoice.documentLink !== '#' ? (
+                <a 
+                  href={getDocumentUrl(invoice.documentLink)} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  title="View document"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              ) : (
+                <span title="No document available">
+                  <ExternalLink className="h-4 w-4 text-gray-400" />
+                </span>
+              )}
             </Button>
           </TableCell>
           <TableCell className="text-right">
