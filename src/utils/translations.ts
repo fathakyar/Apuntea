@@ -649,7 +649,7 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     privacyStatement: "DATENSCHUTZERKLÄRUNG",
     termsConditions: "GESCHÄFTSBEDINGUNGEN",
     cookiePolicy: "COOKIE-RICHTLINIE",
-	allRightsReserved: "TODAL RECHTE VORBEHALTEN",
+	allRightsReserved: "ALLE RECHTE VORBEHALTEN",
     selectLanguage: "SPRACHE AUSWÄHLEN",
     manageEventsAndReminders: "Verwalten Sie Ereignisse und Erinnerungen",
     eventAdded: "Ereignis hinzugefügt",
@@ -750,4 +750,4 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     invoiceSuccessfullyDeleted: "Rechnung wurde erfolgreich gelöscht",
     couldNotDeleteInvoice: "Rechnung konnte nicht gelöscht werden",
     exportSuccessful: "Export erfolgreich",
-    invoiceDataExported
+    invoiceDataExported:
