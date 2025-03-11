@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -25,6 +24,7 @@ import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
+import NewRecord from "./pages/NewRecord";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -39,7 +39,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Index />}>
                   <Route index element={<Dashboard />} />
-                  <Route path="upload" element={<InvoiceUpload />} />
+                  <Route path="upload" element={<NewRecord />} />
                   <Route path="records" element={<Records />} />
                   <Route path="invoice/:id" element={<InvoiceEdit />} />
                   <Route path="definitions" element={<Definitions />} />

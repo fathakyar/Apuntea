@@ -73,3 +73,5 @@ export interface AgendaEvent {
   date: string;
   subcategoryId: string;
 }
+
+export type RecordType = "income" | "expense" | "financing";
