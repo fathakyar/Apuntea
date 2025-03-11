@@ -53,6 +53,7 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
   const handleDocumentClick = (e: React.MouseEvent, url: string) => {
     if (url === '#') {
       e.preventDefault();
+      e.stopPropagation();
       alert('Document is not available.');
       return;
     }

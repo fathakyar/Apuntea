@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -40,8 +41,9 @@ function App() {
                 <Route path="/" element={<Index />}>
                   <Route index element={<Dashboard />} />
                   <Route path="upload" element={<NewRecord />} />
+                  <Route path="new-record" element={<NewRecord />} />
                   <Route path="records" element={<Records />} />
-                  <Route path="invoice/:id" element={<InvoiceEdit />} />
+                  <Route path="edit/:id" element={<InvoiceEdit />} />
                   <Route path="definitions" element={<Definitions />} />
                   <Route path="settings" element={<Settings />} />
                   <Route path="bi" element={<BusinessIntelligence />} />
