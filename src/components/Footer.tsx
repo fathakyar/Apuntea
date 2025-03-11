@@ -57,12 +57,6 @@ const Footer = () => {
                 <SelectContent>
                   <SelectItem value="en">ENGLISH</SelectItem>
                   <SelectItem value="es">ESPAÑOL</SelectItem>
-                  <SelectItem value="de">DEUTSCH</SelectItem>
-                  <SelectItem value="fr">FRANÇAIS</SelectItem>
-                  <SelectItem value="it">ITALIANO</SelectItem>
-                  <SelectItem value="pt">PORTUGUÊS</SelectItem>
-                  <SelectItem value="ar">العربية</SelectItem>
-                  <SelectItem value="zh">中文</SelectItem>
                   <SelectItem value="tr">TÜRKÇE</SelectItem>
                 </SelectContent>
               </Select>

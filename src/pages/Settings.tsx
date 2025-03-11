@@ -324,30 +324,6 @@ const Settings = () => {
                     <Label htmlFor="es">ESPAÑOL</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="de" id="de" />
-                    <Label htmlFor="de">DEUTSCH</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="fr" id="fr" />
-                    <Label htmlFor="fr">FRANÇAIS</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="it" id="it" />
-                    <Label htmlFor="it">ITALIANO</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="pt" id="pt" />
-                    <Label htmlFor="pt">PORTUGUÊS</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="ar" id="ar" />
-                    <Label htmlFor="ar">العربية</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="zh" id="zh" />
-                    <Label htmlFor="zh">中文</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
                     <RadioGroupItem value="tr" id="tr" />
                     <Label htmlFor="tr">TÜRKÇE</Label>
                   </div>
