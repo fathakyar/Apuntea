@@ -7,6 +7,9 @@ import { RecordType } from "@/types";
 import { formatText, formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
 import CompanyAutocomplete from "@/components/CompanyAutocomplete";
 import { Save } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { v4 as uuidv4 } from "uuid";
 
 interface RecordFormProps {
   initialData?: {
@@ -22,9 +25,12 @@ interface RecordFormProps {
 }
 
 const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
+  // Get today's date in yyyy-mm-dd format
+  const today = new Date().toISOString().split('T')[0];
+  
   const [formData, setFormData] = useState({
     documentName: initialData?.documentName || "",
-    invoiceDate: initialData?.invoiceDate || "",
+    invoiceDate: initialData?.invoiceDate || today,
     invoiceNumber: initialData?.invoiceNumber || "",
     companyName: initialData?.companyName || "",
     amount: initialData?.amount || "",
@@ -32,12 +38,23 @@ const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
     totalAmount: initialData?.totalAmount || "",
   });
 
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
     if (name === "amount" || name === "vat") {
-      const numericValue = parseEuropeanNumber(value);
+      let numericValue = 0;
+      try {
+        numericValue = parseEuropeanNumber(value);
+      } catch (error) {
+        // If parsing fails, use 0
+        numericValue = 0;
+      }
+      
       const formattedValue = formatNumberWithEuropeanStyle(numericValue, { formatNumber: true });
+      
       setFormData(prev => {
         const amount = name === "amount" ? numericValue : parseEuropeanNumber(prev.amount);
         const vat = name === "vat" ? numericValue : parseEuropeanNumber(prev.vat);
@@ -61,13 +78,45 @@ const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we'll handle the form submission
-    console.log("Form submitted:", { ...formData, recordType });
+    
+    // Get existing invoices or initialize empty array
+    const existingInvoices = JSON.parse(localStorage.getItem("invoices") || "[]");
+    
+    // Create new invoice with the form data
+    const newInvoice = {
+      id: uuidv4(),
+      documentName: formData.documentName,
+      invoiceDate: formData.invoiceDate,
+      invoiceNumber: formData.invoiceNumber,
+      companyName: formData.companyName,
+      amount: parseEuropeanNumber(formData.amount),
+      vat: parseEuropeanNumber(formData.vat),
+      totalAmount: parseEuropeanNumber(formData.totalAmount),
+      type: recordType, // Save the record type
+      documentLink: "#", // Placeholder for document link
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    
+    // Add the new invoice to the existing ones
+    existingInvoices.push(newInvoice);
+    
+    // Save back to localStorage
+    localStorage.setItem("invoices", JSON.stringify(existingInvoices));
+    
+    // Show success message
+    toast({
+      title: "Record saved successfully",
+      description: `The ${recordType} record has been saved.`,
+    });
+    
+    // Navigate to records page
+    navigate("/records");
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label htmlFor="documentName">Document Name</Label>
           <Input

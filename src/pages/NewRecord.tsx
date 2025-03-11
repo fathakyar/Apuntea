@@ -20,9 +20,24 @@ const NewRecord = () => {
       <div className="grid gap-6">
         <Tabs defaultValue="expense" className="w-full" onValueChange={(value) => setRecordType(value as RecordType)}>
           <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="income">Income</TabsTrigger>
-            <TabsTrigger value="expense">Expense</TabsTrigger>
-            <TabsTrigger value="financing">Financing</TabsTrigger>
+            <TabsTrigger 
+              value="income" 
+              className="data-[state=active]:bg-apuntea-gold data-[state=active]:text-black"
+            >
+              Income
+            </TabsTrigger>
+            <TabsTrigger 
+              value="expense" 
+              className="data-[state=active]:bg-apuntea-purple data-[state=active]:text-white"
+            >
+              Expense
+            </TabsTrigger>
+            <TabsTrigger 
+              value="financing" 
+              className="data-[state=active]:bg-apuntea-dark data-[state=active]:text-white"
+            >
+              Financing
+            </TabsTrigger>
           </TabsList>
         </Tabs>
 
@@ -36,7 +51,7 @@ const NewRecord = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Scan className="h-5 w-5" />
-                Quick New Record with Scan
+                Scan with Quick +New Record
               </CardTitle>
               <CardDescription>
                 Simply scan your document with Apuntea OCR technology. Record information will appear on your screen.

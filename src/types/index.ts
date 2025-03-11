@@ -10,6 +10,7 @@ export interface Invoice {
   documentLink: string;
   createdAt: string;
   updatedAt: string;
+  type?: RecordType; // Added type field
 }
 
 export interface User {
@@ -32,6 +33,7 @@ export interface InvoiceFormData {
   amount: number | string;
   vat: number | string;
   totalAmount: number | string;
+  type?: RecordType; // Added type field
 }
 
 export interface FormattingOptions {

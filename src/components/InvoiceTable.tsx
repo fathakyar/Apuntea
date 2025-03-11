@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { formatCurrency, formatDate } from "@/utils/invoiceUtils";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 
 interface InvoiceTableProps {
   invoices: Invoice[];
@@ -28,7 +29,7 @@ interface InvoiceTableProps {
   onDelete: (id: string) => void;
 }
 
-type SortField = 'invoiceDate' | 'invoiceNumber' | 'companyName' | 'amount' | 'vat' | 'totalAmount';
+type SortField = 'type' | 'invoiceDate' | 'invoiceNumber' | 'companyName' | 'amount' | 'vat' | 'totalAmount';
 type SortDirection = 'asc' | 'desc';
 
 const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete }) => {
@@ -59,6 +60,9 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
     let comparison = 0;
     
     switch (sortField) {
+      case 'type':
+        comparison = (a.type || 'expense').localeCompare(b.type || 'expense');
+        break;
       case 'invoiceDate':
         comparison = new Date(a.invoiceDate).getTime() - new Date(b.invoiceDate).getTime();
         break;
@@ -95,6 +99,19 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
     }
   };
 
+  const getTypeColor = (type?: string) => {
+    switch (type) {
+      case 'income':
+        return 'bg-apuntea-gold text-black';
+      case 'expense':
+        return 'bg-apuntea-purple text-white';
+      case 'financing':
+        return 'bg-apuntea-dark text-white';
+      default:
+        return 'bg-muted';
+    }
+  };
+
   const SortHeader: React.FC<{ label: string; field: SortField }> = ({ label, field }) => (
     <div 
       className="flex items-center space-x-1 cursor-pointer" 
@@ -125,6 +142,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead><SortHeader label="Type" field="type" /></TableHead>
                   <TableHead><SortHeader label="Invoice Date" field="invoiceDate" /></TableHead>
                   <TableHead><SortHeader label="Invoice Number" field="invoiceNumber" /></TableHead>
                   <TableHead><SortHeader label="Company Name" field="companyName" /></TableHead>
@@ -138,6 +156,11 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
               <TableBody>
                 {sortedInvoices.map((invoice) => (
                   <TableRow key={invoice.id} className="animate-fade-in">
+                    <TableCell>
+                      <Badge className={`${getTypeColor(invoice.type)} capitalize`}>
+                        {invoice.type || 'expense'}
+                      </Badge>
+                    </TableCell>
                     <TableCell>{formatDate(invoice.invoiceDate)}</TableCell>
                     <TableCell>{invoice.invoiceNumber}</TableCell>
                     <TableCell>{invoice.companyName}</TableCell>
