@@ -722,7 +722,7 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     subject: "BETREFF",
     message: "NACHRICHT",
     send: "SENDEN",
-    // Add new keys with German translations here
+    // Business Intelligence
     businessIntelligence: "BUSINESS INTELLIGENCE",
     analyticsAndInsights: "Analysen und Einblicke für Ihr Unternehmen",
     revenueOverview: "Umsatzübersicht",
@@ -758,4 +758,5 @@ export const translations: Record<Language, Partial<Record<TranslationKey, strin
     manageRecords: "Aufzeichnungen verwalten",
     proTip: "Profi-Tipp",
     scanInvoiceWithPhone: "Scannen Sie eine Rechnung mit Ihrer Handykamera, um Daten sofort zu extrahieren und zu verarbeiten.",
-    invoiceRecords: "
+    // Records
+    invoiceRecords: "Re
