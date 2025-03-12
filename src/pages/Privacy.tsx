@@ -1,38 +1,43 @@
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { translations } from "@/utils/translations";
+import Layout from "@/components/Layout";
 
 const Privacy = () => {
-  const { language } = useLanguage();
-  const t = translations[language];
-
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in p-6">
-      <h1 className="text-3xl font-bold">{t.privacyStatement}</h1>
-      
-      <Card className="rounded-sm">
-        <CardHeader>
-          <CardTitle>{t.privacyStatement}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>{t.privacyIntro}</p>
+    <Layout>
+      <div className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-6 text-apuntea-purple flex items-center gap-2">
+          <div className="h-8 w-1 bg-apuntea-gold rounded-sm"></div>
+          Privacy Policy
+        </h1>
+        
+        <div className="glass-card p-6">
+          <p className="mb-4">
+            At Apuntea, we take your privacy seriously. This Privacy Policy explains how we collect,
+            use, and protect your personal information.
+          </p>
           
-          <h2 className="text-xl font-semibold mt-6">{t.dataCollection}</h2>
-          <p>{t.dataCollectionText}</p>
+          <h2 className="text-xl font-bold mt-6 mb-3 text-apuntea-purple">Information We Collect</h2>
+          <p className="mb-4">
+            We collect information that you provide directly to us, such as when you create an account,
+            upload invoices, or contact our support team. This may include your name, email address,
+            company information, and financial data related to your invoices.
+          </p>
           
-          <h2 className="text-xl font-semibold mt-6">{t.dataUse}</h2>
-          <p>{t.dataUseText}</p>
+          <h2 className="text-xl font-bold mt-6 mb-3 text-apuntea-purple">How We Use Your Information</h2>
+          <p className="mb-4">
+            We use your information to provide and improve our services, process your invoices,
+            communicate with you, and ensure the security of your account.
+          </p>
           
-          <h2 className="text-xl font-semibold mt-6">{t.dataSecurity}</h2>
-          <p>{t.dataSecurityText}</p>
-          
-          <h2 className="text-xl font-semibold mt-6">{t.contactInfo}</h2>
-          <p>{t.contactInfoText}</p>
-        </CardContent>
-      </Card>
-    </div>
+          <h2 className="text-xl font-bold mt-6 mb-3 text-apuntea-purple">Data Security</h2>
+          <p>
+            We implement appropriate security measures to protect your personal information from
+            unauthorized access, alteration, or disclosure.
+          </p>
+        </div>
+      </div>
+    </Layout>
   );
 };
 

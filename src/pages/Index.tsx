@@ -24,8 +24,7 @@ const Index = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // Outlet is used to render the child routes without wrapping them in Layout
-  // since Layout will now only be applied once from here
+  // Return Layout with Outlet to render child routes
   return <Layout><Outlet /></Layout>;
 };
 

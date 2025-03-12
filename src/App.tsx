@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -38,17 +39,24 @@ function App() {
           <DefinitionsProvider>
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<Index />}>
+                  {/* Nested routes that should have the Layout applied */}
+                  <Route index element={<Dashboard />} />
+                  <Route path="upload" element={<InvoiceUpload />} />
+                  <Route path="new-record" element={<NewRecord />} />
+                  <Route path="records" element={<Records />} />
+                  <Route path="edit/:id" element={<InvoiceEdit />} />
+                  <Route path="definitions" element={<Definitions />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="bi" element={<BusinessIntelligence />} />
+                  <Route path="agenda" element={<Agenda />} />
+                </Route>
+                
+                {/* Routes that should appear without the Layout */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="upload" element={<NewRecord />} />
-                <Route path="new-record" element={<NewRecord />} />
-                <Route path="records" element={<Records />} />
-                <Route path="edit/:id" element={<InvoiceEdit />} />
-                <Route path="definitions" element={<Definitions />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="bi" element={<BusinessIntelligence />} />
-                <Route path="agenda" element={<Agenda />} />
+                
+                {/* Public pages that should have their own layout */}
                 <Route path="about" element={<About />} />
                 <Route path="services" element={<Services />} />
                 <Route path="blog" element={<Blog />} />
@@ -56,6 +64,7 @@ function App() {
                 <Route path="privacy" element={<Privacy />} />
                 <Route path="terms" element={<Terms />} />
                 <Route path="cookies" element={<Cookies />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
             <Toaster />
