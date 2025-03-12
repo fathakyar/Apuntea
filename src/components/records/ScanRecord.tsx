@@ -49,18 +49,23 @@ const ScanRecord: React.FC<ScanRecordProps> = ({ recordType }) => {
   };
 
   return (
-    <Card>
+    <Card className="glass-card border-apuntea-purple/20">
       <CardHeader>
-        <CardTitle>Scan Document</CardTitle>
+        <CardTitle className="text-apuntea-purple flex items-center gap-2">
+          <div className="h-6 w-1 bg-apuntea-gold rounded-sm"></div>
+          Scan Document
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {!scannedData ? (
           <div className="space-y-4">
             {isScanning ? (
               <div className="flex flex-col items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin mb-4" />
+                <Loader2 className="h-8 w-8 animate-spin mb-4 text-apuntea-purple" />
                 <p className="text-lg font-medium">Scanning document...</p>
-                <p className="text-sm text-muted-foreground">Please wait while we process your document</p>
+                <p className="text-sm text-muted-foreground">
+                  Please wait while we process your document
+                </p>
               </div>
             ) : (
               <FileUpload onFileSelect={handleFileSelect} />

@@ -10,9 +10,12 @@ interface ManualRecordProps {
 
 const ManualRecord: React.FC<ManualRecordProps> = ({ recordType }) => {
   return (
-    <Card>
+    <Card className="glass-card border-apuntea-purple/20">
       <CardHeader>
-        <CardTitle>Manual Entry</CardTitle>
+        <CardTitle className="text-apuntea-purple flex items-center gap-2">
+          <div className="h-6 w-1 bg-apuntea-gold rounded-sm"></div>
+          Manual Entry
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <RecordForm recordType={recordType} />
