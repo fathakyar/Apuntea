@@ -153,7 +153,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Categories</SelectItem>
+            <SelectItem value="_all">All Categories</SelectItem>
             {subcategories.map(subcategory => (
               <SelectItem key={subcategory.id} value={subcategory.id}>
                 {subcategory.name}
@@ -170,7 +170,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
             <SelectValue placeholder="All payment types" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Payment Types</SelectItem>
+            <SelectItem value="_all">All Payment Types</SelectItem>
             {paymentTypes.map(paymentType => (
               <SelectItem key={paymentType.id} value={paymentType.id}>
                 {paymentType.name}

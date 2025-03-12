@@ -19,8 +19,8 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const [sortField, setSortField] = useState<SortField>('invoiceDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [categoryFilter, setCategoryFilter] = useState<string>("");
-  const [paymentTypeFilter, setPaymentTypeFilter] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("_all");
+  const [paymentTypeFilter, setPaymentTypeFilter] = useState<string>("_all");
   const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
     to: undefined,
@@ -46,10 +46,10 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
     const matchesType = !typeFilter || typeFilter === "all" ? true : invoice.type === typeFilter;
     
     // Apply category filter
-    const matchesCategory = !categoryFilter ? true : invoice.categoryId === categoryFilter;
+    const matchesCategory = !categoryFilter || categoryFilter === "_all" ? true : invoice.categoryId === categoryFilter;
     
     // Apply payment type filter
-    const matchesPaymentType = !paymentTypeFilter ? true : invoice.paymentTypeId === paymentTypeFilter;
+    const matchesPaymentType = !paymentTypeFilter || paymentTypeFilter === "_all" ? true : invoice.paymentTypeId === paymentTypeFilter;
     
     // Apply date filter
     let matchesDate = true;
@@ -109,15 +109,15 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const clearFilters = () => {
     setTypeFilter("all");
     setSearchTerm("");
-    setCategoryFilter("");
-    setPaymentTypeFilter("");
+    setCategoryFilter("_all");
+    setPaymentTypeFilter("_all");
     setDateRange({ from: undefined, to: undefined });
   };
 
   const hasFilters = !!searchTerm || 
                     (typeFilter && typeFilter !== "all") || 
-                    !!categoryFilter || 
-                    !!paymentTypeFilter || 
+                    (categoryFilter && categoryFilter !== "_all") || 
+                    (paymentTypeFilter && paymentTypeFilter !== "_all") || 
                     !!dateRange.from;
 
   return (
