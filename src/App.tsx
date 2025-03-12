@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DefinitionsProvider } from "./contexts/DefinitionsContext";
@@ -40,8 +40,9 @@ function App() {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Index />}>
-                  {/* Nested routes that should have the Layout applied */}
-                  <Route index element={<Dashboard />} />
+                  {/* Redirect root to agenda */}
+                  <Route index element={<Navigate to="/agenda" replace />} />
+                  <Route path="dashboard" element={<Dashboard />} />
                   <Route path="upload" element={<InvoiceUpload />} />
                   <Route path="new-record" element={<NewRecord />} />
                   <Route path="records" element={<Records />} />

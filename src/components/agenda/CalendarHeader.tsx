@@ -67,7 +67,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         </div>
       </div>
       
-      <Tabs defaultValue={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full">
+      <Tabs defaultValue="day" value={viewMode} onValueChange={(v) => onViewModeChange(v as ViewMode)} className="w-full">
         <TabsList className="w-full">
           <TabsTrigger value="day" className="flex items-center">
             <FileClock className="h-4 w-4 mr-2" />

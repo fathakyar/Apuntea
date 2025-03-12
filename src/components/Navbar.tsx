@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,14 +7,13 @@ import {
   X,
   FileText,
   Plus,
-  LayoutDashboard,
-  LineChart,
   Calendar,
   User,
   Settings,
   LogOut,
   FileInput,
-  Search
+  Search,
+  LineChart
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -41,10 +39,9 @@ const Navbar = () => {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const navigationItems = [
-    { name: t.dashboard, path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { name: t.new, path: "/upload", icon: <Plus className="h-5 w-5" /> },
-    { name: t.records, path: "/records", icon: <FileText className="h-5 w-5" /> },
     { name: t.agenda, path: "/agenda", icon: <Calendar className="h-5 w-5" /> },
+    { name: t.new, path: "/new-record", icon: <Plus className="h-5 w-5" /> },
+    { name: t.records, path: "/records", icon: <FileText className="h-5 w-5" /> },
     { name: ".BI", path: "/bi", icon: <LineChart className="h-5 w-5" /> },
   ];
 
@@ -57,7 +54,6 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  // Handle clicks outside the search box to unfocus it
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -85,7 +81,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - moved closer to logo */}
           <div className="hidden md:flex items-center space-x-1 ml-4">
             {navigationItems.map((item) => (
               <Link
@@ -104,7 +99,6 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center ml-auto gap-2">
-            {/* Improved Search Bar with animation */}
             <div 
               ref={searchRef}
               className={cn(
@@ -165,7 +159,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -181,10 +174,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <div className={`md:hidden ${isOpen ? "block" : "hidden"}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-black/90 backdrop-blur-md animate-slide-in">
-          {/* Mobile search with improved UI */}
           <div className="px-3 py-2">
             <div className="relative border border-gray-300 dark:border-gray-700 rounded-sm">
               <Input
@@ -258,3 +249,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
