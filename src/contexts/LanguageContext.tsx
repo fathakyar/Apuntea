@@ -1,11 +1,10 @@
 
-import React, { createContext, useContext, ReactNode } from "react";
-
-export type Language = "en";
+import React, { createContext, useContext, ReactNode, useState } from "react";
+import { SupportedLanguage } from "../types";
 
 interface LanguageContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
+  language: SupportedLanguage;
+  setLanguage: (lang: SupportedLanguage) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -23,11 +22,11 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  // Always use "en" as the language
-  const language: Language = "en";
+  const [language, setLanguageState] = useState<SupportedLanguage>("en");
   
-  // Empty function as we now only support English
-  const setLanguage = () => {};
+  const setLanguage = (lang: SupportedLanguage) => {
+    setLanguageState(lang);
+  };
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>
