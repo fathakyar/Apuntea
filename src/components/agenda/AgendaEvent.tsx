@@ -14,9 +14,9 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick }) => {
   // Check if this is an invoice record
   const isInvoice = 'eventType' in event && event.eventType === 'invoice';
   
-  // Renk seçimi için basit bir fonksiyon
+  // Color selection function
   const getCategoryColor = (subcategoryId: string) => {
-    // subcategoryId'nin son karakterini alarak sabit renk dönelim
+    // Use the last character of subcategoryId for consistent color
     const lastChar = subcategoryId.charAt(subcategoryId.length - 1);
     const colorMap: Record<string, string> = {
       "0": "bg-red-50 text-red-800 border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800/50",
@@ -34,7 +34,7 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick }) => {
     return colorMap[lastChar] || "bg-gray-50 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700";
   };
 
-  // Get display based on event type
+  // Display based on event type
   if (isInvoice) {
     const invoice = event as Invoice & { eventType: 'invoice' };
     

@@ -57,7 +57,7 @@ export interface AgendaEvent {
   subcategoryId: string;
   date: string;
   reminder?: boolean;
-  importance?: string; // Added missing property
+  importance?: string;
 }
 
 export interface User {
@@ -65,7 +65,7 @@ export interface User {
   email: string;
   name: string;
   role: string;
-  isAuthenticated?: boolean; // Added missing property
+  isAuthenticated?: boolean;
 }
 
 export interface AuthContextType {
@@ -74,7 +74,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   error: string | null;
-  isLoading: boolean; // Added missing property
+  isLoading: boolean;
 }
 
 export interface FormattingOptions {
