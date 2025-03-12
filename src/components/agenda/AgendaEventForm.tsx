@@ -1,28 +1,19 @@
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Trash2, AlertTriangle } from "lucide-react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { AgendaEvent, Subcategory } from "@/types";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
+// Import extracted components
+import EventTypeToggle from "./form/EventTypeToggle";
+import ImportanceToggle from "./form/ImportanceToggle";
+import EventDatePicker from "./form/EventDatePicker";
+import DeleteEventDialog from "./form/DeleteEventDialog";
+import EventFormActions from "./form/EventFormActions";
 
 interface AgendaEventFormProps {
   event: AgendaEvent | null;
@@ -146,62 +137,23 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>{getLabel("type")}</Label>
-        <ToggleGroup type="single" value={formData.type} onValueChange={handleTypeChange} className="justify-start">
-          <ToggleGroupItem value="NOT" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white">
-            {getLabel("note")}
-          </ToggleGroupItem>
-          <ToggleGroupItem value="GÖREV" className="data-[state=on]:bg-green-500 data-[state=on]:text-white">
-            {getLabel("task")}
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
+      <EventTypeToggle 
+        value={formData.type} 
+        onChange={handleTypeChange} 
+        getLabel={getLabel} 
+      />
 
-      <div className="space-y-2">
-        <Label>{getLabel("importance")}</Label>
-        <ToggleGroup type="single" value={formData.importance} onValueChange={handleImportanceChange} className="justify-start">
-          <ToggleGroupItem value="!" className="data-[state=on]:bg-yellow-500 data-[state=on]:text-white">
-            <AlertTriangle className="h-4 w-4 mr-1" />
-            !
-          </ToggleGroupItem>
-          <ToggleGroupItem value="!!" className="data-[state=on]:bg-orange-500 data-[state=on]:text-white">
-            <AlertTriangle className="h-4 w-4 mr-1" />
-            !!
-          </ToggleGroupItem>
-          <ToggleGroupItem value="!!!" className="data-[state=on]:bg-red-500 data-[state=on]:text-white">
-            <AlertTriangle className="h-4 w-4 mr-1" />
-            !!!
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
+      <ImportanceToggle 
+        value={formData.importance} 
+        onChange={handleImportanceChange} 
+        getLabel={getLabel} 
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="date">{getLabel("date")}</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal rounded-sm",
-                !date && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>{getLabel("date")}</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={handleDateChange}
-              initialFocus
-              className="pointer-events-auto"
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
+      <EventDatePicker 
+        date={date} 
+        onChange={handleDateChange} 
+        getLabel={getLabel} 
+      />
 
       <div className="space-y-2">
         <Label htmlFor="description">{getLabel("description")}</Label>
@@ -216,49 +168,19 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
         />
       </div>
 
-      <div className="flex justify-between pt-2">
-        <div>
-          {event && onDelete && (
-            <Button
-              type="button"
-              variant="outline"
-              className="text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-sm"
-              onClick={() => setIsDeleteAlertOpen(true)}
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              {getLabel("delete")}
-            </Button>
-          )}
-        </div>
-        <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm">
-            {getLabel("cancel")}
-          </Button>
-          <Button type="submit" className="rounded-sm">
-            {event ? getLabel("update") : getLabel("add")}
-          </Button>
-        </div>
-      </div>
+      <EventFormActions 
+        isEditing={!!event} 
+        onCancel={onCancel} 
+        onDelete={() => setIsDeleteAlertOpen(true)} 
+        getLabel={getLabel} 
+      />
 
-      <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{getLabel("deleteConfirmTitle")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {getLabel("deleteConfirmDesc")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-sm">{getLabel("cancel")}</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-sm"
-            >
-              {getLabel("delete")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteEventDialog 
+        isOpen={isDeleteAlertOpen} 
+        onOpenChange={setIsDeleteAlertOpen} 
+        onDelete={handleDelete} 
+        getLabel={getLabel} 
+      />
     </form>
   );
 };
