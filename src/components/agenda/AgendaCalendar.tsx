@@ -42,13 +42,10 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
   const { language } = useLanguage();
   const t = translations[language];
 
-  // Get the correct locale for date formatting based on language
   const getDateLocale = () => {
-    // Only English is supported now
     return undefined;
   };
 
-  // Navigation helpers
   const navigate = (direction: "prev" | "next" | "today") => {
     if (direction === "today") {
       setCurrentDate(new Date());
@@ -77,14 +74,11 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     }
   };
 
-  // Helper to get events for a specific day
   const getEventsForDay = (day: Date) => {
-    // Get regular agenda events
     const dayEvents = events.filter(event => 
       isSameDay(parse(event.date, "yyyy-MM-dd", new Date()), day)
     );
     
-    // Get invoice records for this day
     const dayInvoices = invoices
       .filter(invoice => 
         isSameDay(parse(invoice.invoiceDate, "yyyy-MM-dd", new Date()), day)
@@ -94,26 +88,21 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
         eventType: 'invoice' as const
       }));
     
-    // Combine both types of events
     return [...dayEvents, ...dayInvoices];
   };
 
-  // Handle event click
   const handleEventClick = (e: React.MouseEvent, event: AgendaEventType | (Invoice & { eventType?: 'invoice' })) => {
     e.stopPropagation();
     
-    // Check if this is an invoice record
     if ('eventType' in event && event.eventType === 'invoice') {
       onInvoiceClick(event);
       return;
     }
     
-    // Otherwise it's a regular agenda event
     setEditingEvent(event as AgendaEventType);
     setIsFormOpen(true);
   };
 
-  // View mode header
   const renderViewModeHeader = () => {
     let headerText = "";
     const locale = getDateLocale();
@@ -205,7 +194,6 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     );
   };
 
-  // Day view content
   const renderDayView = () => {
     const combinedEvents = getEventsForDay(currentDate);
     
@@ -264,7 +252,6 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     );
   };
 
-  // Week view content
   const renderWeekView = () => {
     const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 });
     const weekEnd = endOfWeek(currentDate, { weekStartsOn: 1 });
@@ -322,10 +309,8 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     );
   };
 
-  // Month view content (traditional calendar)
   const renderMonthView = () => {
     const renderDays = () => {
-      // Day names
       const getDayNames = () => {
         return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       };
@@ -431,7 +416,6 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     );
   };
 
-  // Year view
   const renderYearView = () => {
     const year = getYear(currentDate);
     const months = eachMonthOfInterval({
@@ -451,7 +435,6 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
             end: add(startDate, { days: 34 }) // Just enough days to show the month
           });
 
-          // Count events for this month
           const monthEvents = events.filter(event => {
             const eventDate = parse(event.date, "yyyy-MM-dd", new Date());
             return getMonth(eventDate) === getMonth(month) && 
@@ -513,7 +496,6 @@ const AgendaCalendar: React.FC<AgendaCalendarProps> = ({
     );
   };
 
-  // Render the appropriate view based on viewMode
   const renderContent = () => {
     switch (viewMode) {
       case "day":

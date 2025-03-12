@@ -41,7 +41,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
     const matchesSearch = 
       invoice.companyName.toLowerCase().includes(searchLower) ||
       invoice.invoiceNumber.toLowerCase().includes(searchLower) ||
-      invoice.documentName.toLowerCase().includes(searchLower);
+      (invoice.documentName?.toLowerCase().includes(searchLower) || false);
     
     // Apply type filter (show all if "all" or empty, otherwise filter by type)
     const matchesType = !typeFilter || typeFilter === "all" ? true : invoice.type === typeFilter;

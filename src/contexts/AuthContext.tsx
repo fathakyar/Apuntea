@@ -10,6 +10,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Check for existing user on component mount
@@ -30,7 +31,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // For demo purposes, we're using hardcoded credentials
       // Using case-insensitive comparison for email
       if (email.toLowerCase() === "admin@apuntea.com" && password === "1admin?") {
-        const user = { email, isAuthenticated: true };
+        const user: User = { 
+          id: "1",
+          email,
+          name: "Admin",
+          role: "admin",
+          isAuthenticated: true
+        };
         setUser(user);
         localStorage.setItem("apuntea_user", JSON.stringify(user));
         toast({
@@ -41,9 +48,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error("Invalid credentials");
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Please check your credentials";
+      setError(errorMessage);
       toast({
         title: "Login failed",
-        description: error instanceof Error ? error.message : "Please check your credentials",
+        description: errorMessage,
         variant: "destructive",
       });
       throw error;
@@ -63,7 +72,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      isAuthenticated: !!user?.isAuthenticated, 
+      login, 
+      logout, 
+      error,
+      isLoading 
+    }}>
       {children}
     </AuthContext.Provider>
   );

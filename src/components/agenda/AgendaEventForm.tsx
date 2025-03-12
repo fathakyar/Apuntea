@@ -48,9 +48,9 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
     title: "",
     description: "",
     type: "NOT",
-    importance: "",
-    date: format(new Date(), "yyyy-MM-dd"),
     subcategoryId: subcategories[0]?.id || "",
+    date: format(new Date(), "yyyy-MM-dd"),
+    importance: ""
   });
   
   const [date, setDate] = useState<Date | undefined>(
