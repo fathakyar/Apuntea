@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import InvoiceTable from "@/components/InvoiceTable";
+import InvoiceTable from "@/components/invoice/InvoiceTable";
 import { Button } from "@/components/ui/button";
 import { getInvoices, deleteInvoice } from "@/utils/invoiceUtils";
 import { Invoice } from "@/types";
