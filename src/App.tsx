@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -26,6 +25,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 import NewRecord from "./pages/NewRecord";
+import SignUp from "./pages/SignUp";
 
 // Create a client
 const queryClient = new QueryClient();
@@ -38,26 +38,24 @@ function App() {
           <DefinitionsProvider>
             <BrowserRouter>
               <Routes>
-                <Route path="/" element={<Index />}>
-                  <Route index element={<Dashboard />} />
-                  <Route path="upload" element={<NewRecord />} />
-                  <Route path="new-record" element={<NewRecord />} />
-                  <Route path="records" element={<Records />} />
-                  <Route path="edit/:id" element={<InvoiceEdit />} />
-                  <Route path="definitions" element={<Definitions />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="bi" element={<BusinessIntelligence />} />
-                  <Route path="agenda" element={<Agenda />} />
-                  <Route path="about" element={<About />} />
-                  <Route path="services" element={<Services />} />
-                  <Route path="blog" element={<Blog />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="privacy" element={<Privacy />} />
-                  <Route path="terms" element={<Terms />} />
-                  <Route path="cookies" element={<Cookies />} />
-                </Route>
+                <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="upload" element={<NewRecord />} />
+                <Route path="new-record" element={<NewRecord />} />
+                <Route path="records" element={<Records />} />
+                <Route path="edit/:id" element={<InvoiceEdit />} />
+                <Route path="definitions" element={<Definitions />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="bi" element={<BusinessIntelligence />} />
+                <Route path="agenda" element={<Agenda />} />
+                <Route path="about" element={<About />} />
+                <Route path="services" element={<Services />} />
+                <Route path="blog" element={<Blog />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="privacy" element={<Privacy />} />
+                <Route path="terms" element={<Terms />} />
+                <Route path="cookies" element={<Cookies />} />
               </Routes>
             </BrowserRouter>
             <Toaster />
