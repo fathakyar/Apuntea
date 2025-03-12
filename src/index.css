@@ -85,7 +85,7 @@
   }
 
   body {
-    @apply bg-background text-foreground bg-wave-pattern;
+    @apply bg-background text-foreground;
     font-family: 'UnB Pro Bold', 'Inter', sans-serif;
   }
 
