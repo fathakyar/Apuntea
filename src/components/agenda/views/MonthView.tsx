@@ -1,6 +1,6 @@
 
 import React from "react";
-import { format, isSameDay, isToday, isEqual } from "date-fns";
+import { format, isSameDay, isToday, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek } from "date-fns";
 import { AgendaEvent as AgendaEventType, Invoice } from "@/types";
 import { cn } from "@/lib/utils";
 import AgendaEventComponent from "../AgendaEvent";
@@ -8,7 +8,6 @@ import { getEventsForDay } from "../utils/calendarUtils";
 
 interface MonthViewProps {
   currentDate: Date;
-  daysInMonth: Date[];
   events: AgendaEventType[];
   invoices: Invoice[];
   selectedDate: Date | null;
@@ -18,13 +17,21 @@ interface MonthViewProps {
 
 const MonthView: React.FC<MonthViewProps> = ({
   currentDate,
-  daysInMonth,
   events,
   invoices,
   selectedDate,
   onDateSelect,
   onEventClick
 }) => {
+  // Generate days for the month view (including days from prev/next months to fill the grid)
+  const getDaysInMonth = (date: Date) => {
+    const start = startOfWeek(startOfMonth(date), { weekStartsOn: 1 }); // Start week on Monday
+    const end = endOfWeek(endOfMonth(date), { weekStartsOn: 1 });
+    return eachDayOfInterval({ start, end });
+  };
+
+  const daysInMonth = getDaysInMonth(currentDate);
+
   return (
     <div className="grid grid-cols-7 gap-1 mt-2">
       {/* Day of week headers */}

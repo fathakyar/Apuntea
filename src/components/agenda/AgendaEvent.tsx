@@ -8,9 +8,10 @@ import { formatCurrency } from "@/utils/invoiceUtils";
 interface AgendaEventProps {
   event: AgendaEventType | (Invoice & { eventType?: 'invoice' });
   onClick: (e: React.MouseEvent) => void;
+  compact?: boolean; // Add the compact prop
 }
 
-const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick }) => {
+const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = false }) => {
   // Check if this is an invoice record
   const isInvoice = 'eventType' in event && event.eventType === 'invoice';
   
