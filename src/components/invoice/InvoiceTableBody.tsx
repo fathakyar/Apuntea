@@ -77,6 +77,17 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
     return subcategory ? subcategory.name : "-";
   };
 
+  // Find payment type name based on payment type ID
+  const getPaymentTypeName = (paymentTypeId?: string) => {
+    if (!paymentTypeId) return "-";
+    
+    const paymentTypeCategory = categories.find(cat => cat.id === "paymentType");
+    if (!paymentTypeCategory) return "-";
+    
+    const paymentType = paymentTypeCategory.subcategories.find(sub => sub.id === paymentTypeId);
+    return paymentType ? paymentType.name : "-";
+  };
+
   return (
     <TableBody>
       {invoices.map((invoice) => (
@@ -92,19 +103,10 @@ const InvoiceTableBody: React.FC<InvoiceTableBodyProps> = ({
           <TableCell className="text-right">{formatCurrency(invoice.amount)}</TableCell>
           <TableCell className="text-right">{formatCurrency(invoice.vat)}</TableCell>
           <TableCell className="text-right font-medium">{formatCurrency(invoice.totalAmount)}</TableCell>
+          <TableCell>{invoice.currencyCode || "EUR"}</TableCell>
           <TableCell>{getCategoryName(invoice.categoryId, invoice.type)}</TableCell>
+          <TableCell>{getPaymentTypeName(invoice.paymentTypeId)}</TableCell>
           <TableCell>
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="h-8 w-8"
-              onClick={(e) => handleDocumentClick(e, invoice.documentLink)}
-              type="button"
-            >
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          </TableCell>
-          <TableCell className="text-right">
             <div className="flex justify-end space-x-2">
               <Button
                 variant="outline"

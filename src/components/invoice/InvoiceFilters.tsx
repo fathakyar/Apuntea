@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Calendar as CalendarIcon, Search, X } from "lucide-react";
+import { Calendar as CalendarIcon, Search, X, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,12 +9,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useDefinitions } from "@/contexts/DefinitionsContext";
 
 interface InvoiceFiltersProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   typeFilter: string;
   setTypeFilter: (type: string) => void;
+  categoryFilter: string;
+  setCategoryFilter: (categoryId: string) => void;
+  paymentTypeFilter: string;
+  setPaymentTypeFilter: (paymentTypeId: string) => void;
   dateRange: DateRange;
   setDateRange: (range: DateRange) => void;
   clearFilters: () => void;
@@ -25,15 +30,40 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
   setSearchTerm,
   typeFilter,
   setTypeFilter,
+  categoryFilter,
+  setCategoryFilter,
+  paymentTypeFilter,
+  setPaymentTypeFilter,
   dateRange,
   setDateRange,
   clearFilters,
 }) => {
-  const hasFilters = !!searchTerm || !!typeFilter || !!dateRange.from;
+  const { categories } = useDefinitions();
+  const hasFilters = !!searchTerm || 
+                    (!!typeFilter && typeFilter !== "all") || 
+                    !!categoryFilter || 
+                    !!paymentTypeFilter || 
+                    !!dateRange.from;
+
+  // Get subcategories based on record type
+  const getSubcategories = () => {
+    if (!typeFilter || typeFilter === "all") return [];
+    const category = categories.find(cat => cat.id === typeFilter);
+    return category ? category.subcategories : [];
+  };
+
+  // Get payment types
+  const getPaymentTypes = () => {
+    const paymentTypeCategory = categories.find(cat => cat.id === "paymentType");
+    return paymentTypeCategory ? paymentTypeCategory.subcategories : [];
+  };
+
+  const subcategories = getSubcategories();
+  const paymentTypes = getPaymentTypes();
 
   return (
     <div className="bg-background/60 backdrop-blur-sm sticky top-0 z-10 py-4 border-b mb-4">
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-3 mb-3">
         <div className="relative flex-grow">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -55,61 +85,99 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
           )}
         </div>
 
-        <div className="flex flex-row gap-3">
-          <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="All types" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="expense">Expense</SelectItem>
-              <SelectItem value="income">Income</SelectItem>
-              <SelectItem value="financing">Financing</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-[240px] justify-start text-left font-normal",
-                  !dateRange.from && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange.from ? (
-                  dateRange.to ? (
-                    <>
-                      {format(dateRange.from, "LLL dd, y")} -{" "}
-                      {format(dateRange.to, "LLL dd, y")}
-                    </>
-                  ) : (
-                    format(dateRange.from, "LLL dd, y")
-                  )
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-[240px] justify-start text-left font-normal",
+                !dateRange.from && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateRange.from ? (
+                dateRange.to ? (
+                  <>
+                    {format(dateRange.from, "LLL dd, y")} -{" "}
+                    {format(dateRange.to, "LLL dd, y")}
+                  </>
                 ) : (
-                  <span>Date range</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={dateRange.from}
-                selected={dateRange}
-                onSelect={setDateRange}
-                numberOfMonths={2}
-              />
-            </PopoverContent>
-          </Popover>
-
-          {hasFilters && (
-            <Button variant="ghost" onClick={clearFilters} className="h-10">
-              Clear
+                  format(dateRange.from, "LLL dd, y")
+                )
+              ) : (
+                <span>Date range</span>
+              )}
             </Button>
-          )}
-        </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={dateRange.from}
+              selected={dateRange}
+              onSelect={setDateRange}
+              numberOfMonths={2}
+            />
+          </PopoverContent>
+        </Popover>
+
+        {hasFilters && (
+          <Button variant="ghost" onClick={clearFilters} className="h-10">
+            Clear
+          </Button>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-3 items-center">
+        <Filter className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground mr-1">Filter by:</span>
+
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
+          <SelectTrigger className="w-[120px]">
+            <SelectValue placeholder="All types" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Types</SelectItem>
+            <SelectItem value="expense">Expense</SelectItem>
+            <SelectItem value="income">Income</SelectItem>
+            <SelectItem value="financing">Financing</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select 
+          value={categoryFilter} 
+          onValueChange={setCategoryFilter}
+          disabled={!typeFilter || typeFilter === "all" || subcategories.length === 0}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="All categories" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Categories</SelectItem>
+            {subcategories.map(subcategory => (
+              <SelectItem key={subcategory.id} value={subcategory.id}>
+                {subcategory.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select 
+          value={paymentTypeFilter} 
+          onValueChange={setPaymentTypeFilter}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="All payment types" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Payment Types</SelectItem>
+            {paymentTypes.map(paymentType => (
+              <SelectItem key={paymentType.id} value={paymentType.id}>
+                {paymentType.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

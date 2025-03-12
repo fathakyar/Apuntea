@@ -52,13 +52,25 @@ const WeekView: React.FC<WeekViewProps> = ({
             </div>
             
             <div className="flex-grow overflow-y-auto space-y-1">
-              {combinedEvents.map((event) => (
-                <AgendaEventComponent
-                  key={('id' in event) ? event.id : `invoice-${event.id}`}
-                  event={event}
-                  onClick={(e) => onEventClick(e, event)}
-                />
-              ))}
+              {combinedEvents.map((event) => {
+                if ('eventType' in event && event.eventType === 'invoice') {
+                  return (
+                    <AgendaEventComponent
+                      key={`invoice-${event.id}`}
+                      event={event}
+                      onClick={(e) => onEventClick(e, event)}
+                    />
+                  );
+                } else {
+                  return (
+                    <AgendaEventComponent
+                      key={`event-${(event as AgendaEventType).id}`}
+                      event={event as AgendaEventType}
+                      onClick={(e) => onEventClick(e, event)}
+                    />
+                  );
+                }
+              })}
             </div>
             
             {combinedEvents.length === 0 && (

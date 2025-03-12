@@ -19,6 +19,8 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const [sortField, setSortField] = useState<SortField>('invoiceDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [paymentTypeFilter, setPaymentTypeFilter] = useState<string>("");
   const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
     to: undefined,
@@ -40,8 +42,14 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
       invoice.invoiceNumber.toLowerCase().includes(searchLower) ||
       (invoice.documentName?.toLowerCase().includes(searchLower) || false);
     
-    // Apply type filter (show all if "all" or empty, otherwise filter by type)
+    // Apply type filter
     const matchesType = !typeFilter || typeFilter === "all" ? true : invoice.type === typeFilter;
+    
+    // Apply category filter
+    const matchesCategory = !categoryFilter ? true : invoice.categoryId === categoryFilter;
+    
+    // Apply payment type filter
+    const matchesPaymentType = !paymentTypeFilter ? true : invoice.paymentTypeId === paymentTypeFilter;
     
     // Apply date filter
     let matchesDate = true;
@@ -54,7 +62,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
       }
     }
     
-    return matchesSearch && matchesType && matchesDate;
+    return matchesSearch && matchesType && matchesCategory && matchesPaymentType && matchesDate;
   });
 
   const sortedInvoices = [...filteredInvoices].sort((a, b) => {
@@ -82,6 +90,15 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
       case 'totalAmount':
         comparison = a.totalAmount - b.totalAmount;
         break;
+      case 'currencyCode':
+        comparison = (a.currencyCode || 'EUR').localeCompare(b.currencyCode || 'EUR');
+        break;
+      case 'categoryId':
+        comparison = (a.categoryId || '').localeCompare(b.categoryId || '');
+        break;
+      case 'paymentTypeId':
+        comparison = (a.paymentTypeId || '').localeCompare(b.paymentTypeId || '');
+        break;
       default:
         comparison = 0;
     }
@@ -92,10 +109,16 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
   const clearFilters = () => {
     setTypeFilter("all");
     setSearchTerm("");
+    setCategoryFilter("");
+    setPaymentTypeFilter("");
     setDateRange({ from: undefined, to: undefined });
   };
 
-  const hasFilters = !!searchTerm || (typeFilter && typeFilter !== "all") || !!dateRange.from;
+  const hasFilters = !!searchTerm || 
+                    (typeFilter && typeFilter !== "all") || 
+                    !!categoryFilter || 
+                    !!paymentTypeFilter || 
+                    !!dateRange.from;
 
   return (
     <div className="w-full animate-fade-in">
@@ -104,6 +127,10 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete 
         setSearchTerm={setSearchTerm}
         typeFilter={typeFilter}
         setTypeFilter={setTypeFilter}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        paymentTypeFilter={paymentTypeFilter}
+        setPaymentTypeFilter={setPaymentTypeFilter}
         dateRange={dateRange}
         setDateRange={setDateRange}
         clearFilters={clearFilters}

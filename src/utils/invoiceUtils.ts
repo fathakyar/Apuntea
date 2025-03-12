@@ -96,7 +96,7 @@ export const deleteInvoice = async (id: string): Promise<void> => {
 
 // Format currency (for display)
 export const formatCurrency = (amount: number): string => {
-  return formatNumberWithEuropeanStyle(amount, { formatNumber: true }) + " €";
+  return formatNumberWithEuropeanStyle(amount, { formatNumber: true });
 };
 
 // Format date (for display)
