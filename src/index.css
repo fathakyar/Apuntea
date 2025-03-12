@@ -85,7 +85,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground bg-wave-pattern;
     font-family: 'UnB Pro Bold', 'Inter', sans-serif;
   }
 
@@ -154,5 +154,16 @@
 
   .tab-inactive {
     @apply bg-gray-100 dark:bg-black/60 text-foreground/70 hover:bg-primary/10;
+  }
+  
+  /* Modern wave decorations */
+  .wave-top::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-8 bg-gradient-gold transform -skew-y-2;
+  }
+  
+  .wave-bottom::after {
+    content: '';
+    @apply absolute bottom-0 right-0 w-full h-8 bg-gradient-purple transform skew-y-2;
   }
 }
