@@ -1,3 +1,4 @@
+
 import { SupportedLanguage } from "@/types";
 
 // Update the TranslationKeys interface to include the new keys
@@ -10,6 +11,8 @@ export interface TranslationKeys {
   signingIn: string;
   dontHaveAccount: string;
   signUp: string;
+  orSignInWith: string;
+  signInWithGoogle: string;
 }
 
 // Update the translations object
@@ -23,6 +26,8 @@ export const translations: Record<SupportedLanguage, TranslationKeys> = {
     signingIn: "SIGNING IN...",
     dontHaveAccount: "DON'T HAVE AN ACCOUNT?",
     signUp: "SIGN UP",
+    orSignInWith: "OR",
+    signInWithGoogle: "SIGN IN WITH GOOGLE",
   },
   es: {
     welcomeBack: "BIENVENIDO DE NUEVO",
@@ -33,6 +38,8 @@ export const translations: Record<SupportedLanguage, TranslationKeys> = {
     signingIn: "INICIANDO SESIÓN...",
     dontHaveAccount: "¿NO TIENES UNA CUENTA?",
     signUp: "REGÍSTRATE",
+    orSignInWith: "O",
+    signInWithGoogle: "INICIAR SESIÓN CON GOOGLE",
   },
   tr: {
     welcomeBack: "TEKRAR HOŞGELDİNİZ",
@@ -43,5 +50,7 @@ export const translations: Record<SupportedLanguage, TranslationKeys> = {
     signingIn: "GİRİŞ YAPILIYOR...",
     dontHaveAccount: "HESABINIZ YOK MU?",
     signUp: "KAYIT OL",
+    orSignInWith: "VEYA",
+    signInWithGoogle: "GOOGLE İLE GİRİŞ YAP",
   },
 };
