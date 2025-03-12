@@ -16,7 +16,8 @@ export const getEventsForDay = (day: Date, events: AgendaEvent[], invoices: Invo
       eventType: 'invoice' as const
     }));
   
-  return [...dayEvents, ...dayInvoices];
+  // Return the combined array with proper typing
+  return [...dayEvents, ...dayInvoices] as Array<AgendaEvent | (Invoice & { eventType: 'invoice' })>;
 };
 
 export const formatDateHeader = (date: Date, viewMode: string, locale?: Locale) => {
