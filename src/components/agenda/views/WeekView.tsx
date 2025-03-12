@@ -1,18 +1,18 @@
 
 import React from "react";
 import { startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, isToday, format } from "date-fns";
-import { AgendaEvent, Invoice } from "@/types";
+import { AgendaEvent as AgendaEventType, Invoice } from "@/types";
 import { cn } from "@/lib/utils";
-import AgendaEvent from "../AgendaEvent";
+import AgendaEventComponent from "../AgendaEvent";
 import { getEventsForDay } from "../utils/calendarUtils";
 
 interface WeekViewProps {
   currentDate: Date;
-  events: AgendaEvent[];
+  events: AgendaEventType[];
   invoices: Invoice[];
   selectedDate: Date | null;
   onDateSelect: (date: Date) => void;
-  onEventClick: (e: React.MouseEvent, event: AgendaEvent | (Invoice & { eventType?: 'invoice' })) => void;
+  onEventClick: (e: React.MouseEvent, event: AgendaEventType | (Invoice & { eventType?: 'invoice' })) => void;
 }
 
 const WeekView: React.FC<WeekViewProps> = ({
@@ -53,7 +53,7 @@ const WeekView: React.FC<WeekViewProps> = ({
             
             <div className="flex-grow overflow-y-auto space-y-1">
               {combinedEvents.map((event) => (
-                <AgendaEvent
+                <AgendaEventComponent
                   key={('id' in event) ? event.id : `invoice-${event.id}`}
                   event={event}
                   onClick={(e) => onEventClick(e, event)}

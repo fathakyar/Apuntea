@@ -1,5 +1,5 @@
 
-import { parse, isSameDay, format } from "date-fns";
+import { parse, isSameDay, format, Locale } from "date-fns";
 import { AgendaEvent, Invoice } from "@/types";
 
 export const getEventsForDay = (day: Date, events: AgendaEvent[], invoices: Invoice[]) => {

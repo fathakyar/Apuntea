@@ -10,18 +10,18 @@ import {
   format,
   add
 } from "date-fns";
-import { AgendaEvent, Invoice } from "@/types";
+import { AgendaEvent as AgendaEventType, Invoice } from "@/types";
 import { cn } from "@/lib/utils";
-import AgendaEvent from "../AgendaEvent";
+import AgendaEventComponent from "../AgendaEvent";
 import { getEventsForDay } from "../utils/calendarUtils";
 
 interface MonthViewProps {
   currentDate: Date;
-  events: AgendaEvent[];
+  events: AgendaEventType[];
   invoices: Invoice[];
   selectedDate: Date | null;
   onDateSelect: (date: Date) => void;
-  onEventClick: (e: React.MouseEvent, event: AgendaEvent | (Invoice & { eventType?: 'invoice' })) => void;
+  onEventClick: (e: React.MouseEvent, event: AgendaEventType | (Invoice & { eventType?: 'invoice' })) => void;
 }
 
 const MonthView: React.FC<MonthViewProps> = ({
@@ -106,7 +106,7 @@ const MonthView: React.FC<MonthViewProps> = ({
                   </div>
                   <div className="overflow-y-auto max-h-[80px] space-y-1 pr-1">
                     {combinedEvents.map((event) => (
-                      <AgendaEvent 
+                      <AgendaEventComponent 
                         key={('id' in event) ? event.id : `invoice-${event.id}`}
                         event={event}
                         onClick={(e) => onEventClick(e, event)}

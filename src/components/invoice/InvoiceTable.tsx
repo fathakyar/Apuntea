@@ -4,7 +4,7 @@ import { Invoice } from "@/types";
 import { Table } from "@/components/ui/table";
 import { DateRange } from "react-day-picker";
 import InvoiceFilters from "./InvoiceFilters";
-import InvoiceTableHeader from "./InvoiceTableHeader";
+import InvoiceTableHeader, { SortField, SortDirection } from "./InvoiceTableHeader";
 import InvoiceTableBody from "./InvoiceTableBody";
 import InvoiceEmptyState from "./InvoiceEmptyState";
 
@@ -13,9 +13,6 @@ interface InvoiceTableProps {
   onEdit: (invoice: Invoice) => void;
   onDelete: (id: string) => void;
 }
-
-type SortField = 'type' | 'invoiceDate' | 'invoiceNumber' | 'companyName' | 'amount' | 'vat' | 'totalAmount';
-type SortDirection = 'asc' | 'desc';
 
 const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices, onEdit, onDelete }) => {
   const [searchTerm, setSearchTerm] = useState("");
