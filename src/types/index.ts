@@ -13,6 +13,8 @@ export interface Invoice {
   totalAmount: number;
   documentLink: string;
   categoryId?: string;
+  currencyCode?: string;
+  paymentTypeId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -55,4 +57,25 @@ export interface AgendaEvent {
   subcategoryId: string;
   date: string;
   reminder?: boolean;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  error: string | null;
+}
+
+export interface FormattingOptions {
+  toUpperCase?: boolean;
+  formatNumber?: boolean;
+  decimalPlaces?: number;
 }

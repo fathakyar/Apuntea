@@ -41,7 +41,7 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
         />
       </div>
 
-      <div className="space-y-2 md:col-span-2">
+      <div className="space-y-2 col-span-1">
         <Label htmlFor="totalAmount">Total Amount</Label>
         <Input
           id="totalAmount"

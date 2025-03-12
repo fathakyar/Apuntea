@@ -8,6 +8,8 @@ import DateField from "./form-fields/DateField";
 import InvoiceNumberField from "./form-fields/InvoiceNumberField";
 import AmountFields from "./form-fields/AmountFields";
 import CategoryField from "./form-fields/CategoryField";
+import CurrencyField from "./form-fields/CurrencyField";
+import PaymentTypeField from "./form-fields/PaymentTypeField";
 
 interface RecordFormFieldsProps {
   formData: {
@@ -19,6 +21,8 @@ interface RecordFormFieldsProps {
     vat: string;
     totalAmount: string;
     categoryId: string;
+    currencyCode: string;
+    paymentTypeId: string;
   };
   setFormData: React.Dispatch<React.SetStateAction<{
     documentName: string;
@@ -29,6 +33,8 @@ interface RecordFormFieldsProps {
     vat: string;
     totalAmount: string;
     categoryId: string;
+    currencyCode: string;
+    paymentTypeId: string;
   }>>;
   recordType: RecordType;
 }
@@ -87,6 +93,20 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
     }));
   };
 
+  const handleCurrencyChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      currencyCode: value
+    }));
+  };
+
+  const handlePaymentTypeChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      paymentTypeId: value
+    }));
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <DocumentField 
@@ -119,10 +139,20 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
         onChange={handleChange}
       />
 
+      <CurrencyField
+        value={formData.currencyCode}
+        onChange={handleCurrencyChange}
+      />
+
       <CategoryField
         value={formData.categoryId}
         onChange={handleCategoryChange}
         recordType={recordType}
+      />
+
+      <PaymentTypeField
+        value={formData.paymentTypeId}
+        onChange={handlePaymentTypeChange}
       />
     </div>
   );
