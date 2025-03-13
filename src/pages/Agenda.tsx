@@ -236,13 +236,15 @@ const Agenda = () => {
             onClick={handleAddRecord}
             className="bg-apuntea-purple text-white rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-purple/90 transition-colors"
           >
-            RECORD
+            <Plus size={18} />
+            +RECORD
           </button>
           <button 
             onClick={handleAddNote}
             className="bg-apuntea-gold text-black rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-gold/90 transition-colors"
           >
-            NOTE
+            <Plus size={18} />
+            +NOTE
           </button>
         </div>
       </div>
@@ -307,7 +309,7 @@ const Agenda = () => {
                       <TabsTrigger value="income">INCOME</TabsTrigger>
                       <TabsTrigger value="expense">EXPENSE</TabsTrigger>
                       <TabsTrigger value="financing">FINANCING</TabsTrigger>
-                      <TabsTrigger value="task">TASKS</TabsTrigger>
+                      <TabsTrigger value="task">NOTES</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
