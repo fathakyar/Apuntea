@@ -176,4 +176,6 @@ export interface TranslationKeys {
   securityUpdatedDescription: string;
   uploadImage: string;
   saveInvoice: string;
+  newSubcategory: string;
+  add: string;
 }

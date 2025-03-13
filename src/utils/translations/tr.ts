@@ -177,5 +177,7 @@ export const trTranslations: TranslationKeys = {
   securityUpdated: "Güvenlik Güncellendi",
   securityUpdatedDescription: "Güvenlik ayarlarınız güncellendi",
   uploadImage: "Resim Yükle",
-  saveInvoice: "Faturayı Kaydet"
+  saveInvoice: "Faturayı Kaydet",
+  newSubcategory: "Yeni alt kategori",
+  add: "Ekle"
 };

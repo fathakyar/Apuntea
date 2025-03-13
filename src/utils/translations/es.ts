@@ -177,5 +177,7 @@ export const esTranslations: TranslationKeys = {
   securityUpdated: "Seguridad Actualizada",
   securityUpdatedDescription: "Tu configuración de seguridad ha sido actualizada",
   uploadImage: "Subir Imagen",
-  saveInvoice: "Guardar Factura"
+  saveInvoice: "Guardar Factura",
+  newSubcategory: "Nueva subcategoría",
+  add: "Añadir"
 };
