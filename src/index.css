@@ -92,7 +92,7 @@
   }
 
   #root {
-    @apply flex flex-col min-h-full h-full;
+    @apply flex flex-col min-h-full;
   }
 
   input, textarea, select {
