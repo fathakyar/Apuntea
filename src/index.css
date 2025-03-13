@@ -84,9 +84,20 @@
     text-transform: uppercase;
   }
 
+  html, body {
+    @apply h-full;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'UnB Pro Bold', 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #root {
+    @apply flex flex-col min-h-full;
   }
 
   input, textarea, select {

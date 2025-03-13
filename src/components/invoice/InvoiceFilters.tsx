@@ -97,7 +97,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
             <Button
               variant="outline"
               className={cn(
-                "w-[180px] justify-start text-left font-normal",
+                "w-[240px] justify-start text-left font-normal",
                 !dateRange.from && "text-muted-foreground"
               )}
             >

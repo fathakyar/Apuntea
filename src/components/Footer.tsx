@@ -60,9 +60,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      
-      {/* Purple bar in dark mode */}
-      <div className="hidden dark:block bg-apuntea-purple py-1"></div>
     </footer>
   );
 };

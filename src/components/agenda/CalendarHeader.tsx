@@ -1,6 +1,6 @@
 
 import React from "react";
-import { CalendarIcon, ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileClock, Columns, CalendarDays, CalendarCheck } from "lucide-react";
@@ -55,14 +55,6 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
             onClick={() => onNavigate("next")}
           >
             <ChevronRight className="h-4 w-4" />
-          </Button>
-          <Button 
-            size="sm"
-            onClick={onAddEvent}
-            className="bg-apuntea-gold text-black hover:bg-apuntea-gold/90"
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            {t.new}
           </Button>
         </div>
       </div>

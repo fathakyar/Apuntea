@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, FilterIcon } from "lucide-react";
@@ -237,21 +236,19 @@ const Agenda = () => {
             onClick={handleAddRecord}
             className="bg-apuntea-purple text-white rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-purple/90 transition-colors"
           >
-            <Plus size={18} />
-            + RECORD
+            RECORD
           </button>
           <button 
             onClick={handleAddNote}
             className="bg-apuntea-gold text-black rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-gold/90 transition-colors"
           >
-            <Plus size={18} />
-            + NOTE
+            NOTE
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div className="md:col-span-4">
+        <div className="md:col-span-3">
           <Card className="rounded-sm h-full">
             <CardContent className="p-4">
               <div className="flex flex-col space-y-4">
@@ -295,7 +292,7 @@ const Agenda = () => {
           </Card>
         </div>
         
-        <div className="md:col-span-8">
+        <div className="md:col-span-9">
           <Card className="rounded-sm h-full">
             <CardContent className="p-6">
               <div className="flex flex-col h-full">
