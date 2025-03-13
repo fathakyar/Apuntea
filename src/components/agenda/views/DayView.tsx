@@ -5,6 +5,7 @@ import { AgendaEvent, Invoice } from "@/types";
 import { getEventsForDay } from "../utils/calendarUtils";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/utils/invoiceUtils";
+import { Calendar } from "lucide-react";
 
 interface DayViewProps {
   currentDate: Date;
@@ -38,28 +39,31 @@ const DayView: React.FC<DayViewProps> = ({
       acc[type].totalAmount += invoice.totalAmount || 0;
     } else {
       // Handle regular events
-      const type = 'events';
+      const eventItem = event as AgendaEvent;
+      const type = eventItem.type || 'events';
+      
       if (!acc[type]) {
         acc[type] = {
           items: [],
           totalAmount: 0
         };
       }
-      acc[type].items.push(event);
+      acc[type].items.push(eventItem);
     }
     
     return acc;
   }, {} as Record<string, { items: any[], totalAmount: number }>);
   
   // Sort the groups for consistent display order
-  const orderedGroups = ['income', 'expense', 'financing', 'events'];
+  const orderedGroups = ['income', 'expense', 'financing', 'GÖREV', 'NOT'];
   
   const getGroupTitle = (groupName: string) => {
     switch(groupName) {
       case 'income': return 'GELİR';
       case 'expense': return 'GİDER';
       case 'financing': return 'FİNANSMAN';
-      case 'events': return 'NOTLAR & GÖREVLER';
+      case 'GÖREV': return 'GÖREV';
+      case 'NOT': return 'NOT';
       default: return groupName.toUpperCase();
     }
   };
@@ -69,6 +73,8 @@ const DayView: React.FC<DayViewProps> = ({
       case 'income': return 'bg-apuntea-gold text-black';
       case 'expense': return 'bg-apuntea-purple text-white';
       case 'financing': return 'bg-apuntea-dark text-white';
+      case 'GÖREV': return 'bg-blue-500 text-white';
+      case 'NOT': return 'bg-green-500 text-white';
       default: return 'bg-primary text-primary-foreground';
     }
   };
@@ -78,8 +84,9 @@ const DayView: React.FC<DayViewProps> = ({
       <h3 className="font-bold mb-4">{format(currentDate, "dd MMMM yyyy, EEEE")}</h3>
       
       {Object.keys(groupedInvoices).length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          No events for this day. Click "New" to add an event.
+        <div className="text-center py-8 text-muted-foreground flex flex-col items-center">
+          <Calendar className="h-12 w-12 mb-2 opacity-20" />
+          <p>No events for this day. Click "New" to add an event.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -95,7 +102,7 @@ const DayView: React.FC<DayViewProps> = ({
                       {getGroupTitle(groupName)}
                     </Badge>
                   </h4>
-                  {groupName !== 'events' && group.totalAmount > 0 && (
+                  {(['income', 'expense', 'financing'].includes(groupName)) && group.totalAmount > 0 && (
                     <div className="text-sm font-medium">
                       {formatCurrency(group.totalAmount).replace(' €', '')} EUR
                     </div>

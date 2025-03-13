@@ -9,7 +9,7 @@ export const useCalendarState = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<any | null>(null);
-  // Changed default view to "day" as requested
+  // Default view is "day" as requested
   const [viewMode, setViewMode] = useState<ViewMode>("day");
 
   const navigate = (direction: "prev" | "next" | "today") => {
