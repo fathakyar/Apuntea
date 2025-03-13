@@ -12,7 +12,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#f0b50a] dark:bg-black border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
@@ -24,8 +24,8 @@ const Footer = () => {
             </Link>
           </div>
 
-          {/* Footer Links - Right aligned */}
-          <div className="flex flex-wrap gap-6 justify-end">
+          {/* Footer Links - Now properly aligned */}
+          <div className="flex flex-wrap gap-6 justify-center">
             <Link to="/about">
               <Button variant="link" className="p-0 h-auto">{t.aboutApuntea}</Button>
             </Link>
@@ -45,8 +45,6 @@ const Footer = () => {
         <div className="mt-6 pt-4 border-t border-gray-600/20 dark:border-gray-800">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-              {/* Language selector removed as we only support English now */}
-              
               <Link to="/privacy">
                 <Button variant="link" className="text-sm">{t.privacyStatement}</Button>
               </Link>
@@ -58,7 +56,7 @@ const Footer = () => {
               </Link>
             </div>
             
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-muted-foreground text-center md:text-right">
               © {new Date().getFullYear()} Apuntea. {t.allRightsReserved}
             </div>
           </div>

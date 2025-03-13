@@ -44,16 +44,30 @@ const Definitions = () => {
   
   const budgetGroups = getBudgetSubcategoryGroups();
 
+  // Map category IDs to display names in uppercase English
+  const getCategoryDisplayName = (categoryId: string) => {
+    switch(categoryId) {
+      case "income": return "INCOME";
+      case "expense": return "EXPENSE";
+      case "financing": return "FINANCING";
+      case "noteTask": return "NOTE / TASK";
+      case "paymentType": return "PAYMENT TYPE";
+      case "budget": return "BUDGET";
+      case "currency": return "CURRENCY";
+      default: return categoryId.toUpperCase();
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-1 flex items-center">
             <Settings className="mr-2 h-6 w-6" />
-            {t.definitions || "Definitions"}
+            DEFINITIONS
           </h1>
           <p className="text-muted-foreground">
-            {t.manageCategories || "Manage system categories and subcategories"}
+            MANAGE SYSTEM CATEGORIES AND SUBCATEGORIES
           </p>
         </div>
       </div>
@@ -70,11 +84,11 @@ const Definitions = () => {
               value={category.id}
               className="px-4 py-2"
             >
-              {t[category.id as keyof typeof t] || category.name}
+              {getCategoryDisplayName(category.id)}
             </TabsTrigger>
           ))}
           <TabsTrigger value="currency" className="px-4 py-2">
-            {t.currency || "CURRENCY"}
+            CURRENCY
           </TabsTrigger>
         </TabsList>
         
@@ -83,7 +97,7 @@ const Definitions = () => {
             {category.id === "budget" ? (
               <div className="space-y-6">
                 <div className="mb-4">
-                  <h3 className="text-lg font-medium mb-4">{t.income || "INCOME"}</h3>
+                  <h3 className="text-lg font-medium mb-4">INCOME</h3>
                   <div className="flex flex-wrap gap-2">
                     {budgetGroups.income.map((subcategory) => (
                       <div key={subcategory.id} className="relative">
@@ -96,7 +110,7 @@ const Definitions = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium mb-4">{t.expense || "EXPENSE"}</h3>
+                  <h3 className="text-lg font-medium mb-4">EXPENSE</h3>
                   <div className="flex flex-wrap gap-2">
                     {budgetGroups.expense.map((subcategory) => (
                       <div key={subcategory.id} className="relative">
@@ -110,7 +124,7 @@ const Definitions = () => {
               </div>
             ) : (
               <CategoryCard
-                title={t[category.id as keyof typeof t] || category.name}
+                title={getCategoryDisplayName(category.id)}
                 subcategories={category.subcategories}
                 editable={category.editable}
                 onAdd={(name) => addSubcategory(category.id, name)}
@@ -122,7 +136,7 @@ const Definitions = () => {
                 }
                 description={
                   category.id === "budget" 
-                    ? t.budgetSyncDescription || "Automatically synchronized with INCOME and EXPENSE categories"
+                    ? "AUTOMATICALLY SYNCHRONIZED WITH INCOME AND EXPENSE CATEGORIES"
                     : undefined
                 }
               />

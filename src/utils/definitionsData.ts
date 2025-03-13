@@ -14,80 +14,80 @@ const createSubcategories = (names: string[]) => {
 export const initialCategories: Category[] = [
   {
     id: "income",
-    name: "GELİR",
+    name: "INCOME",
     subcategories: createSubcategories([
-      "SATIŞ GELİRLERİ", 
-      "FİNANSAL GELİRLER", 
-      "REKLAM VE SPONSORLUK GELİRLERİ", 
-      "LİSANS VE TELİF GELİRLERİ", 
-      "KİRALAMA GELİRLERİ", 
-      "TEŞVİK VE HİBE GELİRLERİ", 
-      "DİĞER GELİRLER"
+      "SALES REVENUE", 
+      "FINANCIAL INCOME", 
+      "ADVERTISING AND SPONSORSHIP INCOME", 
+      "LICENSE AND COPYRIGHT INCOME", 
+      "RENTAL INCOME", 
+      "INCENTIVE AND GRANT INCOME", 
+      "OTHER INCOME"
     ]),
     editable: true
   },
   {
     id: "expense",
-    name: "GİDER",
+    name: "EXPENSE",
     subcategories: createSubcategories([
-      "HAMMADDE VE MALZEME ALIMI", 
-      "HİZMET ALIMI", 
-      "LOJİSTİK GİDERLERİ", 
-      "MAAŞ VE ÜCRET GİDERLERİ", 
-      "ÇALIŞAN SOSYAL SİGORTA VE YAN HAKLARI", 
-      "KİRA GİDERLERİ", 
-      "AMORTİSMAN GİDERLERİ", 
-      "ELEKTRİK GİDERİ", 
-      "SU GİDERİ", 
-      "GAZ GİDERİ", 
-      "İNTERNET GİDERİ", 
-      "İLETİŞİM GİDERİ", 
-      "SİGORTA GİDERİ", 
-      "PAZARLAMA VE SATIŞ GİDERLERİ", 
-      "TEKNOLOJİ VE ALTYAPI GİDERLERİ", 
-      "FİNANSAL GİDERLER", 
-      "HUKUKİ GİDERLER", 
-      "YÖNETİM GİDERLERİ", 
-      "VERGİLER VE HARÇLAR", 
-      "CEZA / TAZMİNAT", 
-      "DİĞER GİDERLER"
+      "RAW MATERIALS AND SUPPLIES", 
+      "SERVICE PROCUREMENT", 
+      "LOGISTICS EXPENSES", 
+      "SALARY AND WAGE EXPENSES", 
+      "EMPLOYEE SOCIAL INSURANCE AND BENEFITS", 
+      "RENT EXPENSES", 
+      "DEPRECIATION EXPENSES", 
+      "ELECTRICITY EXPENSE", 
+      "WATER EXPENSE", 
+      "GAS EXPENSE", 
+      "INTERNET EXPENSE", 
+      "COMMUNICATION EXPENSE", 
+      "INSURANCE EXPENSE", 
+      "MARKETING AND SALES EXPENSES", 
+      "TECHNOLOGY AND INFRASTRUCTURE EXPENSES", 
+      "FINANCIAL EXPENSES", 
+      "LEGAL EXPENSES", 
+      "MANAGEMENT EXPENSES", 
+      "TAXES AND FEES", 
+      "PENALTIES / COMPENSATION", 
+      "OTHER EXPENSES"
     ]),
     editable: true
   },
   {
     id: "financing",
-    name: "FİNANSMAN",
+    name: "FINANCING",
     subcategories: createSubcategories([
-      "BORÇ / KREDİ ALIMI", 
-      "BORÇ / KREDİ ÖDEMESİ", 
-      "BORÇ VERME", 
-      "VERİLEN BORCUN"
+      "DEBT / LOAN RECEIPT", 
+      "DEBT / LOAN PAYMENT", 
+      "LENDING", 
+      "LOAN COLLECTION"
     ]),
     editable: true
   },
   {
     id: "noteTask",
-    name: "NOT / GÖREV",
+    name: "NOTE / TASK",
     subcategories: createSubcategories([
-      "NOT", 
-      "GÖREV"
+      "NOTE", 
+      "TASK"
     ]),
     editable: true
   },
   {
     id: "paymentType",
-    name: "ÖDEME TÜRÜ",
+    name: "PAYMENT TYPE",
     subcategories: createSubcategories([
-      "NAKİT", 
-      "HAVALE/EFT", 
-      "KREDİ KARTI", 
-      "ÇEK"
+      "CASH", 
+      "WIRE TRANSFER", 
+      "CREDIT CARD", 
+      "CHECK"
     ]),
     editable: true
   },
   {
     id: "budget",
-    name: "BÜTÇE",
+    name: "BUDGET",
     subcategories: [], // This will be auto-populated
     editable: false
   }

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, FilterIcon } from "lucide-react";
@@ -31,41 +30,34 @@ const Agenda = () => {
   const t = translations[language];
   const navigate = useNavigate();
   
-  // Get subcategories for the form
   const notTaskCategory = { id: "noteTask", name: "Notes & Tasks", subcategories: [
     { id: "note", name: "NOTE" },
     { id: "task", name: "TASK" }
   ]};
 
-  // Load events data from local storage
   useEffect(() => {
     const storedEvents = localStorage.getItem("apuntea_agenda_events");
     if (storedEvents) {
       setEvents(JSON.parse(storedEvents));
     }
     
-    // Load invoice records
     const invoiceRecords = getInvoices();
     setInvoices(invoiceRecords);
   }, []);
 
-  // Save data to local storage
   useEffect(() => {
     if (events.length > 0 || localStorage.getItem("apuntea_agenda_events")) {
       localStorage.setItem("apuntea_agenda_events", JSON.stringify(events));
     }
   }, [events]);
 
-  // Get events for the selected date
   const getEventsForSelectedDate = () => {
     const selectedDateStr = format(selectedDate, 'yyyy-MM-dd');
     
-    // Filter events for the selected date
     const dayEvents = events.filter(event => 
       event.date === selectedDateStr
     );
     
-    // Filter invoices for the selected date
     const dayInvoices = invoices.filter(invoice => 
       invoice.invoiceDate === selectedDateStr
     ).map(invoice => ({
@@ -73,19 +65,16 @@ const Agenda = () => {
       eventType: 'invoice' as const
     }));
     
-    // Apply additional filter if needed
     let filteredEvents = [...dayEvents, ...dayInvoices];
     
     if (activeFilter !== 'all') {
       filteredEvents = filteredEvents.filter(event => {
         if (activeFilter === 'task') {
-          // For tasks from agenda events
           if (!('eventType' in event)) {
             return event.type === 'GÖREV';
           }
           return false;
         } else {
-          // For income, expense, financing from invoices
           if ('eventType' in event && event.eventType === 'invoice') {
             return event.type === activeFilter;
           }
@@ -97,21 +86,17 @@ const Agenda = () => {
     return filteredEvents;
   };
 
-  // Handle date selection
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
   };
   
-  // Handle adding a new event
   const handleAddEvent = () => {
     setEditingEvent(null);
     setIsFormOpen(true);
   };
 
-  // Add new event
   const handleAddOrEditEvent = (newEvent: AgendaEvent | Omit<AgendaEvent, "id">) => {
     if ("id" in newEvent) {
-      // Edit existing event
       const uppercaseEvent = {
         ...newEvent,
         title: ensureUppercase(newEvent.title),
@@ -129,7 +114,6 @@ const Agenda = () => {
         description: `"${uppercaseEvent.title}" ${t.successfullyUpdated || "successfully updated"}.`,
       });
     } else {
-      // Add new event
       const eventWithId = {
         ...newEvent,
         title: ensureUppercase(newEvent.title),
@@ -148,7 +132,6 @@ const Agenda = () => {
     setIsFormOpen(false);
   };
 
-  // Delete event
   const handleDeleteEvent = (eventId: string) => {
     const eventToDelete = events.find(e => e.id === eventId);
     
@@ -164,7 +147,6 @@ const Agenda = () => {
     setIsFormOpen(false);
   };
   
-  // Handle invoice click
   const handleEventClick = (event: AgendaEvent | (Invoice & { eventType?: 'invoice' })) => {
     if ('eventType' in event && event.eventType === 'invoice') {
       navigate(`/edit/${event.id}`);
@@ -174,24 +156,19 @@ const Agenda = () => {
     }
   };
   
-  // Check if a date has events
   const hasEventsOnDate = (date: Date) => {
     const dateString = format(date, 'yyyy-MM-dd');
     
-    // Check events
     const hasEvent = events.some(event => event.date === dateString);
     
-    // Check invoices
     const hasInvoice = invoices.some(invoice => invoice.invoiceDate === dateString);
     
     return hasEvent || hasInvoice;
   };
   
-  // Get dot color for calendar dates with events
   const getEventColorForDate = (date: Date) => {
     const dateString = format(date, 'yyyy-MM-dd');
     
-    // Priority order: income, expense, financing, notes/tasks
     const incomeInvoice = invoices.find(invoice => 
       invoice.invoiceDate === dateString && invoice.type === 'income'
     );
@@ -207,7 +184,6 @@ const Agenda = () => {
     );
     if (financingInvoice) return "bg-apuntea-dark";
     
-    // For any other event
     if (events.some(event => event.date === dateString)) {
       return "bg-blue-400";
     }
@@ -215,10 +191,8 @@ const Agenda = () => {
     return "";
   };
   
-  // Filtered events to display
   const filteredEvents = getEventsForSelectedDate();
 
-  // Get group title by type
   const getGroupTitle = (type: string) => {
     switch(type) {
       case 'income': return 'GELİR';
@@ -230,7 +204,6 @@ const Agenda = () => {
     }
   };
   
-  // Get badge color by type
   const getBadgeColor = (type: string) => {
     switch(type) {
       case 'income': return 'bg-apuntea-gold text-black';
@@ -263,26 +236,23 @@ const Agenda = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Calendar side */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1">
           <Card className="rounded-sm h-full">
-            <CardContent className="p-6">
+            <CardContent className="p-4">
               <div className="flex flex-col space-y-4">
-                {/* Month and year display */}
                 <div className="flex justify-between items-center">
                   <h2 className="text-xl font-semibold">
                     {format(selectedDate, 'MMMM yyyy')}
                   </h2>
                 </div>
                 
-                {/* Calendar */}
                 <div className="mt-4">
                   <Calendar 
                     mode="single"
                     selected={selectedDate}
                     onSelect={(date) => date && handleDateSelect(date)}
-                    className="rounded-md"
+                    className="rounded-md pointer-events-auto"
                     modifiers={{
                       hasEvent: (date) => hasEventsOnDate(date),
                       today: (date) => isToday(date)
@@ -311,30 +281,26 @@ const Agenda = () => {
           </Card>
         </div>
         
-        {/* Events Side */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-3">
           <Card className="rounded-sm h-full">
             <CardContent className="p-6">
               <div className="flex flex-col h-full">
-                {/* Day header */}
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-semibold">
                     {format(selectedDate, 'dd MMMM yyyy, EEEE')}
                   </h2>
                   
-                  {/* Filter */}
                   <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as any)}>
                     <TabsList>
-                      <TabsTrigger value="all">All</TabsTrigger>
-                      <TabsTrigger value="income">Income</TabsTrigger>
-                      <TabsTrigger value="expense">Expense</TabsTrigger>
-                      <TabsTrigger value="financing">Financing</TabsTrigger>
-                      <TabsTrigger value="task">Tasks</TabsTrigger>
+                      <TabsTrigger value="all">ALL</TabsTrigger>
+                      <TabsTrigger value="income">INCOME</TabsTrigger>
+                      <TabsTrigger value="expense">EXPENSE</TabsTrigger>
+                      <TabsTrigger value="financing">FINANCING</TabsTrigger>
+                      <TabsTrigger value="task">TASKS</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
                 
-                {/* Events List */}
                 <div className="space-y-4 mt-2 flex-grow">
                   {filteredEvents.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground flex flex-col items-center">
@@ -401,7 +367,6 @@ const Agenda = () => {
         </div>
       </div>
 
-      {/* Event Form Dialog */}
       <DialogEventForm
         isOpen={isFormOpen}
         setIsOpen={setIsFormOpen}

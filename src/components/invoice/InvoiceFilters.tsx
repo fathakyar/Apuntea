@@ -63,8 +63,8 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
 
   return (
     <div className="bg-background/60 backdrop-blur-sm sticky top-0 z-10 py-4 border-b mb-4">
-      <div className="flex flex-col sm:flex-row gap-3 mb-3">
-        <div className="relative flex-grow">
+      <div className="flex flex-wrap gap-3 items-center">
+        <div className="relative flex-grow min-w-[200px]">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
@@ -90,7 +90,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
             <Button
               variant="outline"
               className={cn(
-                "w-[240px] justify-start text-left font-normal",
+                "w-[180px] justify-start text-left font-normal",
                 !dateRange.from && "text-muted-foreground"
               )}
             >
@@ -121,17 +121,6 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
           </PopoverContent>
         </Popover>
 
-        {hasFilters && (
-          <Button variant="ghost" onClick={clearFilters} className="h-10">
-            Clear
-          </Button>
-        )}
-      </div>
-
-      <div className="flex flex-wrap gap-3 items-center">
-        <Filter className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm text-muted-foreground mr-1">Filter by:</span>
-
         <Select value={typeFilter} onValueChange={setTypeFilter}>
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="All types" />
@@ -150,10 +139,9 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
           disabled={!typeFilter || typeFilter === "all" || subcategories.length === 0}
         >
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="All categories" />
+            <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="_all">All Categories</SelectItem>
             {subcategories.map(subcategory => (
               <SelectItem key={subcategory.id} value={subcategory.id}>
                 {subcategory.name}
@@ -178,6 +166,12 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
             ))}
           </SelectContent>
         </Select>
+
+        {hasFilters && (
+          <Button variant="ghost" onClick={clearFilters} className="h-10">
+            Clear
+          </Button>
+        )}
       </div>
     </div>
   );
