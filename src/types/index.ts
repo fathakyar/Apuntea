@@ -1,7 +1,6 @@
-
 export type RecordType = "income" | "expense" | "financing";
 
-export type SupportedLanguage = "en" | "es" | "tr";
+export type SupportedLanguage = "en";
 
 export interface Invoice {
   id: string;

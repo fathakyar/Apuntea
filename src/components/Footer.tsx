@@ -2,12 +2,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 
 const Footer = () => {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations.en;
 
   return (
     <footer className="bg-[#f0b50a] dark:bg-black border-t border-gray-200 dark:border-gray-800 mt-auto">

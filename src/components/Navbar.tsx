@@ -23,7 +23,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -33,8 +32,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations.en;
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -249,4 +247,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

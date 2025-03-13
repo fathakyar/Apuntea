@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { 
   Card, 
@@ -13,7 +12,6 @@ import { Plus, Pencil, X, Info } from "lucide-react";
 import { Subcategory } from "@/types";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 
 interface CategoryCardProps {
@@ -38,8 +36,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   const [newSubcategory, setNewSubcategory] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations.en;
 
   // Sort subcategories alphabetically by name
   const sortedSubcategories = [...subcategories].sort((a, b) => 

@@ -18,10 +18,10 @@ const EventTypeToggle: React.FC<EventTypeToggleProps> = ({
     <div className="space-y-2">
       <Label>{getLabel("type")}</Label>
       <ToggleGroup type="single" value={value} onValueChange={onChange} className="justify-start">
-        <ToggleGroupItem value="NOT" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white">
+        <ToggleGroupItem value="NOTE" className="data-[state=on]:bg-blue-500 data-[state=on]:text-white">
           {getLabel("note")}
         </ToggleGroupItem>
-        <ToggleGroupItem value="GÖREV" className="data-[state=on]:bg-green-500 data-[state=on]:text-white">
+        <ToggleGroupItem value="TASK" className="data-[state=on]:bg-green-500 data-[state=on]:text-white">
           {getLabel("task")}
         </ToggleGroupItem>
       </ToggleGroup>
