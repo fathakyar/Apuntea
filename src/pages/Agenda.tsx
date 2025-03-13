@@ -1,7 +1,9 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Plus, FilterIcon } from "lucide-react";
+import { Plus, FilterIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
 import { AgendaEvent, Invoice, RecordType } from "@/types";
 import { v4 as uuidv4 } from "uuid";
@@ -245,7 +247,7 @@ const Agenda = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-1 flex items-center">
-            <Calendar className="mr-2 h-7 w-7" />
+            <CalendarIcon className="mr-2 h-7 w-7" />
             {t.agenda}
           </h1>
           <p className="text-muted-foreground">
