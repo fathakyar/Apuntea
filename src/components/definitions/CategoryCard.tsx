@@ -13,6 +13,8 @@ import { Plus, Pencil, X, Info } from "lucide-react";
 import { Subcategory } from "@/types";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations } from "@/utils/translations";
 
 interface CategoryCardProps {
   title: string;
@@ -36,6 +38,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   const [newSubcategory, setNewSubcategory] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // Sort subcategories alphabetically by name
   const sortedSubcategories = [...subcategories].sort((a, b) => 
@@ -92,7 +96,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Bu kategori otomatik olarak güncellenir</p>
+                  <p>This category is automatically updated</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -170,7 +174,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
               <Input
                 value={newSubcategory}
                 onChange={handleNewSubcategoryChange}
-                placeholder="Yeni alt kategori"
+                placeholder={t.newSubcategory || "New subcategory"}
                 className="h-9"
               />
               <Button 
@@ -180,7 +184,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                 className="whitespace-nowrap"
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Ekle
+                {t.add || "Add"}
               </Button>
             </div>
           )}

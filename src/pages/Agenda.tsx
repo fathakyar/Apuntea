@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, FilterIcon } from "lucide-react";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
 import { AgendaEvent, Invoice, RecordType } from "@/types";
@@ -90,9 +91,13 @@ const Agenda = () => {
     setSelectedDate(date);
   };
   
-  const handleAddEvent = () => {
+  const handleAddNote = () => {
     setEditingEvent(null);
     setIsFormOpen(true);
+  };
+  
+  const handleAddRecord = () => {
+    navigate("/new-record");
   };
 
   const handleAddOrEditEvent = (newEvent: AgendaEvent | Omit<AgendaEvent, "id">) => {
@@ -227,17 +232,26 @@ const Agenda = () => {
             {t.manageEventsAndReminders || "Manage events and reminders"}
           </p>
         </div>
-        <button 
-          onClick={handleAddEvent}
-          className="bg-apuntea-gold text-black rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-gold/90 transition-colors"
-        >
-          <Plus size={18} />
-          {t.new || "New"}
-        </button>
+        <div className="flex space-x-2">
+          <button 
+            onClick={handleAddRecord}
+            className="bg-apuntea-purple text-white rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-purple/90 transition-colors"
+          >
+            <Plus size={18} />
+            + RECORD
+          </button>
+          <button 
+            onClick={handleAddNote}
+            className="bg-apuntea-gold text-black rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-gold/90 transition-colors"
+          >
+            <Plus size={18} />
+            + NOTE
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="md:col-span-1">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="md:col-span-4">
           <Card className="rounded-sm h-full">
             <CardContent className="p-4">
               <div className="flex flex-col space-y-4">
@@ -281,7 +295,7 @@ const Agenda = () => {
           </Card>
         </div>
         
-        <div className="md:col-span-3">
+        <div className="md:col-span-8">
           <Card className="rounded-sm h-full">
             <CardContent className="p-6">
               <div className="flex flex-col h-full">
@@ -304,15 +318,24 @@ const Agenda = () => {
                 <div className="space-y-4 mt-2 flex-grow">
                   {filteredEvents.length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground flex flex-col items-center">
-                      <Calendar className="h-12 w-12 mb-2 opacity-20" />
+                      <CalendarIcon className="h-12 w-12 mb-2 opacity-20" />
                       <p>No events for this date</p>
-                      <button
-                        onClick={handleAddEvent}
-                        className="mt-4 text-sm text-primary flex items-center gap-1"
-                      >
-                        <Plus size={16} />
-                        Add Event
-                      </button>
+                      <div className="flex space-x-2 mt-4">
+                        <button
+                          onClick={handleAddRecord}
+                          className="text-sm text-primary flex items-center gap-1"
+                        >
+                          <Plus size={16} />
+                          Add Record
+                        </button>
+                        <button
+                          onClick={handleAddNote}
+                          className="text-sm text-primary flex items-center gap-1"
+                        >
+                          <Plus size={16} />
+                          Add Note
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     filteredEvents.map((event) => {

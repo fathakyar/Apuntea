@@ -177,5 +177,7 @@ export const enTranslations: TranslationKeys = {
   securityUpdated: "Security Updated",
   securityUpdatedDescription: "Your security settings have been updated",
   uploadImage: "Upload Image",
-  saveInvoice: "Save Invoice"
+  saveInvoice: "Save Invoice",
+  newSubcategory: "New subcategory",
+  add: "Add"
 };

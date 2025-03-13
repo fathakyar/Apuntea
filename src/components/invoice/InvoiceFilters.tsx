@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Calendar as CalendarIcon, Search, X, Filter } from "lucide-react";
+import { Calendar as CalendarIcon, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -60,10 +60,17 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
 
   const subcategories = getSubcategories();
   const paymentTypes = getPaymentTypes();
+  
+  // Handle date range selection safely
+  const handleDateRangeChange = (newRange: DateRange | undefined) => {
+    if (newRange) {
+      setDateRange(newRange);
+    }
+  };
 
   return (
     <div className="bg-background/60 backdrop-blur-sm sticky top-0 z-10 py-4 border-b mb-4">
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex flex-wrap md:flex-nowrap gap-3 items-center">
         <div className="relative flex-grow min-w-[200px]">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -115,7 +122,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
               mode="range"
               defaultMonth={dateRange.from}
               selected={dateRange}
-              onSelect={setDateRange}
+              onSelect={handleDateRangeChange}
               numberOfMonths={2}
             />
           </PopoverContent>
@@ -133,22 +140,23 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
           </SelectContent>
         </Select>
 
-        <Select 
-          value={categoryFilter} 
-          onValueChange={setCategoryFilter}
-          disabled={!typeFilter || typeFilter === "all" || subcategories.length === 0}
-        >
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            {subcategories.map(subcategory => (
-              <SelectItem key={subcategory.id} value={subcategory.id}>
-                {subcategory.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {typeFilter && typeFilter !== "all" && subcategories.length > 0 && (
+          <Select 
+            value={categoryFilter} 
+            onValueChange={setCategoryFilter}
+          >
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {subcategories.map(subcategory => (
+                <SelectItem key={subcategory.id} value={subcategory.id}>
+                  {subcategory.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
 
         <Select 
           value={paymentTypeFilter} 
