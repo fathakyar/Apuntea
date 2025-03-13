@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen text-foreground uppercase relative">
+    <div className="flex flex-col min-h-screen text-foreground uppercase">
       {/* Wave background decorations */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-5">
         <div className="absolute top-0 left-0 w-full h-80 bg-wave-pattern animate-wave"></div>
@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       
       <Navbar />
       
-      <main className="flex-grow container mx-auto px-4 py-6 md:px-6 md:py-8 relative z-10">
+      <main className="flex-grow container mx-auto px-4 py-6 md:px-6 md:py-8">
         {children}
       </main>
       
