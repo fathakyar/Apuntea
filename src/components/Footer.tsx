@@ -8,22 +8,22 @@ const Footer = () => {
   const t = translations.en;
 
   return (
-    <footer className="w-full bg-[#f0b50a] dark:bg-black border-t border-gray-200 dark:border-gray-800">
+    <footer className="w-full bg-[#f0b50a] dark:bg-black mt-auto">
       <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex justify-center md:justify-start">
             <Link to="/" className="flex items-center">
               <img
                 src="/lovable-uploads/23d89839-23e5-4a91-9d1e-ab2a8bb6a03e.png"
                 alt="Apuntea Logo"
-                className="h-8 mr-2"
+                className="h-8"
               />
             </Link>
           </div>
 
-          {/* Footer Links - Now properly aligned */}
-          <div className="flex flex-wrap gap-6 justify-center">
+          {/* Footer Links */}
+          <div className="flex flex-wrap gap-4 justify-center md:justify-end">
             <Link to="/about">
               <Button variant="link" className="p-0 h-auto">{t.aboutApuntea}</Button>
             </Link>
@@ -41,7 +41,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="mt-6 pt-4 border-t border-gray-600/20 dark:border-gray-800">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <Link to="/privacy">
                 <Button variant="link" className="text-sm">{t.privacyStatement}</Button>
@@ -54,7 +54,7 @@ const Footer = () => {
               </Link>
             </div>
             
-            <div className="text-sm text-muted-foreground text-center md:text-right">
+            <div className="text-sm text-center md:text-right">
               © {new Date().getFullYear()} Apuntea. {t.allRightsReserved}
             </div>
           </div>
