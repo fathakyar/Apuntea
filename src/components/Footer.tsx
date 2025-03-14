@@ -6,6 +6,7 @@ import { translations } from "@/utils/translations";
 
 const Footer = () => {
   const t = translations.en;
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="w-full bg-[#f0b50a] dark:bg-black mt-auto">
@@ -55,7 +56,7 @@ const Footer = () => {
             </div>
             
             <div className="text-sm text-center md:text-right">
-              © {new Date().getFullYear()} Apuntea. {t.allRightsReserved}
+              © {currentYear} Apuntea. {t.allRightsReserved}
             </div>
           </div>
         </div>
