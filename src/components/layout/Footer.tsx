@@ -2,7 +2,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { translations } from "@/utils/translations";
 
 const Footer: React.FC = () => {
