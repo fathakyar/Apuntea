@@ -237,14 +237,14 @@ const Agenda = () => {
             className="bg-apuntea-purple text-white rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-purple/90 transition-colors"
           >
             <Plus size={18} />
-            +RECORD
+            RECORD
           </button>
           <button 
             onClick={handleAddNote}
             className="bg-apuntea-gold text-black rounded-md px-4 py-2 flex items-center gap-2 hover:bg-apuntea-gold/90 transition-colors"
           >
             <Plus size={18} />
-            +NOTE
+            NOTE
           </button>
         </div>
       </div>

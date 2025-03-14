@@ -41,6 +41,7 @@ export interface Category {
 export interface Subcategory {
   id: string;
   name: string;
+  budgetAmount?: number;
 }
 
 export interface Currency {

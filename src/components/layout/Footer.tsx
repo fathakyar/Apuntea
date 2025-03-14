@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#f0b50a] text-black">
+    <footer className="w-full bg-[#f0b50a] text-black mt-auto">
       <div className="container mx-auto px-4 py-6">
         {/* Top Section */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-4">

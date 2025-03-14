@@ -12,6 +12,7 @@ interface DefinitionsContextType {
   updateSubcategory: (categoryId: string, subcategoryId: string, newName: string) => void;
   deleteSubcategory: (categoryId: string, subcategoryId: string) => void;
   toggleCurrencySelection: (currencyCode: string) => void;
+  updateBudgetAmount: (subcategoryId: string, amount: number) => void;
 }
 
 const DefinitionsContext = createContext<DefinitionsContextType | null>(null);
@@ -47,16 +48,33 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
       
       const incomeCategory = updatedCategories.find(c => c.id === "income");
       const expenseCategory = updatedCategories.find(c => c.id === "expense");
+      const financingCategory = updatedCategories.find(c => c.id === "financing");
       const budgetCategory = updatedCategories.find(c => c.id === "budget");
       
-      if (incomeCategory && expenseCategory && budgetCategory) {
-        // Combine income and expense subcategories for budget
+      if (incomeCategory && expenseCategory && financingCategory && budgetCategory) {
+        // Get the current budget subcategories with their budget amounts
+        const currentBudgetSubcategories = budgetCategory.subcategories;
+        const budgetAmounts: Record<string, number> = {};
+        
+        // Store current budget amounts
+        currentBudgetSubcategories.forEach(sub => {
+          if (sub.budgetAmount !== undefined) {
+            budgetAmounts[sub.id] = sub.budgetAmount;
+          }
+        });
+        
+        // Combine income, expense and financing subcategories
         const combinedSubcategories = [
           ...incomeCategory.subcategories,
-          ...expenseCategory.subcategories
-        ];
+          ...expenseCategory.subcategories,
+          ...financingCategory.subcategories
+        ].map(sub => ({
+          ...sub,
+          // Preserve existing budget amount if available
+          budgetAmount: budgetAmounts[sub.id] !== undefined ? budgetAmounts[sub.id] : undefined
+        }));
         
-        // Update budget subcategories
+        // Update budget subcategories with preserved budget amounts
         budgetCategory.subcategories = combinedSubcategories;
         
         localStorage.setItem("apuntea_categories", JSON.stringify(updatedCategories));
@@ -160,6 +178,28 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
     );
   };
 
+  // Update budget amount for a subcategory
+  const updateBudgetAmount = (subcategoryId: string, amount: number) => {
+    setCategories(prev => 
+      prev.map(category => {
+        if (category.id === "budget") {
+          return {
+            ...category,
+            subcategories: category.subcategories.map(sub => 
+              sub.id === subcategoryId ? { ...sub, budgetAmount: amount } : sub
+            )
+          };
+        }
+        return category;
+      })
+    );
+    
+    toast({
+      title: "Bütçe güncellendi",
+      description: `Bütçe tutarı başarıyla güncellendi.`,
+    });
+  };
+
   return (
     <DefinitionsContext.Provider value={{ 
       categories, 
@@ -167,7 +207,8 @@ export const DefinitionsProvider: React.FC<{ children: React.ReactNode }> = ({ c
       addSubcategory,
       updateSubcategory,
       deleteSubcategory,
-      toggleCurrencySelection
+      toggleCurrencySelection,
+      updateBudgetAmount
     }}>
       {children}
     </DefinitionsContext.Provider>
