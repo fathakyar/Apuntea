@@ -86,12 +86,17 @@
   }
 
   body {
-    @apply bg-background text-foreground min-h-screen;
+    @apply bg-background text-foreground min-h-screen flex flex-col;
     font-family: 'UnB Pro Bold', 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
   }
 
   #root {
     @apply flex flex-col min-h-screen;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   input, textarea, select {
