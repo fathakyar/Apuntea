@@ -1,7 +1,6 @@
 
 import React from "react";
 import Navbar from "@/components/navbar/Navbar";
-import Footer from "@/components/Footer";
 import BackgroundDecorations from "@/components/layout/BackgroundDecorations";
 import MainContent from "@/components/layout/MainContent";
 
@@ -15,7 +14,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <BackgroundDecorations />
       <Navbar />
       <MainContent>{children}</MainContent>
-      <Footer />
     </div>
   );
 };
