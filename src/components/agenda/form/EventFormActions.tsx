@@ -17,8 +17,11 @@ const EventFormActions: React.FC<EventFormActionsProps> = ({
   getLabel,
 }) => {
   return (
-    <div className="flex justify-between pt-2">
-      <div>
+    <div className="flex justify-end pt-2">
+      <div className="flex gap-2">
+        <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm uppercase">
+          {getLabel("cancel")}
+        </Button>
         {isEditing && (
           <Button
             type="button"
@@ -30,11 +33,6 @@ const EventFormActions: React.FC<EventFormActionsProps> = ({
             {getLabel("delete")}
           </Button>
         )}
-      </div>
-      <div className="flex gap-2">
-        <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm uppercase">
-          {getLabel("cancel")}
-        </Button>
         <Button type="submit" className="rounded-sm uppercase">
           {isEditing ? getLabel("update") : getLabel("add")}
         </Button>

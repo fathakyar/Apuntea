@@ -145,7 +145,7 @@ const InvoiceEdit = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in pb-24">
+    <div className="grid grid-cols-1 gap-6 animate-slide-in pb-28">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Button 
@@ -182,7 +182,7 @@ const InvoiceEdit = () => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>CANCEL</AlertDialogCancel>
+              <AlertDialogCancel className="uppercase">CANCEL</AlertDialogCancel>
               <AlertDialogAction 
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90 uppercase"
                 onClick={handleDelete}
@@ -206,7 +206,7 @@ const InvoiceEdit = () => {
               </CardHeader>
               <CardContent className="flex flex-col h-full">
                 <div className="border rounded-lg overflow-hidden bg-background mb-4 flex-grow flex items-center justify-center">
-                  {invoice.documentLink === '#' ? (
+                  {invoice.documentLink === '#' || !invoice.documentLink ? (
                     <div className="text-center p-8">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -241,6 +241,15 @@ const InvoiceEdit = () => {
                         />
                       </svg>
                       <p className="font-medium">{invoice.documentName}</p>
+                      <Button asChild variant="outline" className="mt-4 uppercase">
+                        <a 
+                          href={invoice.documentLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          VIEW PDF
+                        </a>
+                      </Button>
                     </div>
                   ) : (
                     <img 
@@ -251,7 +260,7 @@ const InvoiceEdit = () => {
                   )}
                 </div>
                 
-                {invoice.documentLink !== '#' && (
+                {invoice.documentLink && invoice.documentLink !== '#' && (
                   <Button asChild variant="outline" className="uppercase">
                     <a 
                       href={invoice.documentLink} 

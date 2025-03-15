@@ -19,12 +19,12 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
   // Get badge for importance level
   const getImportanceBadge = (importance?: string) => {
     switch(importance) {
-      case 'high':
-        return <Badge className="bg-red-500 text-white">HIGH</Badge>;
-      case 'medium':
-        return <Badge className="bg-orange-500 text-white">MEDIUM</Badge>;
-      case 'low':
-        return <Badge className="bg-green-500 text-white">LOW</Badge>;
+      case '!!!':
+        return <Badge className="bg-red-500 text-white">!!!</Badge>;
+      case '!!':
+        return <Badge className="bg-orange-500 text-white">!!</Badge>;
+      case '!':
+        return <Badge className="bg-yellow-500 text-black">!</Badge>;
       default:
         return null;
     }
@@ -91,19 +91,22 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
   }
   
   const regularEvent = event as AgendaEventType;
-  const isTask = regularEvent.type === "GÖREV";
+  const isTask = regularEvent.type === "TASK";
   
   return (
     <div
       className={cn(
-        "text-xs px-2 py-1 rounded-sm border flex items-center justify-between gap-1",
+        "text-xs px-2 py-1 rounded-sm border flex items-center gap-1",
         getCategoryColor(regularEvent.subcategoryId),
         "cursor-pointer hover:opacity-80 transition-opacity"
       )}
       onClick={onClick}
       title={regularEvent.title}
     >
-      <div className="flex items-center">
+      <div className="flex-shrink-0 mr-1">
+        {getImportanceBadge(regularEvent.importance)}
+      </div>
+      <div className="flex items-center flex-grow">
         {isTask ? (
           <CheckSquare className="h-3 w-3 shrink-0 mr-1" />
         ) : (
@@ -111,12 +114,7 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
         )}
         <span className="truncate">{regularEvent.title}</span>
       </div>
-      
-      {regularEvent.importance && (
-        <div className="ml-auto">
-          {getImportanceBadge(regularEvent.importance)}
-        </div>
-      )}
+      <p className="text-xs text-muted-foreground truncate hidden sm:block">{regularEvent.description}</p>
     </div>
   );
 };

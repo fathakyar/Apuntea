@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, CalendarIcon } from "lucide-react";
@@ -216,6 +217,19 @@ const Agenda = () => {
     return acc;
   }, {} as Record<string, Array<AgendaEvent | (Invoice & { eventType?: 'invoice' })>>);
   
+  // Sort financial records by amount (largest to smallest)
+  Object.keys(groupedEvents).forEach(key => {
+    if (['income', 'expense', 'financing'].includes(key)) {
+      groupedEvents[key].sort((a, b) => {
+        if ('eventType' in a && 'eventType' in b && 
+            a.eventType === 'invoice' && b.eventType === 'invoice') {
+          return b.totalAmount - a.totalAmount;
+        }
+        return 0;
+      });
+    }
+  });
+  
   const getGroupTitle = (type: string) => {
     switch(type) {
       case 'income': return 'INCOME';
@@ -241,12 +255,12 @@ const Agenda = () => {
   // Importance level badges
   const getImportanceBadge = (importance?: string) => {
     switch(importance) {
-      case 'high':
-        return <Badge className="bg-red-500 text-white">HIGH</Badge>;
-      case 'medium':
-        return <Badge className="bg-orange-500 text-white">MEDIUM</Badge>;
-      case 'low':
-        return <Badge className="bg-green-500 text-white">LOW</Badge>;
+      case '!!!':
+        return <Badge className="bg-red-500 text-white">!!!</Badge>;
+      case '!!':
+        return <Badge className="bg-orange-500 text-white">!!</Badge>;
+      case '!':
+        return <Badge className="bg-yellow-500 text-black">!</Badge>;
       default:
         return null;
     }
@@ -397,17 +411,17 @@ const Agenda = () => {
                               return (
                                 <div 
                                   key={`event-${agendaEvent.id}`}
-                                  className="border p-2 rounded-md hover:bg-muted/20 cursor-pointer flex items-center justify-between"
+                                  className="border p-2 rounded-md hover:bg-muted/20 cursor-pointer flex items-center"
                                   onClick={() => handleEventClick(agendaEvent)}
                                 >
+                                  <div className="flex-shrink-0 mr-2">
+                                    {getImportanceBadge(agendaEvent.importance)}
+                                  </div>
                                   <div className="flex-grow overflow-hidden pr-3">
                                     <div className="font-medium truncate">{agendaEvent.title}</div>
                                     <p className="text-sm text-muted-foreground line-clamp-1">
                                       {agendaEvent.description}
                                     </p>
-                                  </div>
-                                  <div className="flex-shrink-0">
-                                    {getImportanceBadge(agendaEvent.importance)}
                                   </div>
                                 </div>
                               );

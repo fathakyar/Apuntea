@@ -40,7 +40,7 @@ const DayView: React.FC<DayViewProps> = ({
     } else {
       // Handle regular events
       const eventItem = event as AgendaEvent;
-      const type = eventItem.type || 'events';
+      const type = eventItem.type || 'unknown';
       
       if (!acc[type]) {
         acc[type] = {
@@ -54,16 +54,29 @@ const DayView: React.FC<DayViewProps> = ({
     return acc;
   }, {} as Record<string, { items: any[], totalAmount: number }>);
   
+  // Sort financial records by amount (largest to smallest)
+  ['income', 'expense', 'financing'].forEach(groupName => {
+    if (groupedInvoices[groupName]) {
+      groupedInvoices[groupName].items.sort((a, b) => {
+        if ('eventType' in a && 'eventType' in b &&
+            a.eventType === 'invoice' && b.eventType === 'invoice') {
+          return b.totalAmount - a.totalAmount;
+        }
+        return 0;
+      });
+    }
+  });
+  
   // Sort the groups for consistent display order
-  const orderedGroups = ['income', 'expense', 'financing', 'GÖREV', 'NOT'];
+  const orderedGroups = ['income', 'expense', 'financing', 'TASK', 'NOTE'];
   
   const getGroupTitle = (groupName: string) => {
     switch(groupName) {
       case 'income': return 'INCOME';
       case 'expense': return 'EXPENSE';
       case 'financing': return 'FINANCING';
-      case 'GÖREV': return 'TASK';
-      case 'NOT': return 'NOTE';
+      case 'TASK': return 'TASK';
+      case 'NOTE': return 'NOTE';
       default: return groupName.toUpperCase();
     }
   };
@@ -73,8 +86,8 @@ const DayView: React.FC<DayViewProps> = ({
       case 'income': return 'bg-apuntea-gold text-black';
       case 'expense': return 'bg-apuntea-purple text-white';
       case 'financing': return 'bg-apuntea-dark text-white';
-      case 'GÖREV': return 'bg-blue-500 text-white';
-      case 'NOT': return 'bg-green-500 text-white';
+      case 'TASK': return 'bg-blue-500 text-white';
+      case 'NOTE': return 'bg-green-500 text-white';
       default: return 'bg-primary text-primary-foreground';
     }
   };
@@ -82,12 +95,12 @@ const DayView: React.FC<DayViewProps> = ({
   // Importance level badges
   const getImportanceBadge = (importance?: string) => {
     switch(importance) {
-      case 'high':
-        return <Badge className="bg-red-500 text-white">HIGH</Badge>;
-      case 'medium':
-        return <Badge className="bg-orange-500 text-white">MEDIUM</Badge>;
-      case 'low':
-        return <Badge className="bg-green-500 text-white">LOW</Badge>;
+      case '!!!':
+        return <Badge className="bg-red-500 text-white">!!!</Badge>;
+      case '!!':
+        return <Badge className="bg-orange-500 text-white">!!</Badge>;
+      case '!':
+        return <Badge className="bg-yellow-500 text-black">!</Badge>;
       default:
         return null;
     }
@@ -146,16 +159,18 @@ const DayView: React.FC<DayViewProps> = ({
                       return (
                         <div 
                           key={`event-${agendaEvent.id}`}
-                          className="flex items-center justify-between p-2 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                          className="flex items-center p-2 border rounded-sm hover:bg-muted/50 cursor-pointer"
                           onClick={(e) => onEventClick(e, agendaEvent)}
                         >
-                          <div className="flex-grow overflow-hidden pr-3">
-                            <div className="font-medium truncate">{agendaEvent.title}</div>
-                            <p className="text-sm text-muted-foreground line-clamp-1">{agendaEvent.description}</p>
-                          </div>
-                          <div className="flex-shrink-0">
+                          <div className="flex-shrink-0 mr-3">
                             {getImportanceBadge(agendaEvent.importance)}
                           </div>
+                          <div className="flex-grow overflow-hidden">
+                            <div className="font-medium truncate">{agendaEvent.title}</div>
+                          </div>
+                          <p className="text-sm text-muted-foreground truncate hidden sm:block ml-2 flex-shrink">
+                            {agendaEvent.description}
+                          </p>
                         </div>
                       );
                     }

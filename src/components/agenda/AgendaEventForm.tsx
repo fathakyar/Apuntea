@@ -38,10 +38,10 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
   const [formData, setFormData] = useState<Omit<AgendaEvent, "id"> & { id?: string }>({
     title: "",
     description: "",
-    type: "NOT",
+    type: "NOTE", // Default to NOTE
     subcategoryId: subcategories[0]?.id || "",
     date: format(new Date(), "yyyy-MM-dd"),
-    importance: ""
+    importance: "!" // Default to low importance
   });
   
   const [date, setDate] = useState<Date | undefined>(

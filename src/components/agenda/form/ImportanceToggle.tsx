@@ -19,7 +19,7 @@ const ImportanceToggle: React.FC<ImportanceToggleProps> = ({
     <div className="space-y-2">
       <Label>{getLabel("importance")}</Label>
       <ToggleGroup type="single" value={value} onValueChange={onChange} className="justify-start">
-        <ToggleGroupItem value="!" className="data-[state=on]:bg-yellow-500 data-[state=on]:text-white">
+        <ToggleGroupItem value="!" className="data-[state=on]:bg-yellow-500 data-[state=on]:text-black">
           <AlertTriangle className="h-4 w-4 mr-1" />
           !
         </ToggleGroupItem>
