@@ -23,6 +23,10 @@ interface CategoryCardProps {
   onAdd: (name: string) => void;
   onUpdate: (id: string, name: string) => void;
   onDelete: (id: string) => void;
+  categoryStyle?: {
+    borderColor?: string;
+    buttonBg?: string;
+  };
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({
@@ -32,7 +36,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   editable,
   onAdd,
   onUpdate,
-  onDelete
+  onDelete,
+  categoryStyle = { borderColor: "#d1d5db", buttonBg: "bg-primary text-primary-foreground hover:bg-primary/90" }
 }) => {
   const [newSubcategory, setNewSubcategory] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -81,7 +86,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full" style={{ borderColor: categoryStyle.borderColor, borderWidth: categoryStyle.borderColor ? '2px' : '1px' }}>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
           <CardTitle className="text-xl">{title}</CardTitle>
@@ -174,12 +179,13 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                 onChange={handleNewSubcategoryChange}
                 placeholder={t.newSubcategory || "New subcategory"}
                 className="h-9 rounded-sm"
+                style={{ borderColor: categoryStyle.borderColor, borderWidth: categoryStyle.borderColor ? '2px' : '1px' }}
               />
               <Button 
                 size="sm" 
                 onClick={handleAdd}
                 disabled={!newSubcategory.trim()}
-                className="whitespace-nowrap rounded-sm"
+                className={`whitespace-nowrap rounded-sm ${categoryStyle.buttonBg}`}
               >
                 <Plus className="h-4 w-4 mr-1" />
                 {t.add || "Add"}
