@@ -3,6 +3,8 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
+import { translations } from "@/utils/translations";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AmountFieldsProps {
   amount: string;
@@ -12,30 +14,28 @@ interface AmountFieldsProps {
 }
 
 const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, onChange }) => {
-  // Format the amount for display
-  const formatInputValue = (value: string) => {
-    if (!value) return "";
-    
-    try {
-      const numericValue = parseEuropeanNumber(value);
-      return formatNumberWithEuropeanStyle(numericValue, { formatNumber: true });
-    } catch (e) {
-      return value;
-    }
-  };
+  const { language } = useLanguage();
+  const t = translations[language];
 
-  // Handle input change with proper formatting
+  // Handle input change with proper validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
-    // Pass the input value directly to parent component
+    // Only allow numbers, commas and dots
+    if (!/^[\d.,]*$/.test(value) && value !== '') {
+      return; // Don't process invalid inputs
+    }
+    
+    // Pass the validated input value to parent component
     onChange(e);
   };
 
   return (
     <>
       <div className="space-y-2">
-        <Label htmlFor="amount">Amount</Label>
+        <Label htmlFor="amount" className="flex items-center">
+          Amount <span className="text-red-500 ml-1">*</span>
+        </Label>
         <Input
           id="amount"
           name="amount"
@@ -45,11 +45,14 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
           type="text"
           inputMode="decimal"
           placeholder="0,00"
+          className="number-input"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="vat">VAT</Label>
+        <Label htmlFor="vat" className="flex items-center">
+          VAT <span className="text-red-500 ml-1">*</span>
+        </Label>
         <Input
           id="vat"
           name="vat"
@@ -59,11 +62,14 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
           type="text"
           inputMode="decimal"
           placeholder="0,00"
+          className="number-input"
         />
       </div>
 
       <div className="space-y-2 col-span-1">
-        <Label htmlFor="totalAmount">Total Amount</Label>
+        <Label htmlFor="totalAmount" className="flex items-center">
+          Total Amount <span className="text-red-500 ml-1">*</span>
+        </Label>
         <Input
           id="totalAmount"
           name="totalAmount"

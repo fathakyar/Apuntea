@@ -53,8 +53,38 @@ export function useRecordForm(initialData?: RecordFormData, recordType: RecordTy
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const validateForm = (): boolean => {
+    // Check required fields
+    if (!formData.documentName || 
+        !formData.invoiceDate || 
+        !formData.invoiceNumber || 
+        !formData.companyName || 
+        !formData.amount || 
+        !formData.vat || 
+        !formData.totalAmount || 
+        !formData.categoryId || 
+        !formData.currencyCode || 
+        !formData.paymentTypeId) {
+      
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate the form
+    if (!validateForm()) {
+      return;
+    }
     
     // Get existing invoices from local storage
     const existingInvoices = JSON.parse(localStorage.getItem("apuntea_invoices") || "[]");

@@ -40,7 +40,7 @@ export const enTranslations: TranslationKeys = {
   revenueOverview: "Revenue Overview",
   monthlyRevenueTrends: "Monthly Revenue Trends",
   expenseBreakdown: "Expense Breakdown",
-  expensesByCategory: "Expenses by Category",
+  expensesByCategory: "Expenses by Categories",
   office: "Office",
   salary: "Salary",
   marketing: "Marketing",
@@ -172,6 +172,7 @@ export const enTranslations: TranslationKeys = {
   currency: "Currency",
   income: "Income",
   expense: "Expense",
+  financing: "Financing",
   budgetSyncDescription: "Sync your budget across devices",
   manageEventsAndReminders: "Manage Events & Reminders",
   securityUpdated: "Security Updated",
@@ -179,5 +180,8 @@ export const enTranslations: TranslationKeys = {
   uploadImage: "Upload Image",
   saveInvoice: "Save Invoice",
   newSubcategory: "New subcategory",
-  add: "Add"
+  add: "Add",
+  task: "Task",
+  note: "Note",
+  required: "Required"
 };

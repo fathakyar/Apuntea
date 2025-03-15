@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, FilterIcon } from "lucide-react";
@@ -24,7 +25,7 @@ const Agenda = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<AgendaEvent | null>(null);
-  const [activeFilter, setActiveFilter] = useState<"all" | RecordType | "task">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | RecordType | "task" | "note">("all");
   const { toast } = useToast();
   const { language } = useLanguage();
   const t = translations[language];
@@ -72,6 +73,11 @@ const Agenda = () => {
         if (activeFilter === 'task') {
           if (!('eventType' in event)) {
             return event.type === 'GÖREV';
+          }
+          return false;
+        } else if (activeFilter === 'note') {
+          if (!('eventType' in event)) {
+            return event.type === 'NOT';
           }
           return false;
         } else {
@@ -199,11 +205,11 @@ const Agenda = () => {
 
   const getGroupTitle = (type: string) => {
     switch(type) {
-      case 'income': return 'GELİR';
-      case 'expense': return 'GİDER';
-      case 'financing': return 'FİNANSMAN';
-      case 'GÖREV': return 'GÖREV';
-      case 'NOT': return 'NOT';
+      case 'income': return 'INCOME';
+      case 'expense': return 'EXPENSE';
+      case 'financing': return 'FINANCING';
+      case 'GÖREV': return 'TASK';
+      case 'NOT': return 'NOTE';
       default: return type.toUpperCase();
     }
   };
@@ -254,12 +260,7 @@ const Agenda = () => {
           <Card className="rounded-sm h-full">
             <CardContent className="p-4">
               <div className="flex flex-col space-y-4">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-semibold">
-                    {format(selectedDate, 'MMMM yyyy')}
-                  </h2>
-                </div>
-                
+                {/* Removed duplicate date display */}
                 <div className="mt-4">
                   <Calendar 
                     mode="single"
@@ -309,7 +310,8 @@ const Agenda = () => {
                       <TabsTrigger value="income">INCOME</TabsTrigger>
                       <TabsTrigger value="expense">EXPENSE</TabsTrigger>
                       <TabsTrigger value="financing">FINANCING</TabsTrigger>
-                      <TabsTrigger value="task">NOTES</TabsTrigger>
+                      <TabsTrigger value="task">TASKS</TabsTrigger>
+                      <TabsTrigger value="note">NOTES</TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
