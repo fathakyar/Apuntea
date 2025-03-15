@@ -24,9 +24,9 @@ export const formatNumberWithEuropeanStyle = (value: number | string, options?: 
   }
   
   try {
-    const num = typeof value === "string" ? parseFloat(value) : value;
+    const num = typeof value === "string" ? parseFloat(value.replace(",", ".")) : value;
     // Format with comma for decimals and dot for thousands
-    return num.toLocaleString("es-ES", {
+    return num.toLocaleString("de-DE", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
@@ -63,4 +63,3 @@ export const handleUppercaseInput = (
 ) => {
   setter(e.target.value.toUpperCase());
 };
-

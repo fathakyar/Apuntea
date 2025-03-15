@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { 
   Card, 
@@ -113,7 +114,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                     <Input
                       value={editValue}
                       onChange={handleEditValueChange}
-                      className="h-8 min-w-40 text-sm"
+                      className="h-8 min-w-40 text-sm rounded-sm"
                       autoFocus
                     />
                     <Button 
@@ -136,7 +137,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                 ) : (
                   <Badge 
                     variant="outline" 
-                    className="px-3 py-1 h-auto text-sm flex items-center gap-1 group"
+                    className="px-3 py-1 h-auto text-sm flex items-center gap-1 group rounded-sm border-gray-300 border"
                   >
                     {subcategory.name}
                     {editable && (
@@ -172,13 +173,13 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                 value={newSubcategory}
                 onChange={handleNewSubcategoryChange}
                 placeholder={t.newSubcategory || "New subcategory"}
-                className="h-9"
+                className="h-9 rounded-sm"
               />
               <Button 
                 size="sm" 
                 onClick={handleAdd}
                 disabled={!newSubcategory.trim()}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap rounded-sm"
               >
                 <Plus className="h-4 w-4 mr-1" />
                 {t.add || "Add"}

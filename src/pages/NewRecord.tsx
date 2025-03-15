@@ -28,7 +28,7 @@ const NewRecord = () => {
       <div className="container mx-auto p-6 max-w-5xl relative z-10">
         <h1 className="text-3xl font-bold mb-6 text-apuntea-purple flex items-center gap-2">
           <div className="h-8 w-1 bg-apuntea-gold rounded-sm"></div>
-          +NEW RECORD
+          + RECORD
         </h1>
 
         <div className="grid gap-6">
@@ -38,19 +38,19 @@ const NewRecord = () => {
                 value="income" 
                 className="data-[state=active]:bg-apuntea-gold data-[state=active]:text-black"
               >
-                Income
+                INCOME
               </TabsTrigger>
               <TabsTrigger 
                 value="expense" 
                 className="data-[state=active]:bg-apuntea-purple data-[state=active]:text-white"
               >
-                Expense
+                EXPENSE
               </TabsTrigger>
               <TabsTrigger 
                 value="financing" 
                 className="data-[state=active]:bg-apuntea-dark data-[state=active]:text-white"
               >
-                Financing
+                FINANCING
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -65,7 +65,7 @@ const NewRecord = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Scan className="h-5 w-5" />
-                  Scan with Quick +New Record
+                  + RECORD WITH APUNTEA OCR TECHNOLOGY
                 </CardTitle>
                 <CardDescription>
                   Simply scan your document with Apuntea OCR technology. Record information will appear on your screen.
@@ -82,7 +82,7 @@ const NewRecord = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <PenLine className="h-5 w-5" />
-                  Manual Entry New Record
+                  MANUAL ENTRY
                 </CardTitle>
                 <CardDescription>
                   Enter your record information without uploading a document. Add your document later if you wish.

@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Subcategory } from "@/types";
 
 const Definitions = () => {
@@ -53,15 +54,15 @@ const Definitions = () => {
     const financingSubcategories = financingCategory.subcategories.map(sub => sub.id);
     
     return {
-      income: budgetCategory.subcategories.filter(sub => 
-        incomeSubcategories.includes(sub.id)
-      ),
-      expense: budgetCategory.subcategories.filter(sub => 
-        !incomeSubcategories.includes(sub.id) && !financingSubcategories.includes(sub.id)
-      ),
-      financing: budgetCategory.subcategories.filter(sub =>
-        financingSubcategories.includes(sub.id)
-      )
+      income: budgetCategory.subcategories
+        .filter(sub => incomeSubcategories.includes(sub.id))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+      expense: budgetCategory.subcategories
+        .filter(sub => !incomeSubcategories.includes(sub.id) && !financingSubcategories.includes(sub.id))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+      financing: budgetCategory.subcategories
+        .filter(sub => financingSubcategories.includes(sub.id))
+        .sort((a, b) => a.name.localeCompare(b.name))
     };
   };
   
@@ -103,24 +104,24 @@ const Definitions = () => {
   // Render budget subcategories with input fields
   const renderBudgetSubcategories = (subcategories: Subcategory[], type: string) => {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium mb-4">{type.toUpperCase()}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <h3 className="text-lg font-medium mb-3">{type.toUpperCase()}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {subcategories.map((subcategory) => (
-              <div key={subcategory.id} className="border rounded-md p-3 flex items-center justify-between">
-                <div className="font-medium">{subcategory.name}</div>
-                <div className="flex items-center space-x-2">
+              <div key={subcategory.id} className="border border-gray-300 rounded-sm p-2 flex items-center justify-between">
+                <div className="font-medium text-sm truncate mr-2">{subcategory.name}</div>
+                <div className="flex items-center space-x-1 flex-shrink-0">
                   <Input
                     value={budgetAmounts[subcategory.id] || ''}
                     onChange={(e) => handleBudgetAmountChange(subcategory.id, e.target.value)}
-                    className="w-24 text-right"
+                    className="w-20 text-right h-8 text-sm rounded-sm"
                     placeholder="0.00"
                   />
                   <Button 
                     size="sm" 
                     onClick={() => saveBudgetAmount(subcategory.id)}
-                    className="h-9"
+                    className="h-8 px-2"
                   >
                     OK
                   </Button>
@@ -170,15 +171,27 @@ const Definitions = () => {
         {categories.map((category) => (
           <TabsContent key={category.id} value={category.id} className="mt-0">
             {category.id === "budget" ? (
-              <div className="space-y-8">
-                {budgetGroups.income.length > 0 && renderBudgetSubcategories(budgetGroups.income, "INCOME")}
-                {budgetGroups.expense.length > 0 && renderBudgetSubcategories(budgetGroups.expense, "EXPENSE")}
-                {budgetGroups.financing.length > 0 && renderBudgetSubcategories(budgetGroups.financing, "FINANCING")}
+              <div className="space-y-6">
+                {budgetGroups.income.length > 0 && (
+                  <>
+                    {renderBudgetSubcategories(budgetGroups.income, "INCOME")}
+                    <Separator className="my-4" />
+                  </>
+                )}
+                {budgetGroups.expense.length > 0 && (
+                  <>
+                    {renderBudgetSubcategories(budgetGroups.expense, "EXPENSE")}
+                    <Separator className="my-4" />
+                  </>
+                )}
+                {budgetGroups.financing.length > 0 && (
+                  renderBudgetSubcategories(budgetGroups.financing, "FINANCING")
+                )}
               </div>
             ) : (
               <CategoryCard
                 title={getCategoryDisplayName(category.id)}
-                subcategories={category.subcategories}
+                subcategories={category.subcategories.sort((a, b) => a.name.localeCompare(b.name))}
                 editable={category.editable}
                 onAdd={(name) => addSubcategory(category.id, name)}
                 onUpdate={(subcategoryId, newName) => 

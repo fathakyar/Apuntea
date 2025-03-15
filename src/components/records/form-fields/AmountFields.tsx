@@ -2,6 +2,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
 
 interface AmountFieldsProps {
   amount: string;
@@ -11,6 +12,37 @@ interface AmountFieldsProps {
 }
 
 const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, onChange }) => {
+  // Format the amount for display
+  const formatInputValue = (value: string) => {
+    if (!value) return "";
+    
+    try {
+      const numericValue = parseEuropeanNumber(value);
+      return formatNumberWithEuropeanStyle(numericValue, { formatNumber: true });
+    } catch (e) {
+      return value;
+    }
+  };
+
+  // Handle input change with proper formatting
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    
+    // Allow input of numbers and comma
+    const sanitizedValue = value.replace(/[^\d,]/g, '').replace(/,+/g, ',');
+    
+    // Create a synthetic event with the sanitized value
+    const syntheticEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: sanitizedValue
+      }
+    } as React.ChangeEvent<HTMLInputElement>;
+    
+    onChange(syntheticEvent);
+  };
+
   return (
     <>
       <div className="space-y-2">
@@ -19,7 +51,7 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
           id="amount"
           name="amount"
           value={amount}
-          onChange={onChange}
+          onChange={handleInputChange}
           required
           type="text"
           inputMode="numeric"
@@ -33,7 +65,7 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
           id="vat"
           name="vat"
           value={vat}
-          onChange={onChange}
+          onChange={handleInputChange}
           required
           type="text"
           inputMode="numeric"
