@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { RecordType } from "@/types";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,11 @@ export interface RecordFormData {
   paymentTypeId: string;
 }
 
-export function useRecordForm(initialData?: RecordFormData, recordType: RecordType = "expense", onSubmit?: (data: RecordFormData) => void) {
+export function useRecordForm(
+  initialData?: RecordFormData, 
+  recordType: RecordType = "expense", 
+  onSubmit?: (data: RecordFormData) => void
+) {
   // Get today's date in yyyy-mm-dd format
   const today = new Date().toISOString().split('T')[0];
   

@@ -8,10 +8,11 @@ import { useRecordForm, RecordFormData } from "@/hooks/useRecordForm";
 interface RecordFormProps {
   initialData?: RecordFormData;
   recordType: RecordType;
+  onSubmit?: (data: RecordFormData) => void;
 }
 
-const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType }) => {
-  const { formData, setFormData, handleSubmit } = useRecordForm(initialData, recordType);
+const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType, onSubmit }) => {
+  const { formData, setFormData, handleSubmit } = useRecordForm(initialData, recordType, onSubmit);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
