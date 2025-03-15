@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus, CalendarIcon } from "lucide-react";
@@ -381,18 +380,13 @@ const Agenda = () => {
                               return (
                                 <div 
                                   key={`invoice-${invoice.id}`}
-                                  className="border p-3 rounded-md hover:bg-muted/20 cursor-pointer flex items-center"
+                                  className="border p-2 rounded-md hover:bg-muted/20 cursor-pointer flex items-center justify-between"
                                   onClick={() => handleEventClick(invoice)}
                                 >
-                                  <div className="flex flex-grow items-center gap-4">
-                                    <Badge className={`${getBadgeColor(invoice.type || '')}`}>
-                                      {getGroupTitle(invoice.type || '')}
-                                    </Badge>
-                                    <div>
-                                      <h4 className="font-medium">{invoice.companyName}</h4>
-                                    </div>
+                                  <div className="flex-grow overflow-hidden">
+                                    <div className="font-medium truncate">{invoice.companyName}</div>
                                   </div>
-                                  <div className="text-sm font-medium whitespace-nowrap">
+                                  <div className="text-sm font-medium whitespace-nowrap ml-3">
                                     {formatCurrency(invoice.totalAmount)} {invoice.currencyCode || "EUR"}
                                   </div>
                                 </div>
@@ -403,21 +397,16 @@ const Agenda = () => {
                               return (
                                 <div 
                                   key={`event-${agendaEvent.id}`}
-                                  className="border p-3 rounded-md hover:bg-muted/20 cursor-pointer flex items-center"
+                                  className="border p-2 rounded-md hover:bg-muted/20 cursor-pointer flex items-center justify-between"
                                   onClick={() => handleEventClick(agendaEvent)}
                                 >
-                                  <div className="flex flex-grow items-center gap-4">
-                                    <Badge className={`${getBadgeColor(agendaEvent.type)}`}>
-                                      {getGroupTitle(agendaEvent.type)}
-                                    </Badge>
-                                    <div>
-                                      <h4 className="font-medium">{agendaEvent.title}</h4>
-                                      <p className="text-sm text-muted-foreground line-clamp-1">
-                                        {agendaEvent.description}
-                                      </p>
-                                    </div>
+                                  <div className="flex-grow overflow-hidden pr-3">
+                                    <div className="font-medium truncate">{agendaEvent.title}</div>
+                                    <p className="text-sm text-muted-foreground line-clamp-1">
+                                      {agendaEvent.description}
+                                    </p>
                                   </div>
-                                  <div className="ml-2">
+                                  <div className="flex-shrink-0">
                                     {getImportanceBadge(agendaEvent.importance)}
                                   </div>
                                 </div>

@@ -23,7 +23,7 @@ const EventFormActions: React.FC<EventFormActionsProps> = ({
           <Button
             type="button"
             variant="outline"
-            className="text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-sm"
+            className="text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-sm uppercase"
             onClick={onDelete}
           >
             <Trash2 className="h-4 w-4 mr-2" />
@@ -32,10 +32,10 @@ const EventFormActions: React.FC<EventFormActionsProps> = ({
         )}
       </div>
       <div className="flex gap-2">
-        <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm">
+        <Button type="button" variant="outline" onClick={onCancel} className="rounded-sm uppercase">
           {getLabel("cancel")}
         </Button>
-        <Button type="submit" className="rounded-sm">
+        <Button type="submit" className="rounded-sm uppercase">
           {isEditing ? getLabel("update") : getLabel("add")}
         </Button>
       </div>

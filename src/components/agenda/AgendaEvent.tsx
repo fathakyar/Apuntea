@@ -20,11 +20,11 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
   const getImportanceBadge = (importance?: string) => {
     switch(importance) {
       case 'high':
-        return <Badge className="bg-red-500 text-white ml-1">HIGH</Badge>;
+        return <Badge className="bg-red-500 text-white">HIGH</Badge>;
       case 'medium':
-        return <Badge className="bg-orange-500 text-white ml-1">MEDIUM</Badge>;
+        return <Badge className="bg-orange-500 text-white">MEDIUM</Badge>;
       case 'low':
-        return <Badge className="bg-green-500 text-white ml-1">LOW</Badge>;
+        return <Badge className="bg-green-500 text-white">LOW</Badge>;
       default:
         return null;
     }
@@ -68,20 +68,6 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
       }
     };
     
-    // Get type badge color
-    const getTypeBadgeColor = (type?: string) => {
-      switch (type) {
-        case 'income':
-          return 'bg-apuntea-gold text-black';
-        case 'expense':
-          return 'bg-apuntea-purple text-white';
-        case 'financing':
-          return 'bg-apuntea-dark text-white';
-        default:
-          return 'bg-gray-500 text-white';
-      }
-    };
-    
     return (
       <div
         className={cn(
@@ -106,18 +92,6 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
   
   const regularEvent = event as AgendaEventType;
   const isTask = regularEvent.type === "GÖREV";
-  
-  // Get type badge color
-  const getTypeBadgeColor = (type: string) => {
-    switch (type) {
-      case 'GÖREV':
-        return 'bg-blue-500 text-white';
-      case 'NOT':
-        return 'bg-green-500 text-white';
-      default:
-        return 'bg-gray-500 text-white';
-    }
-  };
   
   return (
     <div

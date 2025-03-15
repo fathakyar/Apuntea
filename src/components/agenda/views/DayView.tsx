@@ -130,13 +130,13 @@ const DayView: React.FC<DayViewProps> = ({
                       return (
                         <div 
                           key={`invoice-${invoice.id}`}
-                          className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                          className="flex items-center justify-between p-2 border rounded-sm hover:bg-muted/50 cursor-pointer"
                           onClick={(e) => onEventClick(e, invoice)}
                         >
-                          <div className="flex-grow">
-                            <h4 className="font-medium">{invoice.companyName}</h4>
+                          <div className="flex-grow overflow-hidden">
+                            <div className="font-medium truncate">{invoice.companyName}</div>
                           </div>
-                          <div className="text-sm font-medium whitespace-nowrap ml-4">
+                          <div className="text-sm font-medium whitespace-nowrap ml-3">
                             {formatCurrency(invoice.totalAmount)} {invoice.currencyCode || 'EUR'}
                           </div>
                         </div>
@@ -146,14 +146,14 @@ const DayView: React.FC<DayViewProps> = ({
                       return (
                         <div 
                           key={`event-${agendaEvent.id}`}
-                          className="flex items-center justify-between p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                          className="flex items-center justify-between p-2 border rounded-sm hover:bg-muted/50 cursor-pointer"
                           onClick={(e) => onEventClick(e, agendaEvent)}
                         >
-                          <div className="flex-grow">
-                            <h4 className="font-medium">{agendaEvent.title}</h4>
+                          <div className="flex-grow overflow-hidden pr-3">
+                            <div className="font-medium truncate">{agendaEvent.title}</div>
                             <p className="text-sm text-muted-foreground line-clamp-1">{agendaEvent.description}</p>
                           </div>
-                          <div className="ml-4">
+                          <div className="flex-shrink-0">
                             {getImportanceBadge(agendaEvent.importance)}
                           </div>
                         </div>
