@@ -28,21 +28,8 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
-    // Only allow numbers, commas and dots
-    if (!/^[\d.,]*$/.test(value) && value !== '') {
-      return; // Don't process invalid inputs
-    }
-    
-    // Create a synthetic event with the value
-    const syntheticEvent = {
-      ...e,
-      target: {
-        ...e.target,
-        value: value
-      }
-    } as React.ChangeEvent<HTMLInputElement>;
-    
-    onChange(syntheticEvent);
+    // Pass the input value directly to parent component
+    onChange(e);
   };
 
   return (

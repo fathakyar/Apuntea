@@ -1,4 +1,3 @@
-
 import React from "react";
 import { RecordType } from "@/types";
 import { formatText, formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
@@ -44,37 +43,40 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
     const { name, value } = e.target;
     
     if (name === "amount" || name === "vat") {
-      // For number fields, handle calculation of total
+      // For number fields, accept any input but validate for calculations
       setFormData(prev => {
-        // Calculate the total
-        const otherField = name === "amount" ? "vat" : "amount";
-        const otherValue = prev[otherField] || "0";
+        // Store the raw input value
+        const newData = {
+          ...prev,
+          [name]: value
+        };
         
-        let amountValue = name === "amount" ? value : prev.amount || "0";
-        let vatValue = name === "vat" ? value : prev.vat || "0";
-        
-        // Parse values safely
-        let amountNumber = 0;
-        let vatNumber = 0;
-        
+        // Try to calculate totals if the input is valid
         try {
-          if (amountValue) amountNumber = parseEuropeanNumber(amountValue);
-          if (vatValue) vatNumber = parseEuropeanNumber(vatValue);
+          const amountValue = name === "amount" ? value : prev.amount;
+          const vatValue = name === "vat" ? value : prev.vat;
+          
+          // Only proceed with calculation if both values are sensible
+          if (amountValue && vatValue) {
+            // Try to parse both values
+            const amountNumber = parseEuropeanNumber(amountValue);
+            const vatNumber = parseEuropeanNumber(vatValue);
+            
+            // Calculate total
+            const total = amountNumber + vatNumber;
+            
+            // Format the total with European style
+            const formattedTotal = formatNumberWithEuropeanStyle(total, { formatNumber: true });
+            
+            // Update total amount only if calculation was successful
+            newData.totalAmount = formattedTotal;
+          }
         } catch (error) {
-          console.error("Error parsing number:", error);
+          // If parsing fails, just keep the existing total
+          console.error("Error calculating total:", error);
         }
         
-        // Calculate total
-        const total = amountNumber + vatNumber;
-        
-        // Format the total with European style
-        const formattedTotal = formatNumberWithEuropeanStyle(total, { formatNumber: true });
-        
-        return {
-          ...prev,
-          [name]: value,
-          totalAmount: formattedTotal
-        };
+        return newData;
       });
     } else {
       setFormData(prev => ({
