@@ -44,41 +44,35 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
     const { name, value } = e.target;
     
     if (name === "amount" || name === "vat") {
-      // Process number inputs
+      // For number fields, handle calculation of total
       setFormData(prev => {
-        // Sanitize numeric input but allow correct format for European numbers
-        let updatedValue = value;
-        
         // Calculate the total
         const otherField = name === "amount" ? "vat" : "amount";
         const otherValue = prev[otherField] || "0";
         
+        let amountValue = name === "amount" ? value : prev.amount || "0";
+        let vatValue = name === "vat" ? value : prev.vat || "0";
+        
         // Parse values safely
-        let currentAmount = 0;
-        let otherAmount = 0;
+        let amountNumber = 0;
+        let vatNumber = 0;
         
         try {
-          // Handle comma as decimal separator
-          if (updatedValue) {
-            currentAmount = parseEuropeanNumber(updatedValue);
-          }
-          
-          if (otherValue) {
-            otherAmount = parseEuropeanNumber(otherValue);
-          }
+          if (amountValue) amountNumber = parseEuropeanNumber(amountValue);
+          if (vatValue) vatNumber = parseEuropeanNumber(vatValue);
         } catch (error) {
           console.error("Error parsing number:", error);
         }
         
-        // Calculate total only if both inputs are valid numbers
-        const total = currentAmount + otherAmount;
+        // Calculate total
+        const total = amountNumber + vatNumber;
         
-        // Format total amount with European style
+        // Format the total with European style
         const formattedTotal = formatNumberWithEuropeanStyle(total, { formatNumber: true });
         
         return {
           ...prev,
-          [name]: updatedValue,
+          [name]: value,
           totalAmount: formattedTotal
         };
       });
