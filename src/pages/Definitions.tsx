@@ -71,7 +71,7 @@ const Definitions = () => {
   // Handle budget amount input change
   const handleBudgetAmountChange = (id: string, value: string) => {
     // Only allow numbers and decimal point
-    if (value === '' || /^[0-9]*\.?[0-9]*$/.test(value)) {
+    if (value === '' || /^[0-9]*[,]?[0-9]*$/.test(value)) {
       setBudgetAmounts(prev => ({
         ...prev,
         [id]: value
@@ -82,7 +82,7 @@ const Definitions = () => {
   // Save budget amount for a subcategory
   const saveBudgetAmount = (id: string) => {
     if (budgetAmounts[id] !== undefined) {
-      const amount = budgetAmounts[id] === '' ? 0 : parseFloat(budgetAmounts[id]);
+      const amount = budgetAmounts[id] === '' ? 0 : parseFloat(budgetAmounts[id].replace(',', '.'));
       updateBudgetAmount(id, amount);
     }
   };
@@ -101,8 +101,32 @@ const Definitions = () => {
     }
   };
 
+  // Get category style based on category ID
+  const getCategoryStyle = (categoryId: string) => {
+    switch(categoryId) {
+      case "income": return {
+        borderColor: "#f0b50a", // gold color for income
+        buttonBg: "bg-apuntea-gold text-black hover:bg-apuntea-gold/90"
+      };
+      case "expense": return {
+        borderColor: "#9b87f5", // purple color for expense
+        buttonBg: "bg-apuntea-purple text-white hover:bg-apuntea-purple/90"
+      };
+      case "financing": return {
+        borderColor: "#1A1F2C", // dark color for financing
+        buttonBg: "bg-apuntea-dark text-white hover:bg-apuntea-dark/90"
+      };
+      default: return {
+        borderColor: "#d1d5db", // default gray border
+        buttonBg: "bg-primary text-primary-foreground hover:bg-primary/90"
+      };
+    }
+  };
+
   // Render budget subcategories with input fields
   const renderBudgetSubcategories = (subcategories: Subcategory[], type: string) => {
+    const style = getCategoryStyle(type.toLowerCase());
+    
     return (
       <div className="space-y-4">
         <div>
@@ -116,12 +140,12 @@ const Definitions = () => {
                     value={budgetAmounts[subcategory.id] || ''}
                     onChange={(e) => handleBudgetAmountChange(subcategory.id, e.target.value)}
                     className="w-20 text-right h-8 text-sm rounded-sm"
-                    placeholder="0.00"
+                    placeholder="0,00"
                   />
                   <Button 
                     size="sm" 
                     onClick={() => saveBudgetAmount(subcategory.id)}
-                    className="h-8 px-2"
+                    className={`h-8 px-2 ${style.buttonBg} rounded-sm`}
                   >
                     OK
                   </Button>
@@ -174,18 +198,18 @@ const Definitions = () => {
               <div className="space-y-6">
                 {budgetGroups.income.length > 0 && (
                   <>
-                    {renderBudgetSubcategories(budgetGroups.income, "INCOME")}
+                    {renderBudgetSubcategories(budgetGroups.income, "income")}
                     <Separator className="my-4" />
                   </>
                 )}
                 {budgetGroups.expense.length > 0 && (
                   <>
-                    {renderBudgetSubcategories(budgetGroups.expense, "EXPENSE")}
+                    {renderBudgetSubcategories(budgetGroups.expense, "expense")}
                     <Separator className="my-4" />
                   </>
                 )}
                 {budgetGroups.financing.length > 0 && (
-                  renderBudgetSubcategories(budgetGroups.financing, "FINANCING")
+                  renderBudgetSubcategories(budgetGroups.financing, "financing")
                 )}
               </div>
             ) : (
@@ -205,6 +229,7 @@ const Definitions = () => {
                     ? "AUTOMATICALLY SYNCHRONIZED WITH INCOME AND EXPENSE CATEGORIES"
                     : undefined
                 }
+                categoryStyle={getCategoryStyle(category.id)}
               />
             )}
           </TabsContent>

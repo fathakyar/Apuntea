@@ -15,13 +15,11 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mb-4">
           {/* Logo - Left on large screens, centered on small */}
           <div className="flex justify-center md:justify-start mb-4 md:mb-0">
-            <h2 className="text-3xl font-bold tracking-tight flex items-center">
-              <img 
-                src="/lovable-uploads/81156e85-98e1-4e93-a985-76fe34561a6f.png" 
-                alt="Apuntea Logo" 
-                className="h-10"
-              />
-            </h2>
+            <img 
+              src="/lovable-uploads/abaef638-5a47-4704-b310-ac2008ff656d.png" 
+              alt="Apuntea Logo" 
+              className="h-10"
+            />
           </div>
 
           {/* Navigation Links - Right on large screens, centered on small */}

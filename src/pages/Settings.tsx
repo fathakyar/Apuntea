@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -190,19 +189,19 @@ const Settings = () => {
             <TabsList className="w-full justify-start mb-6 overflow-x-auto rounded-sm">
               <TabsTrigger value="profile" className="px-4 py-2 flex items-center rounded-sm">
                 <User className="h-4 w-4 mr-2" />
-                {t.profile}
+                PROFILE
               </TabsTrigger>
               <TabsTrigger value="accountSettings" className="px-4 py-2 flex items-center rounded-sm">
                 <Shield className="h-4 w-4 mr-2" />
-                {t.accountSettings}
+                ACCOUNT SETTINGS
               </TabsTrigger>
               <TabsTrigger value="plansAndPricing" className="px-4 py-2 flex items-center rounded-sm">
                 <CreditCard className="h-4 w-4 mr-2" />
-                {t.plansAndPricing}
+                PLANS & PRICING
               </TabsTrigger>
               <TabsTrigger value="help" className="px-4 py-2 flex items-center rounded-sm">
                 <HelpCircle className="h-4 w-4 mr-2" />
-                {t.help}
+                HELP
               </TabsTrigger>
             </TabsList>
             
@@ -283,7 +282,7 @@ const Settings = () => {
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="submit" className="rounded-sm">{t.save}</Button>
+                  <Button type="submit" className="rounded-sm">SAVE</Button>
                 </div>
               </form>
             </TabsContent>
@@ -306,8 +305,6 @@ const Settings = () => {
                   />
                 </div>
               </div>
-              
-              {/* Language section removed as we only support English now */}
               
               <div className="space-y-4 border p-4 rounded-sm">
                 <h3 className="text-lg font-medium">{t.security}</h3>
@@ -357,7 +354,7 @@ const Settings = () => {
                     />
                   </div>
                   <div className="flex justify-end">
-                    <Button type="submit" className="rounded-sm">{t.save}</Button>
+                    <Button type="submit" className="rounded-sm">SAVE</Button>
                   </div>
                 </form>
               </div>
@@ -371,14 +368,14 @@ const Settings = () => {
                     className="rounded-sm"
                     onClick={() => setBillingCycle("monthly")}
                   >
-                    {t.monthly}
+                    MONTHLY
                   </Button>
                   <Button
                     variant={billingCycle === "yearly" ? "default" : "ghost"}
                     className="rounded-sm"
                     onClick={() => setBillingCycle("yearly")}
                   >
-                    {t.yearly}
+                    YEARLY
                   </Button>
                 </div>
               </div>
@@ -406,7 +403,7 @@ const Settings = () => {
                       <span className="mr-2">✓</span> Single user
                     </li>
                   </ul>
-                  <Button variant="outline" className="w-full rounded-sm">{t.currentPlan}</Button>
+                  <Button variant="outline" className="w-full rounded-sm">CURRENT PLAN</Button>
                 </div>
                 
                 <div className="border rounded-sm p-6 flex flex-col relative overflow-hidden">
@@ -434,7 +431,7 @@ const Settings = () => {
                       <span className="mr-2">✓</span> Data backup
                     </li>
                   </ul>
-                  <Button className="w-full bg-apuntea-gold text-black hover:bg-apuntea-gold/90 rounded-sm">{t.upgrade}</Button>
+                  <Button className="w-full bg-apuntea-gold text-black hover:bg-apuntea-gold/90 rounded-sm">UPGRADE</Button>
                 </div>
                 
                 <div className="border rounded-sm p-6 flex flex-col">
@@ -459,7 +456,7 @@ const Settings = () => {
                       <span className="mr-2">✓</span> Multi-user access
                     </li>
                   </ul>
-                  <Button className="w-full rounded-sm">{t.upgrade}</Button>
+                  <Button className="w-full rounded-sm">UPGRADE</Button>
                   <p className="text-sm text-muted-foreground mt-4">
                     This plan allows up to 5 users. Please contact us for higher user needs.
                   </p>
@@ -502,7 +499,7 @@ const Settings = () => {
                   />
                 </div>
                 <div className="flex justify-end">
-                  <Button type="submit" className="rounded-sm">{t.send}</Button>
+                  <Button type="submit" className="rounded-sm">SEND</Button>
                 </div>
               </form>
             </TabsContent>
