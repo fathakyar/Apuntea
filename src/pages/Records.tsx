@@ -36,13 +36,13 @@ const Records = () => {
       loadInvoices();
       
       toast({
-        title: t.invoiceDeleted || "Invoice deleted",
-        description: t.invoiceSuccessfullyDeleted || "Invoice has been successfully deleted",
+        title: t.invoiceDeleted || "Record deleted",
+        description: t.invoiceSuccessfullyDeleted || "Record has been successfully deleted",
       });
     } catch (error) {
       toast({
         title: t.error || "Error",
-        description: t.couldNotDeleteInvoice || "Could not delete the invoice",
+        description: t.couldNotDeleteInvoice || "Could not delete the record",
         variant: "destructive",
       });
     }
@@ -53,7 +53,7 @@ const Records = () => {
       const dataStr = JSON.stringify(invoices, null, 2);
       const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
       
-      const exportFileDefaultName = `apuntea-invoices-${new Date().toISOString().slice(0, 10)}.json`;
+      const exportFileDefaultName = `apuntea-records-${new Date().toISOString().slice(0, 10)}.json`;
       
       const linkElement = document.createElement("a");
       linkElement.setAttribute("href", dataUri);
@@ -62,12 +62,12 @@ const Records = () => {
       
       toast({
         title: t.exportSuccessful || "Export successful",
-        description: t.invoiceDataExported || "Invoice data has been exported successfully",
+        description: t.invoiceDataExported || "Record data has been exported successfully",
       });
     } catch (error) {
       toast({
         title: t.exportFailed || "Export failed",
-        description: t.couldNotExportData || "Could not export invoice data",
+        description: t.couldNotExportData || "Could not export record data",
         variant: "destructive",
       });
     }

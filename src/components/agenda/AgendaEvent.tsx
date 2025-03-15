@@ -4,16 +4,31 @@ import { cn } from "@/lib/utils";
 import { AgendaEvent as AgendaEventType, Invoice } from "@/types";
 import { FileText, CheckSquare, Receipt } from "lucide-react";
 import { formatCurrency } from "@/utils/invoiceUtils";
+import { Badge } from "@/components/ui/badge";
 
 interface AgendaEventProps {
   event: AgendaEventType | (Invoice & { eventType?: 'invoice' });
   onClick: (e: React.MouseEvent) => void;
-  compact?: boolean; // Add the compact prop
+  compact?: boolean;
 }
 
 const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = false }) => {
   // Check if this is an invoice record
   const isInvoice = 'eventType' in event && event.eventType === 'invoice';
+  
+  // Get badge for importance level
+  const getImportanceBadge = (importance?: string) => {
+    switch(importance) {
+      case 'high':
+        return <Badge className="bg-red-500 text-white ml-1">HIGH</Badge>;
+      case 'medium':
+        return <Badge className="bg-orange-500 text-white ml-1">MEDIUM</Badge>;
+      case 'low':
+        return <Badge className="bg-green-500 text-white ml-1">LOW</Badge>;
+      default:
+        return null;
+    }
+  };
   
   // Color selection function
   const getCategoryColor = (subcategoryId: string) => {
@@ -53,18 +68,38 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
       }
     };
     
+    // Get type badge color
+    const getTypeBadgeColor = (type?: string) => {
+      switch (type) {
+        case 'income':
+          return 'bg-apuntea-gold text-black';
+        case 'expense':
+          return 'bg-apuntea-purple text-white';
+        case 'financing':
+          return 'bg-apuntea-dark text-white';
+        default:
+          return 'bg-gray-500 text-white';
+      }
+    };
+    
     return (
       <div
         className={cn(
-          "text-xs px-2 py-1 rounded-sm border truncate flex items-center gap-1",
+          "text-xs px-2 py-1 rounded-sm border flex items-center justify-between gap-1",
           getInvoiceTypeColor(invoice.type),
           "cursor-pointer hover:opacity-80 transition-opacity"
         )}
         onClick={onClick}
         title={`${invoice.companyName} - ${formatCurrency(invoice.totalAmount)}`}
       >
-        <Receipt className="h-3 w-3 shrink-0" />
-        <span className="truncate">{invoice.companyName} - {formatCurrency(invoice.totalAmount)}</span>
+        <div className="flex items-center">
+          <Receipt className="h-3 w-3 shrink-0 mr-1" />
+          <span className="truncate">{invoice.companyName}</span>
+        </div>
+        
+        <div className="flex items-center text-right">
+          <span className="font-medium">{formatCurrency(invoice.totalAmount)}</span>
+        </div>
       </div>
     );
   }
@@ -72,22 +107,42 @@ const AgendaEvent: React.FC<AgendaEventProps> = ({ event, onClick, compact = fal
   const regularEvent = event as AgendaEventType;
   const isTask = regularEvent.type === "GÖREV";
   
+  // Get type badge color
+  const getTypeBadgeColor = (type: string) => {
+    switch (type) {
+      case 'GÖREV':
+        return 'bg-blue-500 text-white';
+      case 'NOT':
+        return 'bg-green-500 text-white';
+      default:
+        return 'bg-gray-500 text-white';
+    }
+  };
+  
   return (
     <div
       className={cn(
-        "text-xs px-2 py-1 rounded-sm border truncate flex items-center gap-1",
+        "text-xs px-2 py-1 rounded-sm border flex items-center justify-between gap-1",
         getCategoryColor(regularEvent.subcategoryId),
         "cursor-pointer hover:opacity-80 transition-opacity"
       )}
       onClick={onClick}
       title={regularEvent.title}
     >
-      {isTask ? (
-        <CheckSquare className="h-3 w-3 shrink-0" />
-      ) : (
-        <FileText className="h-3 w-3 shrink-0" />
+      <div className="flex items-center">
+        {isTask ? (
+          <CheckSquare className="h-3 w-3 shrink-0 mr-1" />
+        ) : (
+          <FileText className="h-3 w-3 shrink-0 mr-1" />
+        )}
+        <span className="truncate">{regularEvent.title}</span>
+      </div>
+      
+      {regularEvent.importance && (
+        <div className="ml-auto">
+          {getImportanceBadge(regularEvent.importance)}
+        </div>
       )}
-      <span className="truncate">{regularEvent.title}</span>
     </div>
   );
 };

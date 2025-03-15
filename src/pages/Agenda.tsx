@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, FilterIcon } from "lucide-react";
-import { CalendarIcon } from "lucide-react";
+import { Plus, CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import AgendaCalendar from "@/components/agenda/AgendaCalendar";
 import { AgendaEvent, Invoice, RecordType } from "@/types";
@@ -199,6 +198,25 @@ const Agenda = () => {
   
   const filteredEvents = getEventsForSelectedDate();
 
+  // Group events by type
+  const groupedEvents = filteredEvents.reduce((acc, event) => {
+    let groupKey: string;
+    
+    if ('eventType' in event && event.eventType === 'invoice') {
+      groupKey = event.type || 'unknown';
+    } else {
+      const agendaEvent = event as AgendaEvent;
+      groupKey = agendaEvent.type || 'unknown';
+    }
+    
+    if (!acc[groupKey]) {
+      acc[groupKey] = [];
+    }
+    
+    acc[groupKey].push(event);
+    return acc;
+  }, {} as Record<string, Array<AgendaEvent | (Invoice & { eventType?: 'invoice' })>>);
+  
   const getGroupTitle = (type: string) => {
     switch(type) {
       case 'income': return 'INCOME';
@@ -218,6 +236,20 @@ const Agenda = () => {
       case 'GÖREV': return 'bg-blue-500 text-white';
       case 'NOT': return 'bg-green-500 text-white';
       default: return 'bg-gray-500 text-white';
+    }
+  };
+
+  // Importance level badges
+  const getImportanceBadge = (importance?: string) => {
+    switch(importance) {
+      case 'high':
+        return <Badge className="bg-red-500 text-white">HIGH</Badge>;
+      case 'medium':
+        return <Badge className="bg-orange-500 text-white">MEDIUM</Badge>;
+      case 'low':
+        return <Badge className="bg-green-500 text-white">LOW</Badge>;
+      default:
+        return null;
     }
   };
 
@@ -310,8 +342,8 @@ const Agenda = () => {
                   </Tabs>
                 </div>
                 
-                <div className="space-y-4 mt-2 flex-grow">
-                  {filteredEvents.length === 0 ? (
+                <div className="space-y-6 mt-2 flex-grow">
+                  {Object.keys(groupedEvents).length === 0 ? (
                     <div className="text-center py-8 text-muted-foreground flex flex-col items-center">
                       <CalendarIcon className="h-12 w-12 mb-2 opacity-20" />
                       <p>No events for this date</p>
@@ -333,50 +365,68 @@ const Agenda = () => {
                       </div>
                     </div>
                   ) : (
-                    filteredEvents.map((event) => {
-                      if ('eventType' in event && event.eventType === 'invoice') {
-                        const invoice = event as Invoice & { eventType: 'invoice' };
-                        return (
-                          <div 
-                            key={`invoice-${invoice.id}`}
-                            className="border p-4 rounded-md hover:bg-muted/20 cursor-pointer"
-                            onClick={() => handleEventClick(invoice)}
-                          >
-                            <div className="flex items-center justify-between">
-                              <Badge className={getBadgeColor(invoice.type || '')}>
-                                {getGroupTitle(invoice.type || '')}
-                              </Badge>
-                              <span className="text-sm text-muted-foreground">
-                                {formatCurrency(invoice.totalAmount).replace(' €', '')} EUR
-                              </span>
-                            </div>
-                            <h3 className="font-semibold mt-2">{invoice.companyName}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {invoice.invoiceNumber}
-                            </p>
-                          </div>
-                        );
-                      } else {
-                        const agendaEvent = event as AgendaEvent;
-                        return (
-                          <div 
-                            key={`event-${agendaEvent.id}`}
-                            className="border p-4 rounded-md hover:bg-muted/20 cursor-pointer"
-                            onClick={() => handleEventClick(agendaEvent)}
-                          >
-                            <div className="flex items-center justify-between">
-                              <Badge className={getBadgeColor(agendaEvent.type)}>
-                                {getGroupTitle(agendaEvent.type)}
-                              </Badge>
-                            </div>
-                            <h3 className="font-semibold mt-2">{agendaEvent.title}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {agendaEvent.description}
-                            </p>
-                          </div>
-                        );
-                      }
-                    })
+                    Object.entries(groupedEvents).map(([groupType, groupEvents]) => (
+                      <div key={groupType} className="space-y-2">
+                        <h3 className="font-semibold text-sm tracking-wider">
+                          <Badge className={`${getBadgeColor(groupType)}`}>
+                            {getGroupTitle(groupType)}
+                          </Badge>
+                        </h3>
+                        
+                        <div className="space-y-2">
+                          {groupEvents.map((event) => {
+                            if ('eventType' in event && event.eventType === 'invoice') {
+                              // Financial record
+                              const invoice = event as Invoice & { eventType: 'invoice' };
+                              return (
+                                <div 
+                                  key={`invoice-${invoice.id}`}
+                                  className="border p-3 rounded-md hover:bg-muted/20 cursor-pointer flex items-center"
+                                  onClick={() => handleEventClick(invoice)}
+                                >
+                                  <div className="flex flex-grow items-center gap-4">
+                                    <Badge className={`${getBadgeColor(invoice.type || '')}`}>
+                                      {getGroupTitle(invoice.type || '')}
+                                    </Badge>
+                                    <div>
+                                      <h4 className="font-medium">{invoice.companyName}</h4>
+                                    </div>
+                                  </div>
+                                  <div className="text-sm font-medium whitespace-nowrap">
+                                    {formatCurrency(invoice.totalAmount)} {invoice.currencyCode || "EUR"}
+                                  </div>
+                                </div>
+                              );
+                            } else {
+                              // Note or task
+                              const agendaEvent = event as AgendaEvent;
+                              return (
+                                <div 
+                                  key={`event-${agendaEvent.id}`}
+                                  className="border p-3 rounded-md hover:bg-muted/20 cursor-pointer flex items-center"
+                                  onClick={() => handleEventClick(agendaEvent)}
+                                >
+                                  <div className="flex flex-grow items-center gap-4">
+                                    <Badge className={`${getBadgeColor(agendaEvent.type)}`}>
+                                      {getGroupTitle(agendaEvent.type)}
+                                    </Badge>
+                                    <div>
+                                      <h4 className="font-medium">{agendaEvent.title}</h4>
+                                      <p className="text-sm text-muted-foreground line-clamp-1">
+                                        {agendaEvent.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="ml-2">
+                                    {getImportanceBadge(agendaEvent.importance)}
+                                  </div>
+                                </div>
+                              );
+                            }
+                          })}
+                        </div>
+                      </div>
+                    ))
                   )}
                 </div>
               </div>

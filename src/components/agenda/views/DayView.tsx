@@ -59,11 +59,11 @@ const DayView: React.FC<DayViewProps> = ({
   
   const getGroupTitle = (groupName: string) => {
     switch(groupName) {
-      case 'income': return 'GELİR';
-      case 'expense': return 'GİDER';
-      case 'financing': return 'FİNANSMAN';
-      case 'GÖREV': return 'GÖREV';
-      case 'NOT': return 'NOT';
+      case 'income': return 'INCOME';
+      case 'expense': return 'EXPENSE';
+      case 'financing': return 'FINANCING';
+      case 'GÖREV': return 'TASK';
+      case 'NOT': return 'NOTE';
       default: return groupName.toUpperCase();
     }
   };
@@ -76,6 +76,20 @@ const DayView: React.FC<DayViewProps> = ({
       case 'GÖREV': return 'bg-blue-500 text-white';
       case 'NOT': return 'bg-green-500 text-white';
       default: return 'bg-primary text-primary-foreground';
+    }
+  };
+  
+  // Importance level badges
+  const getImportanceBadge = (importance?: string) => {
+    switch(importance) {
+      case 'high':
+        return <Badge className="bg-red-500 text-white">HIGH</Badge>;
+      case 'medium':
+        return <Badge className="bg-orange-500 text-white">MEDIUM</Badge>;
+      case 'low':
+        return <Badge className="bg-green-500 text-white">LOW</Badge>;
+      default:
+        return null;
     }
   };
   
@@ -109,45 +123,44 @@ const DayView: React.FC<DayViewProps> = ({
                   )}
                 </div>
                 
-                {group.items.map((item) => {
-                  if ('eventType' in item && item.eventType === 'invoice') {
-                    const invoice = item as Invoice & { eventType: 'invoice' };
-                    return (
-                      <div 
-                        key={`invoice-${invoice.id}`}
-                        className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
-                        onClick={(e) => onEventClick(e, invoice)}
-                      >
-                        <div className="flex-grow">
-                          <h4 className="font-medium">{invoice.companyName}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {invoice.invoiceNumber} - {formatCurrency(invoice.totalAmount).replace(' €', '')} {invoice.currencyCode || 'EUR'}
-                          </p>
+                <div className="space-y-2">
+                  {group.items.map((item) => {
+                    if ('eventType' in item && item.eventType === 'invoice') {
+                      const invoice = item as Invoice & { eventType: 'invoice' };
+                      return (
+                        <div 
+                          key={`invoice-${invoice.id}`}
+                          className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                          onClick={(e) => onEventClick(e, invoice)}
+                        >
+                          <div className="flex-grow">
+                            <h4 className="font-medium">{invoice.companyName}</h4>
+                          </div>
+                          <div className="text-sm font-medium whitespace-nowrap ml-4">
+                            {formatCurrency(invoice.totalAmount)} {invoice.currencyCode || 'EUR'}
+                          </div>
                         </div>
-                        <div className="text-sm text-muted-foreground whitespace-nowrap ml-4">
-                          {invoice.type?.toUpperCase()}
+                      );
+                    } else {
+                      const agendaEvent = item as AgendaEvent;
+                      return (
+                        <div 
+                          key={`event-${agendaEvent.id}`}
+                          className="flex items-center justify-between p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
+                          onClick={(e) => onEventClick(e, agendaEvent)}
+                        >
+                          <div className="flex-grow">
+                            <h4 className="font-medium">{agendaEvent.title}</h4>
+                            <p className="text-sm text-muted-foreground line-clamp-1">{agendaEvent.description}</p>
+                          </div>
+                          <div className="ml-4">
+                            {getImportanceBadge(agendaEvent.importance)}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  } else {
-                    const agendaEvent = item as AgendaEvent;
-                    return (
-                      <div 
-                        key={`event-${agendaEvent.id}`}
-                        className="flex items-center p-3 border rounded-sm hover:bg-muted/50 cursor-pointer"
-                        onClick={(e) => onEventClick(e, agendaEvent)}
-                      >
-                        <div className="flex-grow">
-                          <h4 className="font-medium">{agendaEvent.title}</h4>
-                          <p className="text-sm text-muted-foreground truncate">{agendaEvent.description}</p>
-                        </div>
-                        <div className="text-sm text-muted-foreground whitespace-nowrap ml-4">
-                          {agendaEvent.type}
-                        </div>
-                      </div>
-                    );
-                  }
-                })}
+                      );
+                    }
+                  })}
+                </div>
               </div>
             );
           })}

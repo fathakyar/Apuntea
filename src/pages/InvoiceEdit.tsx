@@ -6,12 +6,23 @@ import { RecordFormData } from "@/hooks/useRecordForm";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getInvoices, updateInvoice } from "@/utils/invoiceUtils";
+import { getInvoices, updateInvoice, deleteInvoice } from "@/utils/invoiceUtils";
 import { Invoice } from "@/types";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Trash2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { formatNumberWithEuropeanStyle } from "@/utils/formatUtils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const InvoiceEdit = () => {
   const navigate = useNavigate();
@@ -32,7 +43,7 @@ const InvoiceEdit = () => {
       } else {
         toast({
           title: t.error || "Error",
-          description: t.invoiceNotFound || "Invoice not found",
+          description: t.invoiceNotFound || "Record not found",
           variant: "destructive",
         });
         navigate("/records");
@@ -77,20 +88,42 @@ const InvoiceEdit = () => {
       updateInvoice(updatedInvoice);
       
       toast({
-        title: t.invoiceUpdated || "Invoice updated",
-        description: t.invoiceSuccessfullyUpdated || "Invoice has been successfully updated",
+        title: t.invoiceUpdated || "Record updated",
+        description: t.invoiceSuccessfullyUpdated || "Record has been successfully updated",
       });
       
       navigate("/records");
     } catch (error) {
-      console.error("Error updating invoice:", error);
+      console.error("Error updating record:", error);
       toast({
-        title: t.errorUpdatingInvoice || "Error updating invoice",
-        description: t.couldNotUpdateInvoice || "Could not update the invoice",
+        title: t.errorUpdatingInvoice || "Error updating record",
+        description: t.couldNotUpdateInvoice || "Could not update the record",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!invoice || !id) return;
+    
+    try {
+      await deleteInvoice(id);
+      
+      toast({
+        title: "Record deleted",
+        description: "Record has been successfully deleted",
+      });
+      
+      navigate("/records");
+    } catch (error) {
+      console.error("Error deleting record:", error);
+      toast({
+        title: "Error deleting record",
+        description: "Could not delete the record",
+        variant: "destructive",
+      });
     }
   };
 
@@ -112,22 +145,53 @@ const InvoiceEdit = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in pb-16">
-      <div className="flex items-center">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate("/records")}
-          className="mr-4 uppercase"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          BACK
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold mb-1">EDIT RECORD</h1>
-          <p className="text-muted-foreground">
-            UPDATE RECORD INFO
-          </p>
+    <div className="grid grid-cols-1 gap-6 animate-slide-in pb-24">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/records")}
+            className="mr-4 uppercase"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            BACK
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold mb-1">EDIT RECORD</h1>
+            <p className="text-muted-foreground">
+              UPDATE RECORD INFO
+            </p>
+          </div>
         </div>
+        
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button 
+              variant="destructive" 
+              className="uppercase"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              DELETE
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete the record. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>CANCEL</AlertDialogCancel>
+              <AlertDialogAction 
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 uppercase"
+                onClick={handleDelete}
+              >
+                DELETE
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       {invoice && (
@@ -142,7 +206,25 @@ const InvoiceEdit = () => {
               </CardHeader>
               <CardContent className="flex flex-col h-full">
                 <div className="border rounded-lg overflow-hidden bg-background mb-4 flex-grow flex items-center justify-center">
-                  {invoice.documentLink.endsWith(".pdf") ? (
+                  {invoice.documentLink === '#' ? (
+                    <div className="text-center p-8">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-16 w-16 mx-auto mb-4 text-muted-foreground"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      <p className="font-medium">{invoice.documentName || "No document available"}</p>
+                    </div>
+                  ) : invoice.documentLink.endsWith(".pdf") ? (
                     <div className="text-center p-8">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -169,17 +251,19 @@ const InvoiceEdit = () => {
                   )}
                 </div>
                 
-                <Button asChild variant="outline" className="uppercase">
-                  <a 
-                    href={invoice.documentLink} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="w-full"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    OPEN ORIGINAL DOCUMENT
-                  </a>
-                </Button>
+                {invoice.documentLink !== '#' && (
+                  <Button asChild variant="outline" className="uppercase">
+                    <a 
+                      href={invoice.documentLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="w-full"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      OPEN ORIGINAL DOCUMENT
+                    </a>
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </div>
