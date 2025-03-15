@@ -79,7 +79,7 @@ const Records = () => {
         <div>
           <h1 className="text-3xl font-bold mb-1">ALL RECORDS</h1>
           <p className="text-muted-foreground">
-            TÜM FİNANSAL KAYITLARINIZI YÖNETİN
+            MANAGE ALL YOUR RECORDS
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
@@ -88,7 +88,7 @@ const Records = () => {
             className="btn-primary"
           >
             <Plus className="h-4 w-4 mr-2" />
-            NEW RECORD
+            + RECORD
           </Button>
           {invoices.length > 0 && (
             <Button 

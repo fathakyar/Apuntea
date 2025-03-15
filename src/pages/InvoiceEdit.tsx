@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import RecordForm from "@/components/records/RecordForm";
 import { RecordFormData } from "@/hooks/useRecordForm";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getInvoices, updateInvoice } from "@/utils/invoiceUtils";
@@ -46,15 +46,28 @@ const InvoiceEdit = () => {
     setIsLoading(true);
     
     try {
+      // Parse the numeric values from European format
+      const parsedAmount = typeof formData.amount === 'string' ? 
+        parseFloat(formData.amount.replace(/\./g, '').replace(',', '.')) : 
+        formData.amount;
+      
+      const parsedVat = typeof formData.vat === 'string' ? 
+        parseFloat(formData.vat.replace(/\./g, '').replace(',', '.')) : 
+        formData.vat;
+      
+      const parsedTotalAmount = typeof formData.totalAmount === 'string' ? 
+        parseFloat(formData.totalAmount.replace(/\./g, '').replace(',', '.')) : 
+        formData.totalAmount;
+      
       const updatedInvoice: Invoice = {
         ...invoice,
         documentName: formData.documentName,
         invoiceDate: formData.invoiceDate,
         invoiceNumber: formData.invoiceNumber,
         companyName: formData.companyName,
-        amount: typeof formData.amount === 'string' ? parseFloat(formData.amount.replace(',', '.')) : formData.amount,
-        vat: typeof formData.vat === 'string' ? parseFloat(formData.vat.replace(',', '.')) : formData.vat,
-        totalAmount: typeof formData.totalAmount === 'string' ? parseFloat(formData.totalAmount.replace(',', '.')) : formData.totalAmount,
+        amount: parsedAmount,
+        vat: parsedVat,
+        totalAmount: parsedTotalAmount,
         currencyCode: formData.currencyCode,
         categoryId: formData.categoryId,
         paymentTypeId: formData.paymentTypeId,
@@ -70,6 +83,7 @@ const InvoiceEdit = () => {
       
       navigate("/records");
     } catch (error) {
+      console.error("Error updating invoice:", error);
       toast({
         title: t.errorUpdatingInvoice || "Error updating invoice",
         description: t.couldNotUpdateInvoice || "Could not update the invoice",
@@ -84,10 +98,10 @@ const InvoiceEdit = () => {
     if (!invoice) return undefined;
     
     return {
-      documentName: invoice.documentName,
-      invoiceDate: invoice.invoiceDate,
-      invoiceNumber: invoice.invoiceNumber,
-      companyName: invoice.companyName,
+      documentName: invoice.documentName || "",
+      invoiceDate: invoice.invoiceDate || "",
+      invoiceNumber: invoice.invoiceNumber || "",
+      companyName: invoice.companyName || "",
       amount: formatNumberWithEuropeanStyle(invoice.amount, { formatNumber: true }),
       vat: formatNumberWithEuropeanStyle(invoice.vat, { formatNumber: true }),
       totalAmount: formatNumberWithEuropeanStyle(invoice.totalAmount, { formatNumber: true }),
@@ -182,6 +196,7 @@ const InvoiceEdit = () => {
                 <RecordForm
                   initialData={getInitialFormData()}
                   recordType={invoice.type || "expense"}
+                  onSubmit={handleFormSubmit}
                 />
               </CardContent>
             </Card>

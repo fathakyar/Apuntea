@@ -75,7 +75,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search invoices..."
+            placeholder="SEARCH DOCUMENT..."
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

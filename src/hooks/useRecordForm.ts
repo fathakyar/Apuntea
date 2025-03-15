@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { RecordType } from "@/types";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { v4 as uuidv4 } from "uuid";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
 import { parseEuropeanNumber } from "@/utils/formatUtils";
@@ -20,7 +20,7 @@ export interface RecordFormData {
   paymentTypeId: string;
 }
 
-export function useRecordForm(initialData?: RecordFormData, recordType: RecordType = "expense") {
+export function useRecordForm(initialData?: RecordFormData, recordType: RecordType = "expense", onSubmit?: (data: RecordFormData) => void) {
   // Get today's date in yyyy-mm-dd format
   const today = new Date().toISOString().split('T')[0];
   
@@ -83,6 +83,12 @@ export function useRecordForm(initialData?: RecordFormData, recordType: RecordTy
     
     // Validate the form
     if (!validateForm()) {
+      return;
+    }
+    
+    // If custom onSubmit was provided, use that instead
+    if (onSubmit) {
+      onSubmit(formData);
       return;
     }
     

@@ -29,7 +29,7 @@ const InvoiceTableHeader: React.FC<InvoiceTableHeaderProps> = ({
   const SortableHeader = ({ field, children }: { field: SortField, children: React.ReactNode }) => (
     <Button 
       variant="ghost" 
-      className="p-0 h-auto font-medium hover:bg-transparent hover:underline"
+      className="p-0 h-auto font-medium hover:bg-transparent hover:underline uppercase"
       onClick={() => handleSort(field)}
     >
       {children}
@@ -41,36 +41,36 @@ const InvoiceTableHeader: React.FC<InvoiceTableHeaderProps> = ({
     <TableHeader>
       <TableRow>
         <TableHead className="w-[100px]">
-          <SortableHeader field="type">Type</SortableHeader>
+          <SortableHeader field="type">TYPE</SortableHeader>
         </TableHead>
         <TableHead className="w-[120px]">
-          <SortableHeader field="invoiceDate">Date</SortableHeader>
+          <SortableHeader field="invoiceDate">DATE</SortableHeader>
         </TableHead>
         <TableHead>
-          <SortableHeader field="invoiceNumber">Invoice No</SortableHeader>
+          <SortableHeader field="invoiceNumber">DOC. NO.</SortableHeader>
         </TableHead>
         <TableHead>
-          <SortableHeader field="companyName">Company</SortableHeader>
+          <SortableHeader field="companyName">COMPANY</SortableHeader>
         </TableHead>
         <TableHead className="text-right">
-          <SortableHeader field="amount">Amount</SortableHeader>
+          <SortableHeader field="amount">AMOUNT</SortableHeader>
         </TableHead>
         <TableHead className="text-right">
           <SortableHeader field="vat">VAT</SortableHeader>
         </TableHead>
         <TableHead className="text-right">
-          <SortableHeader field="totalAmount">Total</SortableHeader>
+          <SortableHeader field="totalAmount">TOTAL</SortableHeader>
         </TableHead>
         <TableHead>
-          <SortableHeader field="currencyCode">Currency</SortableHeader>
+          <SortableHeader field="currencyCode">CURRENCY</SortableHeader>
         </TableHead>
         <TableHead>
-          <SortableHeader field="categoryId">Category</SortableHeader>
+          <SortableHeader field="categoryId">CATEGORY</SortableHeader>
         </TableHead>
         <TableHead>
-          <SortableHeader field="paymentTypeId">Payment Type</SortableHeader>
+          <SortableHeader field="paymentTypeId">PAYMENT TYPE</SortableHeader>
         </TableHead>
-        <TableHead className="text-right">Actions</TableHead>
+        <TableHead className="text-right">ACTIONS</TableHead>
       </TableRow>
     </TableHeader>
   );
