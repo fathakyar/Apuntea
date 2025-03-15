@@ -178,8 +178,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
                 value={newSubcategory}
                 onChange={handleNewSubcategoryChange}
                 placeholder={t.newSubcategory || "New subcategory"}
-                className="h-9 rounded-sm"
-                style={{ borderColor: categoryStyle.borderColor, borderWidth: categoryStyle.borderColor ? '2px' : '1px' }}
+                className="h-9 rounded-sm border-gray-300"
+                style={{ borderColor: "#d1d5db" }}
               />
               <Button 
                 size="sm" 

@@ -28,8 +28,8 @@ const AmountFields: React.FC<AmountFieldsProps> = ({ amount, vat, totalAmount, o
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
-    // Allow input of numbers and comma
-    if (!/^[0-9]*[,]?[0-9]*$/.test(value) && value !== '') {
+    // Allow input of numbers, comma, and dot
+    if (!/^[0-9]*[,.]?[0-9]*$/.test(value) && value !== '') {
       return; // Don't process invalid inputs
     }
     
