@@ -44,35 +44,41 @@ const RecordFormFields: React.FC<RecordFormFieldsProps> = ({ formData, setFormDa
     const { name, value } = e.target;
     
     if (name === "amount" || name === "vat") {
-      // Allow direct input of numbers without immediately formatting
-      // This will let users type values like "1500" without interference
+      // Process number inputs
       setFormData(prev => {
-        let numericInput = value.replace(/[^\d,]/g, ''); // Keep only digits and comma
+        // Sanitize numeric input but allow correct format for European numbers
+        let updatedValue = value;
         
         // Calculate the total
         const otherField = name === "amount" ? "vat" : "amount";
         const otherValue = prev[otherField] || "0";
         
         // Parse values safely
-        let currentValue = 0;
-        let otherFieldValue = 0;
+        let currentAmount = 0;
+        let otherAmount = 0;
         
         try {
           // Handle comma as decimal separator
-          currentValue = numericInput ? parseFloat(numericInput.replace(",", ".")) : 0;
-          otherFieldValue = parseEuropeanNumber(otherValue);
+          if (updatedValue) {
+            currentAmount = parseEuropeanNumber(updatedValue);
+          }
+          
+          if (otherValue) {
+            otherAmount = parseEuropeanNumber(otherValue);
+          }
         } catch (error) {
           console.error("Error parsing number:", error);
         }
         
-        const total = currentValue + otherFieldValue;
+        // Calculate total only if both inputs are valid numbers
+        const total = currentAmount + otherAmount;
         
         // Format total amount with European style
         const formattedTotal = formatNumberWithEuropeanStyle(total, { formatNumber: true });
         
         return {
           ...prev,
-          [name]: numericInput,
+          [name]: updatedValue,
           totalAmount: formattedTotal
         };
       });

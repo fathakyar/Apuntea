@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { v4 as uuidv4 } from "uuid";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
+import { parseEuropeanNumber } from "@/utils/formatUtils";
 
 export interface RecordFormData {
   documentName: string;
@@ -58,16 +59,16 @@ export function useRecordForm(initialData?: RecordFormData, recordType: RecordTy
     // Get existing invoices from local storage
     const existingInvoices = JSON.parse(localStorage.getItem("apuntea_invoices") || "[]");
     
-    // Create new invoice with the form data
+    // Create new invoice with the form data, properly parsing the numbers
     const newInvoice = {
       id: uuidv4(),
       documentName: formData.documentName,
       invoiceDate: formData.invoiceDate,
       invoiceNumber: formData.invoiceNumber,
       companyName: formData.companyName,
-      amount: parseFloat(formData.amount.replace(/\./g, "").replace(",", ".")) || 0,
-      vat: parseFloat(formData.vat.replace(/\./g, "").replace(",", ".")) || 0,
-      totalAmount: parseFloat(formData.totalAmount.replace(/\./g, "").replace(",", ".")) || 0,
+      amount: parseEuropeanNumber(formData.amount),
+      vat: parseEuropeanNumber(formData.vat),
+      totalAmount: parseEuropeanNumber(formData.totalAmount),
       type: recordType, // Save the record type
       categoryId: formData.categoryId, // Save the selected category ID
       currencyCode: formData.currencyCode, // Save the currency code
