@@ -41,17 +41,17 @@ const RecordFormActions: React.FC<RecordFormActionsProps> = ({ onCancel, recordT
         type="button" 
         variant="outline" 
         onClick={handleCancel}
-        className="w-full md:w-auto"
+        className="w-full md:w-auto uppercase"
       >
         <X className="w-4 h-4 mr-2" />
-        Cancel
+        CANCEL
       </Button>
       <Button 
         type="submit" 
-        className={`w-full md:w-auto ${getButtonStyle()}`}
+        className={`w-full md:w-auto uppercase ${getButtonStyle()}`}
       >
         <Save className="w-4 h-4 mr-2" />
-        Save Record
+        SAVE RECORD
       </Button>
     </div>
   );

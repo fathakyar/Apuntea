@@ -112,20 +112,20 @@ const InvoiceEdit = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in">
+    <div className="grid grid-cols-1 gap-6 animate-slide-in pb-16">
       <div className="flex items-center">
         <Button 
           variant="ghost" 
           onClick={() => navigate("/records")}
-          className="mr-4"
+          className="mr-4 uppercase"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          {t.back || "Back"}
+          BACK
         </Button>
         <div>
-          <h1 className="text-3xl font-bold mb-1">{t.editInvoice || "Edit Invoice"}</h1>
+          <h1 className="text-3xl font-bold mb-1">EDIT RECORD</h1>
           <p className="text-muted-foreground">
-            {t.updateInvoiceInfo || "Update invoice information"}
+            UPDATE RECORD INFO
           </p>
         </div>
       </div>
@@ -135,9 +135,9 @@ const InvoiceEdit = () => {
           <div>
             <Card className="glass-card h-full">
               <CardHeader>
-                <CardTitle>{t.documentPreview || "Document Preview"}</CardTitle>
+                <CardTitle>DOCUMENT PREVIEW</CardTitle>
                 <CardDescription>
-                  {t.viewOriginalDocument || "View the original document"}
+                  View the original document
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col h-full">
@@ -163,13 +163,13 @@ const InvoiceEdit = () => {
                   ) : (
                     <img 
                       src={invoice.documentLink} 
-                      alt="Invoice preview" 
+                      alt="Document preview" 
                       className="max-w-full max-h-full object-contain"
                     />
                   )}
                 </div>
                 
-                <Button asChild variant="outline">
+                <Button asChild variant="outline" className="uppercase">
                   <a 
                     href={invoice.documentLink} 
                     target="_blank" 
@@ -177,7 +177,7 @@ const InvoiceEdit = () => {
                     className="w-full"
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    {t.openOriginalDocument || "Open Original Document"}
+                    OPEN ORIGINAL DOCUMENT
                   </a>
                 </Button>
               </CardContent>
@@ -187,9 +187,9 @@ const InvoiceEdit = () => {
           <div>
             <Card className="glass-card">
               <CardHeader>
-                <CardTitle>{t.editInvoiceDetails || "Edit Invoice Details"}</CardTitle>
+                <CardTitle>EDIT RECORD DETAILS</CardTitle>
                 <CardDescription>
-                  {t.updateInvoiceInfoNeeded || "Update the invoice information as needed"}
+                  UPDATE RECORD INFO NEEDED
                 </CardDescription>
               </CardHeader>
               <CardContent>

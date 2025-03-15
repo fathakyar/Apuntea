@@ -88,7 +88,7 @@ const Records = () => {
             className="btn-primary"
           >
             <Plus className="h-4 w-4 mr-2" />
-            + RECORD
+            RECORD
           </Button>
           {invoices.length > 0 && (
             <Button 
