@@ -1,15 +1,17 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import InvoiceForm from "@/components/InvoiceForm";
+import RecordForm from "@/components/records/RecordForm";
+import { RecordFormData } from "@/hooks/useRecordForm";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getInvoices, updateInvoice } from "@/utils/invoiceUtils";
-import { Invoice, InvoiceFormData } from "@/types";
+import { Invoice } from "@/types";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
+import { formatNumberWithEuropeanStyle } from "@/utils/formatUtils";
 
 const InvoiceEdit = () => {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ const InvoiceEdit = () => {
     }
   }, [id, navigate, toast, t]);
 
-  const handleFormSubmit = (formData: InvoiceFormData) => {
+  const handleFormSubmit = (formData: RecordFormData) => {
     if (!invoice) return;
     
     setIsLoading(true);
@@ -50,9 +52,13 @@ const InvoiceEdit = () => {
         invoiceDate: formData.invoiceDate,
         invoiceNumber: formData.invoiceNumber,
         companyName: formData.companyName,
-        amount: typeof formData.amount === 'string' ? parseFloat(formData.amount) : formData.amount,
-        vat: typeof formData.vat === 'string' ? parseFloat(formData.vat) : formData.vat,
-        totalAmount: typeof formData.totalAmount === 'string' ? parseFloat(formData.totalAmount) : formData.totalAmount,
+        amount: typeof formData.amount === 'string' ? parseFloat(formData.amount.replace(',', '.')) : formData.amount,
+        vat: typeof formData.vat === 'string' ? parseFloat(formData.vat.replace(',', '.')) : formData.vat,
+        totalAmount: typeof formData.totalAmount === 'string' ? parseFloat(formData.totalAmount.replace(',', '.')) : formData.totalAmount,
+        currencyCode: formData.currencyCode,
+        categoryId: formData.categoryId,
+        paymentTypeId: formData.paymentTypeId,
+        updatedAt: new Date().toISOString(),
       };
       
       updateInvoice(updatedInvoice);
@@ -74,7 +80,7 @@ const InvoiceEdit = () => {
     }
   };
 
-  const getInitialFormData = (): InvoiceFormData | undefined => {
+  const getInitialFormData = (): RecordFormData | undefined => {
     if (!invoice) return undefined;
     
     return {
@@ -82,9 +88,12 @@ const InvoiceEdit = () => {
       invoiceDate: invoice.invoiceDate,
       invoiceNumber: invoice.invoiceNumber,
       companyName: invoice.companyName,
-      amount: invoice.amount,
-      vat: invoice.vat,
-      totalAmount: invoice.totalAmount,
+      amount: formatNumberWithEuropeanStyle(invoice.amount, { formatNumber: true }),
+      vat: formatNumberWithEuropeanStyle(invoice.vat, { formatNumber: true }),
+      totalAmount: formatNumberWithEuropeanStyle(invoice.totalAmount, { formatNumber: true }),
+      currencyCode: invoice.currencyCode || "EUR",
+      categoryId: invoice.categoryId || "",
+      paymentTypeId: invoice.paymentTypeId || "",
     };
   };
 
@@ -170,11 +179,9 @@ const InvoiceEdit = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <InvoiceForm
+                <RecordForm
                   initialData={getInitialFormData()}
-                  onSubmit={handleFormSubmit}
-                  isLoading={isLoading}
-                  submitLabel={t.updateInvoice || "Update Invoice"}
+                  recordType={invoice.type || "expense"}
                 />
               </CardContent>
             </Card>

@@ -170,6 +170,7 @@ export interface TranslationKeys {
   currency: string;
   income: string;
   expense: string;
+  financing: string;
   budgetSyncDescription: string;
   manageEventsAndReminders: string;
   securityUpdated: string;
@@ -178,4 +179,7 @@ export interface TranslationKeys {
   saveInvoice: string;
   newSubcategory: string;
   add: string;
+  task: string;
+  note: string;
+  required: string;
 }

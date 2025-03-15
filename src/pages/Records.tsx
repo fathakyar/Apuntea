@@ -77,9 +77,9 @@ const Records = () => {
     <div className="grid grid-cols-1 gap-6 animate-slide-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-1">{t.invoiceRecords || "Invoice Records"}</h1>
+          <h1 className="text-3xl font-bold mb-1">ALL RECORDS</h1>
           <p className="text-muted-foreground">
-            {t.manageAllInvoices || "Manage all your invoice records in one place"}
+            TÜM FİNANSAL KAYITLARINIZI YÖNETİN
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">

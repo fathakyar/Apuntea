@@ -10,9 +10,10 @@ interface CategoryFieldProps {
   value: string;
   onChange: (value: string) => void;
   recordType: RecordType;
+  required?: boolean;
 }
 
-const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, recordType }) => {
+const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, recordType, required }) => {
   const { categories } = useDefinitions();
   
   // Get the appropriate category based on record type
@@ -21,10 +22,13 @@ const CategoryField: React.FC<CategoryFieldProps> = ({ value, onChange, recordTy
 
   return (
     <div className="space-y-2 col-span-2">
-      <Label htmlFor="category">Category</Label>
+      <Label htmlFor="category" className="flex items-center">
+        Category {required && <span className="text-red-500 ml-1">*</span>}
+      </Label>
       <Select 
         value={value} 
         onValueChange={onChange}
+        required={required}
       >
         <SelectTrigger id="category">
           <SelectValue placeholder="Select a category" />

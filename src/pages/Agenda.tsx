@@ -25,7 +25,7 @@ const Agenda = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<AgendaEvent | null>(null);
-  const [activeFilter, setActiveFilter] = useState<"all" | RecordType | "task" | "note">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | RecordType | "note">("all");
   const { toast } = useToast();
   const { language } = useLanguage();
   const t = translations[language];
@@ -70,14 +70,10 @@ const Agenda = () => {
     
     if (activeFilter !== 'all') {
       filteredEvents = filteredEvents.filter(event => {
-        if (activeFilter === 'task') {
+        if (activeFilter === 'note') {
+          // Show all events created via the "ADD NEW EVENT" popup when NOTES filter is selected
           if (!('eventType' in event)) {
-            return event.type === 'GÖREV';
-          }
-          return false;
-        } else if (activeFilter === 'note') {
-          if (!('eventType' in event)) {
-            return event.type === 'NOT';
+            return true;
           }
           return false;
         } else {
@@ -260,7 +256,6 @@ const Agenda = () => {
           <Card className="rounded-sm h-full">
             <CardContent className="p-4">
               <div className="flex flex-col space-y-4">
-                {/* Removed duplicate date display */}
                 <div className="mt-4">
                   <Calendar 
                     mode="single"
@@ -310,7 +305,6 @@ const Agenda = () => {
                       <TabsTrigger value="income">INCOME</TabsTrigger>
                       <TabsTrigger value="expense">EXPENSE</TabsTrigger>
                       <TabsTrigger value="financing">FINANCING</TabsTrigger>
-                      <TabsTrigger value="task">TASKS</TabsTrigger>
                       <TabsTrigger value="note">NOTES</TabsTrigger>
                     </TabsList>
                   </Tabs>
