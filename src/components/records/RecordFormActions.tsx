@@ -43,8 +43,6 @@ const RecordFormActions: React.FC<RecordFormActionsProps> = ({
     }
   };
 
-  const isEditPage = location.pathname.includes('/edit/');
-
   return (
     <div className="flex justify-between gap-4 pt-4">
       <Button 
@@ -58,7 +56,7 @@ const RecordFormActions: React.FC<RecordFormActionsProps> = ({
       </Button>
       
       <div className="flex gap-2">
-        {isEditPage && onDelete && (
+        {isEditing && onDelete && (
           <Button 
             type="button" 
             variant="outline"

@@ -9,9 +9,17 @@ interface RecordFormProps {
   initialData?: RecordFormData;
   recordType: RecordType;
   onSubmit?: (data: RecordFormData) => void;
+  onDelete?: () => void;
+  isEditing?: boolean;
 }
 
-const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType, onSubmit }) => {
+const RecordForm: React.FC<RecordFormProps> = ({ 
+  initialData, 
+  recordType, 
+  onSubmit,
+  onDelete,
+  isEditing = false
+}) => {
   const { formData, setFormData, handleSubmit } = useRecordForm(initialData, recordType, onSubmit);
 
   return (
@@ -21,7 +29,11 @@ const RecordForm: React.FC<RecordFormProps> = ({ initialData, recordType, onSubm
         setFormData={setFormData} 
         recordType={recordType}
       />
-      <RecordFormActions recordType={recordType} />
+      <RecordFormActions 
+        recordType={recordType} 
+        onDelete={onDelete}
+        isEditing={isEditing}
+      />
     </form>
   );
 };
