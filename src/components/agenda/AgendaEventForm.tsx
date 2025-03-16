@@ -140,7 +140,8 @@ const AgendaEventForm: React.FC<AgendaEventFormProps> = ({
       <EventTypeToggle 
         value={formData.type} 
         onChange={handleTypeChange} 
-        getLabel={getLabel} 
+        getLabel={getLabel}
+        subcategories={subcategories}
       />
 
       <ImportanceToggle 

@@ -1,17 +1,25 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Save, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Save, X, Trash2 } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { RecordType } from "@/types";
 
 interface RecordFormActionsProps {
   onCancel?: () => void;
+  onDelete?: () => void;
   recordType?: RecordType;
+  isEditing?: boolean;
 }
 
-const RecordFormActions: React.FC<RecordFormActionsProps> = ({ onCancel, recordType = "expense" }) => {
+const RecordFormActions: React.FC<RecordFormActionsProps> = ({ 
+  onCancel, 
+  onDelete,
+  recordType = "expense",
+  isEditing = false
+}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleCancel = () => {
     if (onCancel) {
@@ -35,24 +43,41 @@ const RecordFormActions: React.FC<RecordFormActionsProps> = ({ onCancel, recordT
     }
   };
 
+  const isEditPage = location.pathname.includes('/edit/');
+
   return (
     <div className="flex justify-between gap-4 pt-4">
       <Button 
         type="button" 
         variant="outline" 
         onClick={handleCancel}
-        className="w-full md:w-auto uppercase"
+        className="uppercase"
       >
         <X className="w-4 h-4 mr-2" />
         CANCEL
       </Button>
-      <Button 
-        type="submit" 
-        className={`w-full md:w-auto uppercase ${getButtonStyle()}`}
-      >
-        <Save className="w-4 h-4 mr-2" />
-        SAVE RECORD
-      </Button>
+      
+      <div className="flex gap-2">
+        {isEditPage && onDelete && (
+          <Button 
+            type="button" 
+            variant="outline"
+            onClick={onDelete}
+            className="uppercase text-destructive hover:bg-destructive hover:text-destructive-foreground"
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            DELETE
+          </Button>
+        )}
+        
+        <Button 
+          type="submit" 
+          className={`uppercase ${getButtonStyle()}`}
+        >
+          <Save className="w-4 h-4 mr-2" />
+          SAVE RECORD
+        </Button>
+      </div>
     </div>
   );
 };

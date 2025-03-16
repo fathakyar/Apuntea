@@ -8,21 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getInvoices, updateInvoice, deleteInvoice } from "@/utils/invoiceUtils";
 import { Invoice } from "@/types";
-import { ArrowLeft, ExternalLink, Trash2 } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { formatNumberWithEuropeanStyle } from "@/utils/formatUtils";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 const InvoiceEdit = () => {
   const navigate = useNavigate();
@@ -163,35 +152,6 @@ const InvoiceEdit = () => {
             </p>
           </div>
         </div>
-        
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button 
-              variant="destructive" 
-              className="uppercase"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              DELETE
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will permanently delete the record. This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel className="uppercase">CANCEL</AlertDialogCancel>
-              <AlertDialogAction 
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 uppercase"
-                onClick={handleDelete}
-              >
-                DELETE
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
 
       {invoice && (
@@ -247,7 +207,7 @@ const InvoiceEdit = () => {
                           target="_blank" 
                           rel="noopener noreferrer"
                         >
-                          VIEW PDF
+                          OPEN PDF
                         </a>
                       </Button>
                     </div>
@@ -255,7 +215,7 @@ const InvoiceEdit = () => {
                     <img 
                       src={invoice.documentLink} 
                       alt="Document preview" 
-                      className="max-w-full max-h-full object-contain"
+                      className="max-w-full max-h-[300px] object-contain"
                     />
                   )}
                 </div>
@@ -290,6 +250,8 @@ const InvoiceEdit = () => {
                   initialData={getInitialFormData()}
                   recordType={invoice.type || "expense"}
                   onSubmit={handleFormSubmit}
+                  onDelete={handleDelete}
+                  isEditing={true}
                 />
               </CardContent>
             </Card>

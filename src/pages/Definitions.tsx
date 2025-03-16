@@ -70,8 +70,8 @@ const Definitions = () => {
 
   // Handle budget amount input change
   const handleBudgetAmountChange = (id: string, value: string) => {
-    // Only allow numbers and decimal point
-    if (value === '' || /^[0-9]*[,]?[0-9]*$/.test(value)) {
+    // Allow numbers with either dots or commas
+    if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
       setBudgetAmounts(prev => ({
         ...prev,
         [id]: value
@@ -82,7 +82,9 @@ const Definitions = () => {
   // Save budget amount for a subcategory
   const saveBudgetAmount = (id: string) => {
     if (budgetAmounts[id] !== undefined) {
-      const amount = budgetAmounts[id] === '' ? 0 : parseFloat(budgetAmounts[id].replace(',', '.'));
+      // Handle both comma and dot as decimal separators
+      const normalizedValue = budgetAmounts[id].replace(',', '.');
+      const amount = normalizedValue === '' ? 0 : parseFloat(normalizedValue);
       updateBudgetAmount(id, amount);
     }
   };
@@ -93,7 +95,7 @@ const Definitions = () => {
       case "income": return "INCOME";
       case "expense": return "EXPENSE";
       case "financing": return "FINANCING";
-      case "noteTask": return "NOTE / TASK";
+      case "noteTask": return "EVENT";  // Changed from "NOTE / TASK" to "EVENT"
       case "paymentType": return "PAYMENT TYPE";
       case "budget": return "BUDGET";
       case "currency": return "CURRENCY";
@@ -227,6 +229,8 @@ const Definitions = () => {
                 description={
                   category.id === "budget" 
                     ? "AUTOMATICALLY SYNCHRONIZED WITH INCOME AND EXPENSE CATEGORIES"
+                    : category.id === "noteTask" 
+                    ? "EVENT TYPES FOR AGENDA" // Updated description for EVENT tab
                     : undefined
                 }
                 categoryStyle={getCategoryStyle(category.id)}

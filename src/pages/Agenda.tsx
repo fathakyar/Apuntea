@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DialogEventForm from "@/components/agenda/DialogEventForm";
 import { formatCurrency } from "@/utils/invoiceUtils";
+import { useDefinitions } from "@/contexts/DefinitionsContext";
 
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
@@ -29,12 +30,9 @@ const Agenda = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
+  const { categories } = useDefinitions();
+  const eventCategory = categories.find(cat => cat.id === "noteTask");
   
-  const notTaskCategory = { id: "noteTask", name: "Notes & Tasks", subcategories: [
-    { id: "note", name: "NOTE" },
-    { id: "task", name: "TASK" }
-  ]};
-
   useEffect(() => {
     const storedEvents = localStorage.getItem("apuntea_agenda_events");
     if (storedEvents) {
@@ -227,6 +225,23 @@ const Agenda = () => {
         }
         return 0;
       });
+    } else {
+      // Sort agenda events by importance level (!!!->!!->!)
+      groupedEvents[key].sort((a, b) => {
+        if (!('eventType' in a) && !('eventType' in b)) {
+          const importanceOrder: {[key: string]: number} = {
+            '!!!': 1,
+            '!!': 2,
+            '!': 3
+          };
+          
+          const aImportance = (a as AgendaEvent).importance || '!';
+          const bImportance = (b as AgendaEvent).importance || '!';
+          
+          return importanceOrder[aImportance] - importanceOrder[bImportance];
+        }
+        return 0;
+      });
     }
   });
   
@@ -307,6 +322,7 @@ const Agenda = () => {
                     selected={selectedDate}
                     onSelect={(date) => date && handleDateSelect(date)}
                     className="rounded-md pointer-events-auto"
+                    weekStartsOn={1} // Monday as start of week
                     modifiers={{
                       hasEvent: (date) => hasEventsOnDate(date),
                       today: (date) => isToday(date)
@@ -443,7 +459,7 @@ const Agenda = () => {
         setIsOpen={setIsFormOpen}
         selectedDate={selectedDate}
         editingEvent={editingEvent}
-        subcategories={notTaskCategory.subcategories}
+        subcategories={eventCategory?.subcategories || []}
         onSubmit={handleAddOrEditEvent}
         onDelete={handleDeleteEvent}
       />
