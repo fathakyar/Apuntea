@@ -24,7 +24,7 @@ export const formatNumberWithEuropeanStyle = (value: number | string, options?: 
   }
   
   try {
-    const num = typeof value === "string" ? parseFloat(value.replace(",", ".")) : value;
+    const num = typeof value === "string" ? parseFloat(value.replace(/\./g, "").replace(",", ".")) : value;
     // Format with comma for decimals and dot for thousands
     return num.toLocaleString("de-DE", {
       minimumFractionDigits: 2,

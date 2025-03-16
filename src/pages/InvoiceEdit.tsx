@@ -157,15 +157,15 @@ const InvoiceEdit = () => {
       {invoice && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <Card className="glass-card h-full">
+            <Card className="glass-card">
               <CardHeader>
                 <CardTitle>DOCUMENT PREVIEW</CardTitle>
                 <CardDescription>
                   View the original document
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col h-full">
-                <div className="border rounded-lg overflow-hidden bg-background mb-4 flex-grow flex items-center justify-center">
+              <CardContent className="flex flex-col">
+                <div className="border rounded-lg overflow-hidden bg-background mb-4 flex items-center justify-center h-[250px]">
                   {invoice.documentLink === '#' || !invoice.documentLink ? (
                     <div className="text-center p-8">
                       <svg
@@ -215,7 +215,7 @@ const InvoiceEdit = () => {
                     <img 
                       src={invoice.documentLink} 
                       alt="Document preview" 
-                      className="max-w-full max-h-[300px] object-contain"
+                      className="max-w-full max-h-[250px] object-contain"
                     />
                   )}
                 </div>

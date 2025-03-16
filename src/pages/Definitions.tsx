@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
 import CategoryCard from "@/components/definitions/CategoryCard";
@@ -11,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Subcategory } from "@/types";
+import { formatNumberWithEuropeanStyle, parseEuropeanNumber } from "@/utils/formatUtils";
 
 const Definitions = () => {
   const { 
@@ -28,19 +28,19 @@ const Definitions = () => {
   const t = translations[language];
   const [budgetAmounts, setBudgetAmounts] = useState<{[key: string]: string}>({});
 
-  // Initialize budget amounts from stored values
   useEffect(() => {
     const budgetCategory = categories.find(c => c.id === "budget");
     if (budgetCategory) {
       const initialBudgetAmounts: {[key: string]: string} = {};
       budgetCategory.subcategories.forEach(sub => {
-        initialBudgetAmounts[sub.id] = sub.budgetAmount?.toString() || '';
+        initialBudgetAmounts[sub.id] = sub.budgetAmount 
+          ? formatNumberWithEuropeanStyle(sub.budgetAmount, { formatNumber: true })
+          : '';
       });
       setBudgetAmounts(initialBudgetAmounts);
     }
   }, [categories]);
 
-  // Group budget subcategories by income and expense
   const getBudgetSubcategoryGroups = () => {
     const budgetCategory = categories.find(c => c.id === "budget");
     const incomeCategory = categories.find(c => c.id === "income");
@@ -68,9 +68,7 @@ const Definitions = () => {
   
   const budgetGroups = getBudgetSubcategoryGroups();
 
-  // Handle budget amount input change
   const handleBudgetAmountChange = (id: string, value: string) => {
-    // Allow numbers with either dots or commas
     if (value === '' || /^[0-9]*[.,]?[0-9]*$/.test(value)) {
       setBudgetAmounts(prev => ({
         ...prev,
@@ -79,17 +77,19 @@ const Definitions = () => {
     }
   };
 
-  // Save budget amount for a subcategory
   const saveBudgetAmount = (id: string) => {
     if (budgetAmounts[id] !== undefined) {
-      // Handle both comma and dot as decimal separators
       const normalizedValue = budgetAmounts[id].replace(',', '.');
       const amount = normalizedValue === '' ? 0 : parseFloat(normalizedValue);
       updateBudgetAmount(id, amount);
+      
+      setBudgetAmounts(prev => ({
+        ...prev,
+        [id]: formatNumberWithEuropeanStyle(amount, { formatNumber: true })
+      }));
     }
   };
 
-  // Map category IDs to display names in uppercase English
   const getCategoryDisplayName = (categoryId: string) => {
     switch(categoryId) {
       case "income": return "INCOME";
@@ -103,7 +103,6 @@ const Definitions = () => {
     }
   };
 
-  // Get category style based on category ID
   const getCategoryStyle = (categoryId: string) => {
     switch(categoryId) {
       case "income": return {
@@ -125,7 +124,6 @@ const Definitions = () => {
     }
   };
 
-  // Render budget subcategories with input fields
   const renderBudgetSubcategories = (subcategories: Subcategory[], type: string) => {
     const style = getCategoryStyle(type.toLowerCase());
     
@@ -141,8 +139,9 @@ const Definitions = () => {
                   <Input
                     value={budgetAmounts[subcategory.id] || ''}
                     onChange={(e) => handleBudgetAmountChange(subcategory.id, e.target.value)}
-                    className="w-20 text-right h-8 text-sm rounded-sm"
+                    className="w-20 text-right h-8 text-sm rounded-sm number-input"
                     placeholder="0,00"
+                    inputMode="decimal"
                   />
                   <Button 
                     size="sm" 

@@ -177,7 +177,7 @@ const InvoiceFilters: React.FC<InvoiceFiltersProps> = ({
 
         {hasFilters && (
           <Button variant="ghost" onClick={clearFilters} className="h-10">
-            Clear
+            CLEAR
           </Button>
         )}
       </div>
