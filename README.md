@@ -2,4 +2,6 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/e916d831-ef64-4c80-8942-9622e64bab17
+**URL**: https://apuntea.lovable.app
+EMAIL: ADMIN@APUNTEA.COM
+PASSWORD: 1admin?
