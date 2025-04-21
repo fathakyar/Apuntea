@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Welcome to my project, Apuntea
 
 ## Project info
 
