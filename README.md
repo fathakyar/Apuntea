@@ -2,6 +2,6 @@
 
 ## Project info
 
-**URL**: https://apuntea.lovable.app
-EMAIL: ADMIN@APUNTEA.COM
+**URL**: https://apuntea.lovable.app /n
+EMAIL: ADMIN@APUNTEA.COM /n
 PASSWORD: 1admin?
