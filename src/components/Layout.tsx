@@ -11,7 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col min-h-screen w-full overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-background">
       <BackgroundDecorations />
       <Navbar />
       <MainContent>{children}</MainContent>

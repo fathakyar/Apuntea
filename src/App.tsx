@@ -6,6 +6,10 @@ import { DefinitionsProvider } from "./contexts/DefinitionsContext";
 import { Toaster } from "./components/ui/toaster";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
+// Layouts
+import Layout from "./components/Layout";
+import PublicLayout from "./components/PublicLayout";
+
 // Pages
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
@@ -57,7 +61,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
                 
-                {/* Public pages that should have their own layout */}
+                {/* Public pages that use PublicLayout */}
                 <Route path="about" element={<About />} />
                 <Route path="services" element={<Services />} />
                 <Route path="blog" element={<Blog />} />

@@ -79,29 +79,33 @@
   * {
     @apply border-border;
     text-transform: uppercase;
-  }
-
-  html {
-    @apply h-full;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+
+  html, body {
+    @apply h-full;
+    height: 100%;
+    overflow-x: hidden;
   }
 
   body {
-    @apply bg-background text-foreground min-h-screen flex flex-col;
+    @apply bg-background text-foreground;
     font-family: 'UnB Pro Bold', 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
 
   #root {
-    @apply flex flex-col min-h-screen w-full overflow-x-hidden;
+    @apply flex flex-col min-h-screen;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    width: 100%;
+    position: relative;
   }
 
   input, textarea, select {
