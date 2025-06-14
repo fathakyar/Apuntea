@@ -14,6 +14,7 @@ import AgendaToolbar from "@/components/agenda/AgendaToolbar";
 import AgendaEventsList from "@/components/agenda/AgendaEventsList";
 import DialogEventForm from "@/components/agenda/DialogEventForm";
 
+// Responsive ve simetrik layout
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -88,11 +89,11 @@ const Agenda = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 animate-slide-in">
-      {/* Sol: Takvim */}
-      <aside className="lg:w-[340px] w-full shrink-0 mb-4 lg:mb-0">
-        <Card className="rounded-sm">
-          <CardContent className="p-4">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 animate-slide-in w-full max-w-[1100px] mx-auto">
+      {/* Takvim (sol) */}
+      <aside className="w-full lg:w-[340px] flex-shrink-0 mb-2 lg:mb-0 flex items-stretch">
+        <Card className="rounded-xl shadow-glass flex-1 flex flex-col justify-between">
+          <CardContent className="p-4 flex-1 flex flex-col justify-center">
             <Calendar
               mode="single"
               selected={selectedDate}
@@ -103,20 +104,22 @@ const Agenda = () => {
         </Card>
       </aside>
 
-      {/* Sağ: Kayıtlar ve kontrol barı */}
-      <main className="flex-1 w-full">
-        <AgendaToolbar
-          selectedDate={selectedDate}
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-          handleAddNote={handleAddNote}
-          handleAddRecord={handleAddRecord}
-          onDateSelect={date => date && setSelectedDate(date)}
-          t={t}
-        />
-
-        <Card className="rounded-sm h-full">
-          <CardContent className="p-6">
+      {/* Sağ taraf */}
+      <main className="flex-1 w-full flex flex-col">
+        <Card className="rounded-xl shadow-glass h-full flex flex-col">
+          {/* Toolbar üstte, content altta */}
+          <div className="p-6 pb-2 border-b border-border bg-background rounded-t-xl">
+            <AgendaToolbar
+              selectedDate={selectedDate}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+              handleAddNote={handleAddNote}
+              handleAddRecord={handleAddRecord}
+              onDateSelect={date => date && setSelectedDate(date)}
+              t={t}
+            />
+          </div>
+          <CardContent className="flex-1 p-6 flex flex-col justify-stretch">
             <AgendaEventsList
               events={events}
               invoices={invoices}
