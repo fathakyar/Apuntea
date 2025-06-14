@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @font-face {
@@ -17,60 +18,39 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 263 45% 15%;
-
     --card: 0 0% 100%;
     --card-foreground: 263 45% 15%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 263 45% 15%;
-
     --primary: 273 50% 48%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 44 92% 53%;
     --secondary-foreground: 0 0% 12%;
-
     --muted: 263 45% 94%;
     --muted-foreground: 263 45% 40%;
-
     --accent: 273 50% 94%;
     --accent-foreground: 273 50% 30%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 263 45% 90%;
     --input: 263 45% 90%;
     --ring: 273 50% 48%;
-
     --radius: 0.125rem;
   }
 
   .dark {
     --background: 263 45% 6%;
     --foreground: 263 45% 98%;
-
     --card: 263 45% 10%;
     --card-foreground: 263 45% 98%;
-
-    --popover: 263 45% 10%;
-    --popover-foreground: 263 45% 98%;
-
     --primary: 0 0% 100%;
     --primary-foreground: 263 45% 6%;
-
     --secondary: 44 92% 53%;
     --secondary-foreground: 0 0% 12%;
-
     --muted: 263 45% 20%;
     --muted-foreground: 263 45% 80%;
-
     --accent: 0 0% 20%;
     --accent-foreground: 0 0% 90%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 263 45% 20%;
     --input: 263 45% 20%;
     --ring: 0 0% 100%;
@@ -83,20 +63,17 @@
     margin: 0;
     padding: 0;
   }
-
   html, body {
     @apply h-full min-h-screen w-full overflow-x-hidden;
     height: 100%;
     min-height: 100vh;
     width: 100%;
   }
-
   body {
     @apply bg-background text-foreground min-h-screen w-full flex flex-col relative;
     font-family: 'UnB Pro Bold', 'Inter', sans-serif;
     position: relative;
   }
-
   #root {
     @apply flex flex-col min-h-screen w-full relative;
     display: flex;
@@ -105,94 +82,64 @@
     width: 100%;
     position: relative;
   }
-
   input, textarea, select {
     text-transform: uppercase;
   }
-  
-  /* Ensure numeric inputs allow numbers only */
   input.number-input {
     -moz-appearance: textfield;
   }
-  
   input.number-input::-webkit-outer-spin-button,
   input.number-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-
   .glass {
     @apply bg-white/90 dark:bg-black/60 backdrop-blur-md border border-gray-200 dark:border-gray-800 shadow-glass;
   }
-
   .card {
     @apply rounded-sm p-6 transition-all duration-300 ease-in-out;
   }
-
   .glass-card {
     @apply card bg-white/80 backdrop-blur-md border border-gray-200 shadow-lg;
   }
-  
   .form-group {
     @apply space-y-1.5 mb-4;
   }
-  
   .form-label {
     @apply text-sm font-medium text-foreground;
   }
-  
   .form-input {
     @apply w-full rounded-sm border border-input bg-background px-3 py-2 text-sm ring-offset-background 
     placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 
     focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-foreground;
   }
-  
   .btn-primary {
     @apply bg-apuntea-purple hover:bg-apuntea-gold hover:text-black text-white transition-all;
   }
-  
   .btn-secondary {
     @apply bg-apuntea-gold hover:opacity-90 text-black transition-all;
   }
-
   .animate-ready {
     @apply opacity-0;
   }
-  
   .animate-ready.animate-visible {
     @apply opacity-100 transition-opacity duration-500 ease-in-out;
   }
-
   .table-header {
     @apply bg-gray-100 dark:bg-black/60 text-foreground border-b-2 border-apuntea-purple/50;
   }
-
   .table-row {
     @apply border-b border-apuntea-purple/20 hover:bg-apuntea-purple/5 dark:hover:bg-apuntea-purple/10 transition-colors;
   }
-
   .tab-active {
     @apply bg-apuntea-purple text-white font-bold;
   }
-
   .tab-inactive {
     @apply bg-gray-100 dark:bg-black/60 text-foreground/70 hover:bg-apuntea-purple/10;
   }
-  
-  .wave-top::before {
-    content: '';
-    @apply absolute top-0 left-0 w-full h-8 bg-gradient-gold transform -skew-y-2;
-  }
-  
-  .wave-bottom::after {
-    content: '';
-    @apply absolute bottom-0 right-0 w-full h-8 bg-gradient-purple transform skew-y-2;
-  }
-
   .animate-slide-in {
     animation: slideIn 0.2s ease-out forwards;
   }
-
   @keyframes slideIn {
     from {
       opacity: 0;
@@ -204,3 +151,5 @@
     }
   }
 }
+
+/* Kullanılmayan background ve dekorasyon, gereksiz özel animasyonlar vs. kaldırıldı, kod sadeleştirildi */
