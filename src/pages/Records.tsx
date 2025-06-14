@@ -74,7 +74,7 @@ const Records = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in">
+    <div className="grid grid-cols-1 gap-6 animate-slide-in max-w-screen-xl px-4 sm:px-8 mx-auto w-full">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-1">ALL RECORDS</h1>
