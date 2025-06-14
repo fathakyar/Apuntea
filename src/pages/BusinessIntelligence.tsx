@@ -17,17 +17,14 @@ const BusinessIntelligence = () => {
           {t.analyticsAndInsights || "Analytics and insights for your business"}
         </p>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>{t.revenueOverview || "Revenue Overview"}</CardTitle>
-            <CardDescription>
-              {t.monthlyRevenueTrends || "Monthly revenue trends"}
-            </CardDescription>
+            <CardDescription>{t.monthlyRevenueTrends || "Monthly revenue trends"}</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
-            <LineChart 
+            <LineChart
               data={[
                 { month: "Jan", revenue: 2400 },
                 { month: "Feb", revenue: 1398 },
@@ -42,13 +39,10 @@ const BusinessIntelligence = () => {
             />
           </CardContent>
         </Card>
-        
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>{t.expenseBreakdown || "Expense Breakdown"}</CardTitle>
-            <CardDescription>
-              {t.expensesByCategory || "Expenses by category"}
-            </CardDescription>
+            <CardDescription>{t.expensesByCategory || "Expenses by category"}</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
             <PieChart
@@ -65,13 +59,10 @@ const BusinessIntelligence = () => {
             />
           </CardContent>
         </Card>
-        
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>{t.salesByProduct || "Sales by Product"}</CardTitle>
-            <CardDescription>
-              {t.quarterlyProductSales || "Quarterly product sales"}
-            </CardDescription>
+            <CardDescription>{t.quarterlyProductSales || "Quarterly product sales"}</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
             <BarChart
@@ -87,13 +78,10 @@ const BusinessIntelligence = () => {
             />
           </CardContent>
         </Card>
-        
         <Card className="glass-card">
           <CardHeader>
             <CardTitle>{t.customerGrowth || "Customer Growth"}</CardTitle>
-            <CardDescription>
-              {t.monthlyNewCustomers || "Monthly new customer acquisition"}
-            </CardDescription>
+            <CardDescription>{t.monthlyNewCustomers || "Monthly new customer acquisition"}</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
             <AreaChart

@@ -17,54 +17,46 @@ const Records = () => {
   const { language } = useLanguage();
   const t = translations[language];
 
+  const loadInvoices = () => setInvoices(getInvoices());
+
   useEffect(() => {
     loadInvoices();
   }, []);
 
-  const loadInvoices = () => {
-    const fetchedInvoices = getInvoices();
-    setInvoices(fetchedInvoices);
-  };
-
-  const handleEdit = (invoice: Invoice) => {
-    navigate(`/edit/${invoice.id}`);
-  };
+  const handleEdit = (invoice: Invoice) => navigate(`/edit/${invoice.id}`);
 
   const handleDelete = (id: string) => {
-    try {
-      deleteInvoice(id);
-      loadInvoices();
-      
-      toast({
-        title: t.invoiceDeleted || "Record deleted",
-        description: t.invoiceSuccessfullyDeleted || "Record has been successfully deleted",
-      });
-    } catch (error) {
-      toast({
-        title: t.error || "Error",
-        description: t.couldNotDeleteInvoice || "Could not delete the record",
-        variant: "destructive",
-      });
-    }
+    deleteInvoice(id)
+      .then(loadInvoices)
+      .then(() =>
+        toast({
+          title: t.invoiceDeleted || "Record deleted",
+          description: t.invoiceSuccessfullyDeleted || "Record has been successfully deleted",
+        })
+      )
+      .catch(() =>
+        toast({
+          title: t.error || "Error",
+          description: t.couldNotDeleteInvoice || "Could not delete the record",
+          variant: "destructive",
+        })
+      );
   };
 
   const handleExport = () => {
     try {
       const dataStr = JSON.stringify(invoices, null, 2);
       const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-      
       const exportFileDefaultName = `apuntea-records-${new Date().toISOString().slice(0, 10)}.json`;
-      
       const linkElement = document.createElement("a");
       linkElement.setAttribute("href", dataUri);
       linkElement.setAttribute("download", exportFileDefaultName);
       linkElement.click();
-      
       toast({
         title: t.exportSuccessful || "Export successful",
         description: t.invoiceDataExported || "Record data has been exported successfully",
       });
-    } catch (error) {
+    } catch {
       toast({
         title: t.exportFailed || "Export failed",
         description: t.couldNotExportData || "Could not export record data",
@@ -83,30 +75,19 @@ const Records = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
-          <Button
-            onClick={() => navigate("/new-record")}
-            className="btn-primary"
-          >
+          <Button onClick={() => navigate("/new-record")} className="btn-primary">
             <Plus className="h-4 w-4 mr-2" />
             RECORD
           </Button>
           {invoices.length > 0 && (
-            <Button 
-              variant="outline" 
-              onClick={handleExport}
-            >
+            <Button variant="outline" onClick={handleExport}>
               <Download className="h-4 w-4 mr-2" />
               EXPORT DATA
             </Button>
           )}
         </div>
       </div>
-
-      <InvoiceTable
-        invoices={invoices}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <InvoiceTable invoices={invoices} onEdit={handleEdit} onDelete={handleDelete} />
     </div>
   );
 };

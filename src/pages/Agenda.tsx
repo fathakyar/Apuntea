@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 import { translations } from "@/utils/translations";
-import { getInvoices, formatCurrency } from "@/utils/invoiceUtils";
+import { getInvoices } from "@/utils/invoiceUtils";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useDefinitions } from "@/contexts/DefinitionsContext";
@@ -13,7 +14,6 @@ import AgendaToolbar from "@/components/agenda/AgendaToolbar";
 import AgendaEventsList from "@/components/agenda/AgendaEventsList";
 import DialogEventForm from "@/components/agenda/DialogEventForm";
 
-// Responsive ve simetrik layout
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -26,11 +26,13 @@ const Agenda = () => {
   const t = translations[language];
   const navigate = useNavigate();
   const { categories } = useDefinitions();
+
+  // Subcategory for event category
   const eventCategory = categories.find(cat => cat.id === "noteTask");
 
   useEffect(() => {
     const storedEvents = localStorage.getItem("apuntea_agenda_events");
-    if (storedEvents) setEvents(JSON.parse(storedEvents));
+    setEvents(storedEvents ? JSON.parse(storedEvents) : []);
     setInvoices(getInvoices());
   }, []);
 
@@ -40,24 +42,18 @@ const Agenda = () => {
     }
   }, [events]);
 
-  const handleDateSelect = (date: Date | undefined) => {
-    if (date) setSelectedDate(date);
-  };
-
-  const handleAddNote = () => {
-    setEditingEvent(null);
-    setIsFormOpen(true);
-  };
-
+  const handleDateSelect = (date?: Date) => date && setSelectedDate(date);
+  const handleAddNote = () => { setEditingEvent(null); setIsFormOpen(true); };
   const handleAddRecord = () => navigate("/new-record");
 
+  // Add/Edit event callback
   const handleAddOrEditEvent = (newEvent: AgendaEvent | Omit<AgendaEvent, "id">) => {
     if ("id" in newEvent) {
-      setEvents(prev => prev.map(event => event.id === newEvent.id ? {
-        ...newEvent,
-        title: (newEvent.title || "").toUpperCase(),
-        description: (newEvent.description || "").toUpperCase(),
-      } : event));
+      setEvents(prev => prev.map(event =>
+        event.id === newEvent.id
+          ? { ...newEvent, title: (newEvent.title || "").toUpperCase(), description: (newEvent.description || "").toUpperCase() }
+          : event
+      ));
       toast({ title: t.eventUpdated, description: `"${newEvent.title}" ${t.successfullyUpdated}.` });
     } else {
       const eventWithId = {
@@ -73,11 +69,11 @@ const Agenda = () => {
   };
 
   const handleDeleteEvent = (eventId: string) => {
-    const eventToDelete = events.find(e => e.id === eventId);
+    const deleted = events.find(e => e.id === eventId);
     setEvents(prev => prev.filter(event => event.id !== eventId));
     toast({
       title: t.eventDeleted,
-      description: eventToDelete ? `"${eventToDelete.title}" ${t.successfullyDeleted}.` : t.eventSuccessfullyDeleted,
+      description: deleted ? `"${deleted.title}" ${t.successfullyDeleted}.` : t.eventSuccessfullyDeleted,
     });
     setIsFormOpen(false);
   };
@@ -89,7 +85,6 @@ const Agenda = () => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 animate-slide-in w-full max-w-screen-xl px-4 sm:px-8 mx-auto mt-8">
-      {/* Takvim (sol) */}
       <aside className="w-full lg:w-[340px] flex-shrink-0 mb-2 lg:mb-0 flex items-stretch">
         <Card className="rounded-xl shadow-glass flex-1 flex flex-col justify-between border border-apuntea-purple/30">
           <CardContent className="p-4 flex-1 flex flex-col justify-center">
@@ -103,10 +98,8 @@ const Agenda = () => {
         </Card>
       </aside>
 
-      {/* Sağ taraf */}
       <main className="flex-1 w-full flex flex-col">
         <Card className="rounded-xl shadow-glass h-full flex flex-col border border-apuntea-purple/30">
-          {/* Toolbar üstte, content altta */}
           <div className="p-6 pb-2 border-b border-border bg-background rounded-t-xl">
             <AgendaToolbar
               selectedDate={selectedDate}
@@ -114,7 +107,7 @@ const Agenda = () => {
               setActiveFilter={setActiveFilter}
               handleAddNote={handleAddNote}
               handleAddRecord={handleAddRecord}
-              onDateSelect={date => date && setSelectedDate(date)}
+              onDateSelect={handleDateSelect}
               t={t}
             />
           </div>
