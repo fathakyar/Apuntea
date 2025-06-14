@@ -31,7 +31,7 @@ const AgendaToolbar = ({
       <h2 className="text-xl font-semibold">{format(selectedDate, 'dd MMMM yyyy, EEEE')}</h2>
     </div>
     <div className="flex flex-col items-end space-y-2">
-      <Tabs value={activeFilter} onValueChange={setActiveFilter as any}>
+      <Tabs value={activeFilter} onValueChange={(v) => setActiveFilter(v as "all" | "note" | import("@/types").RecordType)}>
         <TabsList>
           <TabsTrigger value="all">ALL</TabsTrigger>
           <TabsTrigger value="income">INCOME</TabsTrigger>
