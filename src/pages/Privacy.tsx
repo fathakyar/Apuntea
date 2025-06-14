@@ -15,42 +15,32 @@ const Privacy: React.FC = () => {
         
         <div className="prose max-w-none">
           <p className="mb-4">
-            {t.privacyInfo}
+            {t.privacyIntro}
           </p>
           
           <h2 className="text-xl font-semibold mt-6 mb-3">{t.dataCollection}</h2>
           <p className="mb-4">
-            {t.dataCollectionInfo}
+            {t.dataCollectionText}
           </p>
           
-          <h2 className="text-xl font-semibold mt-6 mb-3">{t.dataUsage}</h2>
+          <h2 className="text-xl font-semibold mt-6 mb-3">{t.dataUse}</h2>
           <p className="mb-4">
-            {t.dataUsageInfo}
-          </p>
-          
-          <h2 className="text-xl font-semibold mt-6 mb-3">{t.dataSharing}</h2>
-          <p className="mb-4">
-            {t.dataSharingInfo}
+            {t.dataUseText}
           </p>
           
           <h2 className="text-xl font-semibold mt-6 mb-3">{t.dataSecurity}</h2>
           <p className="mb-4">
-            {t.dataSecurityInfo}
+            {t.dataSecurityText}
           </p>
           
-          <h2 className="text-xl font-semibold mt-6 mb-3">{t.cookies}</h2>
+          <h2 className="text-xl font-semibold mt-6 mb-3">{t.cookiePolicy}</h2>
           <p className="mb-4">
-            {t.cookiesInfo}
+            {t.cookieIntro}
           </p>
           
-          <h2 className="text-xl font-semibold mt-6 mb-3">{t.changes}</h2>
+          <h2 className="text-xl font-semibold mt-6 mb-3">{t.contactUs}</h2>
           <p className="mb-4">
-            {t.changesInfo}
-          </p>
-          
-          <h2 className="text-xl font-semibold mt-6 mb-3">{t.contact}</h2>
-          <p className="mb-4">
-            {t.contactInfo}
+            {t.contactInfoText}
           </p>
         </div>
       </div>
