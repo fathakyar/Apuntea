@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 import { translations } from "@/utils/translations";
 import { getInvoices, formatCurrency } from "@/utils/invoiceUtils";
@@ -12,7 +13,6 @@ import { v4 as uuidv4 } from "uuid";
 import AgendaToolbar from "@/components/agenda/AgendaToolbar";
 import AgendaEventsList from "@/components/agenda/AgendaEventsList";
 import DialogEventForm from "@/components/agenda/DialogEventForm";
-import { getEventsForDate, getEventColorForDate } from "@/components/agenda/agendaUtils";
 
 const Agenda = () => {
   const [events, setEvents] = useState<AgendaEvent[]>([]);
@@ -40,7 +40,9 @@ const Agenda = () => {
     }
   }, [events]);
 
-  const handleDateSelect = (date: Date) => setSelectedDate(date);
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) setSelectedDate(date);
+  };
 
   const handleAddNote = () => {
     setEditingEvent(null);
@@ -86,31 +88,48 @@ const Agenda = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in">
-      <AgendaToolbar
-        selectedDate={selectedDate}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        handleAddNote={handleAddNote}
-        handleAddRecord={handleAddRecord}
-        onDateSelect={handleDateSelect}
-        t={t}
-      />
+    <div className="flex flex-col lg:flex-row gap-8 animate-slide-in">
+      {/* Sol: Takvim */}
+      <aside className="lg:w-[340px] w-full shrink-0 mb-4 lg:mb-0">
+        <Card className="rounded-sm">
+          <CardContent className="p-4">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={handleDateSelect}
+              className="pointer-events-auto"
+            />
+          </CardContent>
+        </Card>
+      </aside>
 
-      <Card className="rounded-sm h-full">
-        <CardContent className="p-6">
-          <AgendaEventsList
-            events={events}
-            invoices={invoices}
-            selectedDate={selectedDate}
-            activeFilter={activeFilter}
-            onEventClick={handleEventClick}
-            onAddNote={handleAddNote}
-            onAddRecord={handleAddRecord}
-            t={t}
-          />
-        </CardContent>
-      </Card>
+      {/* Sağ: Kayıtlar ve kontrol barı */}
+      <main className="flex-1 w-full">
+        <AgendaToolbar
+          selectedDate={selectedDate}
+          activeFilter={activeFilter}
+          setActiveFilter={setActiveFilter}
+          handleAddNote={handleAddNote}
+          handleAddRecord={handleAddRecord}
+          onDateSelect={date => date && setSelectedDate(date)}
+          t={t}
+        />
+
+        <Card className="rounded-sm h-full">
+          <CardContent className="p-6">
+            <AgendaEventsList
+              events={events}
+              invoices={invoices}
+              selectedDate={selectedDate}
+              activeFilter={activeFilter}
+              onEventClick={handleEventClick}
+              onAddNote={handleAddNote}
+              onAddRecord={handleAddRecord}
+              t={t}
+            />
+          </CardContent>
+        </Card>
+      </main>
 
       <DialogEventForm
         isOpen={isFormOpen}
@@ -124,4 +143,5 @@ const Agenda = () => {
     </div>
   );
 };
+
 export default Agenda;
