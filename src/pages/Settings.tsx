@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -166,7 +167,8 @@ const Settings = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6 animate-slide-in">
+-    <div className="grid grid-cols-1 gap-6 animate-slide-in">
++    <div className="grid grid-cols-1 gap-6 animate-slide-in max-w-screen-xl mx-auto px-4 sm:px-8 w-full">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-1 flex items-center">
@@ -178,7 +180,6 @@ const Settings = () => {
           </p>
         </div>
       </div>
-
       <Card className="rounded-sm">
         <CardContent className="p-6">
           <Tabs 
@@ -511,3 +512,4 @@ const Settings = () => {
 };
 
 export default Settings;
+
