@@ -88,7 +88,7 @@ const Agenda = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 animate-slide-in w-full max-w-screen-xl px-4 sm:px-8 mx-auto">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 animate-slide-in w-full max-w-screen-xl px-4 sm:px-8 mx-auto mt-8">
       {/* Takvim (sol) */}
       <aside className="w-full lg:w-[340px] flex-shrink-0 mb-2 lg:mb-0 flex items-stretch">
         <Card className="rounded-xl shadow-glass flex-1 flex flex-col justify-between border border-apuntea-purple/30">
