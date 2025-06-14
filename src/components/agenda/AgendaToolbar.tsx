@@ -10,7 +10,17 @@ type AgendaFilter = "all" | "note" | import("@/types").RecordType;
 const isValidAgendaFilter = (v: string): v is AgendaFilter =>
   ["all", "note", "income", "expense", "financing"].includes(v);
 
-const AgendaToolbar = ({
+type AgendaToolbarProps = {
+  selectedDate: Date;
+  activeFilter: AgendaFilter;
+  setActiveFilter: (v: AgendaFilter) => void;
+  handleAddNote: () => void;
+  handleAddRecord: () => void;
+  onDateSelect: (date: Date) => void;
+  t: any;
+};
+
+function AgendaToolbar({
   selectedDate,
   activeFilter,
   setActiveFilter,
@@ -18,15 +28,7 @@ const AgendaToolbar = ({
   handleAddRecord,
   onDateSelect,
   t,
-}: {
-  selectedDate: Date;
-  activeFilter: string;
-  setActiveFilter: (v: AgendaFilter) => void;
-  handleAddNote: () => void;
-  handleAddRecord: () => void;
-  onDateSelect: (date: Date) => void;
-  t: any;
-}) => {
+}: AgendaToolbarProps) {
   const handleTabChange = (v: string) => {
     if (isValidAgendaFilter(v)) setActiveFilter(v);
   };
@@ -59,5 +61,6 @@ const AgendaToolbar = ({
       </div>
     </div>
   );
-};
+}
+
 export default AgendaToolbar;
