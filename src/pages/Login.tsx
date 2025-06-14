@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, Link } from "react-router-dom";
@@ -12,7 +11,7 @@ import { handleUppercaseInput } from "@/utils/formatUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/utils/translations";
 import { Separator } from "@/components/ui/separator";
-import PublicLayout from "@/components/PublicLayout";
+import AuthLayout from "@/components/AuthLayout";
 
 const Login = () => {
   const { user, login, isLoading } = useAuth();
@@ -44,7 +43,7 @@ const Login = () => {
   };
 
   return (
-    <PublicLayout>
+    <AuthLayout>
       <div className="flex-1 flex items-center justify-center relative">
         {/* Wave background decorations */}
         <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-5">
@@ -163,9 +162,8 @@ const Login = () => {
           </Card>
         </div>
       </div>
-    </PublicLayout>
+    </AuthLayout>
   );
 };
 
 export default Login;
-
