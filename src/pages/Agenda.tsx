@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
@@ -89,10 +88,10 @@ const Agenda = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 animate-slide-in w-full max-w-[1100px] mx-auto">
+    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 animate-slide-in w-full max-w-screen-xl px-4 sm:px-8 mx-auto">
       {/* Takvim (sol) */}
       <aside className="w-full lg:w-[340px] flex-shrink-0 mb-2 lg:mb-0 flex items-stretch">
-        <Card className="rounded-xl shadow-glass flex-1 flex flex-col justify-between">
+        <Card className="rounded-xl shadow-glass flex-1 flex flex-col justify-between border border-apuntea-purple/30">
           <CardContent className="p-4 flex-1 flex flex-col justify-center">
             <Calendar
               mode="single"
@@ -106,7 +105,7 @@ const Agenda = () => {
 
       {/* Sağ taraf */}
       <main className="flex-1 w-full flex flex-col">
-        <Card className="rounded-xl shadow-glass h-full flex flex-col">
+        <Card className="rounded-xl shadow-glass h-full flex flex-col border border-apuntea-purple/30">
           {/* Toolbar üstte, content altta */}
           <div className="p-6 pb-2 border-b border-border bg-background rounded-t-xl">
             <AgendaToolbar

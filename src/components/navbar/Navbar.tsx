@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -27,8 +26,9 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-white dark:bg-black/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-apuntea-purple/30 transition-all duration-300 shadow-sm hover:shadow-md">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="max-w-screen-xl mx-auto w-full px-4 sm:px-8">
         <div className="flex items-center justify-between h-12">
+          {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <img
@@ -39,7 +39,8 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-1 ml-4">
+          {/* Menü (Logo'dan daha uzak) */}
+          <div className="hidden md:flex items-center space-x-3 ml-8">
             {navigationItems.map((item) => (
               <NavLink
                 key={item.path}
@@ -51,11 +52,13 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          <div className="hidden md:flex items-center ml-auto gap-2">
+          {/* Sağ arama ve kullanıcı */}
+          <div className="hidden md:flex items-center ml-auto gap-2 mr-2">
             <SearchBar />
             {user && <UserMenu />}
           </div>
 
+          {/* Mobil Menü */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
