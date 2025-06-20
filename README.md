@@ -4,13 +4,13 @@
 **Apuntea** is an intelligent invoice management platform designed for small businesses to streamline invoice tracking, reduce data entry time, and enable actionable financial analysis with minimal effort.
 
 🔗 [Visit Website](https://apuntea.lovable.app)  
-🧪 **Demo Credentials**  
+**Demo Credentials**  
 Email: `ADMIN@APUNTEA.COM`  
 Password: `1admin?`  
 
 ---
 
-## 🚀 Value Proposition
+## Value Proposition
 
 Apuntea was created with the vision of helping small businesses:
 
@@ -23,13 +23,13 @@ Apuntea also aims to leverage **OCR (Optical Character Recognition)** and **AI t
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 Apuntea is built and designed using the [Lovable](https://lovable.app) platform, a web-based no-code environment for creating functional business tools and applications.
 
 ---
 
-## 🛠️ Features
+## Features
 
 - Invoice upload interface  
 - Expense categorization  
@@ -41,7 +41,7 @@ Apuntea is built and designed using the [Lovable](https://lovable.app) platform,
 
 ---
 
-## 📈 Roadmap
+## Roadmap
 
 Planned future improvements include:
 
@@ -54,19 +54,19 @@ Planned future improvements include:
 
 ---
 
-## 🌍 Language Support
+## Language Support
 
 - Currently available in **English** only.
 
 ---
 
-## 🤝 Feedback & Contribution
+## Feedback & Contribution
 
 Apuntea is currently under active development. Feedback, suggestions, and bug reports are welcome via GitHub Issues.
 
 ---
 
-## 🛡️ License
+## License
 
 This project is not open source at the moment. The codebase is private and the platform is shared as a working demo.
 
