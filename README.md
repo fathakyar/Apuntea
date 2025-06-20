@@ -13,7 +13,6 @@ Password: `1admin?`
 ## Value Proposition
 
 Apuntea was created with the vision of helping small businesses:
-
 - Organize and automate invoice tracking workflows  
 - Minimize the time spent on manual record-keeping  
 - Enable financial insights and reporting with simple inputs  
@@ -21,50 +20,50 @@ Apuntea was created with the vision of helping small businesses:
 
 Apuntea also aims to leverage **OCR (Optical Character Recognition)** and **AI technologies** in future updates, further accelerating and simplifying the invoice management process.
 
----
 
 ## Tech Stack
 
 Apuntea is built and designed using the [Lovable](https://lovable.app) platform, a web-based no-code environment for creating functional business tools and applications.
 
----
 
 ## Features
 
 - Invoice upload interface  
 - Expense categorization  
 - Financial dashboards and summaries  
-- Secure user authentication  
-- Intuitive and user-friendly UI  
+- Daily task and note tracking  
+- User-friendly UI  
 
 > OCR functionality is planned and its integration point is already prepared within the app.
 
----
+
+## Daily Productivity Tools
+
+In addition to financial tools, Apuntea includes built-in features to help business owners stay organized:
+- Task tracking for daily business goals  
+- Personal notes and reminders  
+- Simple to-do management interface  
+
 
 ## Roadmap
 
 Planned future improvements include:
-
 - Integration of OCR and AI-based automation  
 - Exportable reports (PDF/Excel)  
 - Multi-user support  
-- Integration with third-party accounting tools  
 - Enhanced reporting filters  
 - Mobile optimization  
 
----
 
 ## Language Support
 
 - Currently available in **English** only.
 
----
 
 ## Feedback & Contribution
 
 Apuntea is currently under active development. Feedback, suggestions, and bug reports are welcome via GitHub Issues.
 
----
 
 ## License
 
